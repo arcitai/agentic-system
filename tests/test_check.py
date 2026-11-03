@@ -142,6 +142,8 @@ class CheckTests(unittest.TestCase):
                 "`~~~` inside a code span, then [Broken after code span](absent-after.md)\n"
                 "`[Ignored span](ignored-span.md)`\n"
                 "~~~\n[Ignored fence](ignored-fence.md)\n~~~\n"
+                "[Broken after fence](absent-after-fence.md)\n"
+                "~~~\n[Second ignored fence](ignored-second-fence.md)\n~~~\n"
             )
             errors = module.check(root)[0]
             broken = sorted(
@@ -154,6 +156,7 @@ class CheckTests(unittest.TestCase):
                     'absent-title.md "Title"',
                     "absent-codeline.md",
                     "absent-after.md",
+                    "absent-after-fence.md",
                 ]
             )
             self.assertEqual(broken, expected)
