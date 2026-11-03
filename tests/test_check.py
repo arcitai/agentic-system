@@ -110,6 +110,57 @@ class CheckTests(unittest.TestCase):
             self.assertFalse(any(".claude" in e for e in errors))
             self.assertTrue(any("pull_request_template.md: broken link" in e for e in errors))
 
+    def test_links_in_code_spans_fences_and_titles_are_not_reported(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "VERSION").write_text("0.1.4\n")
+            (root / "target.md").write_text("# Target\n")
+            doc = root / "guide.md"
+            doc.write_text(
+                "# Guide\n\nRevision: 0.1.4 · Updated: 2026-10-09\n\n"
+                "`[a](missing.md)`\n"
+                "``[a](x.md) with ` tick``\n"
+                "~~~\n[a](missing.md)\n~~~\n"
+                '[c](target.md "Title")\n'
+                "[c](target.md 'Title')\n"
+                "[c](target.md (Title))\n"
+            )
+            errors = module.check(root)[0]
+            self.assertFalse(any("broken link" in e for e in errors))
+
+    def test_real_broken_links_still_reported(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "VERSION").write_text("0.1.4\n")
+            (root / "kept.md").write_text("# Kept\n")
+            doc = root / "guide.md"
+            doc.write_text(
+                "# Guide\n\nRevision: 0.1.4 · Updated: 2026-10-09\n\n"
+                "[Missing plain](absent-plain.md)\n"
+                '[Missing title](absent-title.md "Title")\n'
+                "`[code](kept.md)` [Broken on code line](absent-codeline.md)\n"
+                "`~~~` inside a code span, then [Broken after code span](absent-after.md)\n"
+                "`[Ignored span](ignored-span.md)`\n"
+                "~~~\n[Ignored fence](ignored-fence.md)\n~~~\n"
+                "[Broken after fence](absent-after-fence.md)\n"
+                "~~~\n[Second ignored fence](ignored-second-fence.md)\n~~~\n"
+            )
+            errors = module.check(root)[0]
+            broken = sorted(
+                e for e in errors if "broken link" in e
+            )
+            expected = sorted(
+                f"{doc.relative_to(root)}: broken link {raw}"
+                for raw in [
+                    "absent-plain.md",
+                    'absent-title.md "Title"',
+                    "absent-codeline.md",
+                    "absent-after.md",
+                    "absent-after-fence.md",
+                ]
+            )
+            self.assertEqual(broken, expected)
+
     def test_package_version_is_required_and_numeric(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

@@ -96,9 +96,15 @@ def check(root=ROOT):
             if len(matches) != 1 or not valid_revision(matches[0][1], matches[0][2], package_version):
                 errors.append(f"{path.relative_to(root)}: invalid/missing top revision or edit date")
         text = re.sub(r"```.*?```", "", source, flags=re.S)
+        text = re.sub(r"(?ms)^~~~.*?^~~~[^\n]*", "", text)
+        # Inline code spans (single or multi-backtick) are not link targets.
+        text = re.sub(r"(`+)(.*?)\1", "", text)
         skill_root = next((p.parent for p in skills if path.is_relative_to(p.parent)), None)
         for raw in re.findall(r"\]\(([^)]+)\)", text):
-            url = urlsplit(raw)
+            # A CommonMark title, if present, follows the destination after a
+            # space and must not become part of the target path.
+            destination = raw.split()[0] if raw.split() else raw
+            url = urlsplit(destination)
             if url.scheme or not url.path:
                 continue
             target = (path.parent / unquote(url.path)).resolve()
