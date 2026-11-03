@@ -1,17 +1,17 @@
 # Versioned export; the canonical editable original is the Notion YAML block.
 # Original: https://gustavanderson.notion.site/4056d2e17f56811b96fec7b970741916
-# Canonical block last edited: 2026-10-30T11:28:00.000Z
-# Canonical YAML SHA-256 (UTF-8, LF, trailing newline): e076d1b6fad1b77ac37dbc05d0f18f171885644a4174bc577749b652922b8808
-# Declaration version: 0.5; exported 2026-10-30 for Factory 0.1.30 (Lab intake selection).
+# Canonical block last edited: 2026-11-03T20:47:09.670Z
+# Canonical YAML SHA-256 (UTF-8, LF, trailing newline): b0c47e1b311aac5bfbacd1b9a78ee58c3bee8f3834487c7c7f669177b36004eb
+# Declaration version: 0.7; exported 2026-11-03 for Factory 0.1.32 (Lab model selection and current holds).
 # Edit the original before a new reviewed export.
 
-# Factory Lab declaration; version 0.5.
+# Factory Lab declaration; version 0.7.
 # Interpreted by AgentOps; not applied configuration.
 # Native tools enforce only what is configured and verified in them.
 # This file grants no authority or access and does not override existing holds.
 # Inspired by Warp Factories; not their schema or a compatible Warp definition.
 # Reference: https://www.warp.dev/blog/the-factory-stack
-definition_version: "0.5"
+definition_version: "0.7"
 name: arcitai-factory-lab
 description: Develop, qualify and publish the portable Factory method.
 status: candidate
@@ -28,15 +28,38 @@ context:
 workspace:
   selected: t3-code  # Lab choice, not a method requirement
   channel: stable  # stable preferred; Lab moved to it on 29 October 2026 (#34)
-  candidate_version: 0.1.5
+  candidate_version: 0.1.6
   environments: separate-project-lead-and-narrower-worker-environments
   shared_environment: explicit-trusted-related-projects-only
   operator_view: one-native-gui
   qualification: required-for-selected-capabilities
 
+models:  # Gustav's selected Lab choices, not universal Factory requirements
+  implementation:
+    model: claude-sonnet-5-5
+    effort: high
+    fast_mode: false
+  routine_work:
+    model: claude-sonnet-5-5
+    effort: high
+  specification:
+    model: claude-opus-5-5
+    effort: high
+    fast_mode: false
+  review:
+    model: claude-opus-5-5
+    effort: high
+    fast_mode: false
+  optional_gpt:
+    model: gpt-6.1-sol
+    effort: high
+    status: not-qualified-in-lab
+  apply: next-safe-task-boundary
+
 agents:
   lead:
     skill: https://gustavanderson.notion.site/4056d2e17f56819cbe9df834bc7819f0
+    briefing: https://gustavanderson.notion.site/40d6d2e17f568162ac85eb119ef33a2b  # shared method from #117; authoring edition
   foundation:
     skill: https://gustavanderson.notion.site/4056d2e17f5681edb778c29cc5faa9a0
   evaluator:
@@ -78,10 +101,15 @@ evaluation:
 
 operations:
   notes: https://gustavanderson.notion.site/4056d2e17f5681a79c09f46f42742989
-  automations: lab-native-issue-intake-every-180-minutes  # Lab-only T3 schedule bound to the pinned AgentOps; dispatch, not completion; shipping defaults open
+  automations: disabled-during-qualification  # existing Lab-only 180-minute native schedule retained, not enabled
   maintenance_owner: to-be-decided
   access_and_isolation: qualify-in-native-tools
+  owner_contact: project-issues-and-lead-thread  # no direct route selected (#117)
+  follow_up: lead-owned-native-trigger-or-named-gap
 
 qualification:
-  installed_recipe: not-qualified
+  installed_recipe: bounded-lab-qualification-in-progress
   evidence: https://github.com/arcitai/factory/blob/main/docs/qualification.md
+  worker_boundaries: https://github.com/arcitai/factory/issues/32
+  native_maintenance: https://github.com/arcitai/factory/issues/34#issuecomment-6613129194
+  holds: [general-intake, retirement, issue-114-delivery]
