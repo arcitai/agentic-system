@@ -140,7 +140,7 @@ class CheckTests(unittest.TestCase):
                 '[Missing title](absent-title.md "Title")\n'
                 "`[code](kept.md)` [Broken on code line](absent-codeline.md)\n"
                 "`~~~` inside a code span, then [Broken after code span](absent-after.md)\n"
-                "[Ignored span](ignored-span.md)\n"
+                "`[Ignored span](ignored-span.md)`\n"
                 "~~~\n[Ignored fence](ignored-fence.md)\n~~~\n"
             )
             errors = module.check(root)[0]
