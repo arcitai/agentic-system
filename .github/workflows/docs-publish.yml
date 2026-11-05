@@ -1,0 +1,61 @@
+name: Public documentation propagation
+# #122: freeze the canonical Notion originals (read-only), reconcile every distribution with its
+# original, and propagate Git-owned released references to their existing Notion Skills pages
+# (whole directory plus Version/Status/Source). Notion-owned originals are never written; their
+# changes reach Git by a deliberate export PR. The commit status factory/docs-propagation is the
+# receipt: pending before writes; success only after full readback and anonymous access.
+# Inactive until the owner provisions the dedicated connection: repository variable
+# FACTORY_DOCS_PUBLISH=enabled and environment "factory-public-docs" holding secret
+# FACTORY_PUBLIC_DOCS_TOKEN (shared only with the public guide subtree it must read and the
+# released-reference skill pages it updates). Restrict that environment's deployment refs to main
+# and v* tags and require a reviewer, so no other branch's scripts run with the token.
+on:
+  workflow_run:
+    workflows: [Method checks]
+    types: [completed]
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: read
+  statuses: write
+concurrency:
+  group: factory-public-docs
+  cancel-in-progress: false
+jobs:
+  propagate:
+    # Only main (via the completed checks) or a v* release tag; restrict the environment to the same refs and require a reviewer.
+    if: ${{ vars.FACTORY_DOCS_PUBLISH == 'enabled' && ((github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main') || (github.event_name != 'workflow_run' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')))) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: factory-public-docs
+    env:
+      FACTORY_DOCS_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - name: A release tag must be on main
+        if: ${{ github.event_name != 'workflow_run' && startsWith(github.ref, 'refs/tags/') }}
+        run: git merge-base --is-ancestor "$FACTORY_DOCS_SHA" origin/main
+      - name: Freeze canonical originals (read-only)
+        env:
+          FACTORY_PUBLIC_DOCS_TOKEN: ${{ secrets.FACTORY_PUBLIC_DOCS_TOKEN }}
+        run: python3 scripts/notion_snapshot.py --output "$RUNNER_TEMP/canonical"
+      - name: Reconcile with the originals
+        run: python3 scripts/reconcile.py --canonical "$RUNNER_TEMP/canonical" --json "$RUNNER_TEMP/reconciliation.json"
+      - name: Propagate released references and read back
+        shell: bash  # pipefail: a failed or pending publish must fail this step despite tee
+        env:
+          FACTORY_PUBLIC_DOCS_TOKEN: ${{ secrets.FACTORY_PUBLIC_DOCS_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/publish.py --snapshot "$RUNNER_TEMP/canonical" --live | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: documentation-propagation
+          path: ${{ runner.temp }}/reconciliation.json
+          if-no-files-found: warn
