@@ -198,8 +198,8 @@ class ImpactTests(unittest.TestCase):
         self.assertNotIn("CONFLICT", {i["level"] for i in items})
 
     def test_manifest_errors_with_a_base_do_not_crash(self):
-        self.repo.manifest(lambda k, a: k["doc/vision"].pop("kind"))
-        self.repo.edit("VISION.md", "#", "# ")  # a changed path owned by the invalid entry
+        self.repo.manifest(lambda k, a: k["skill/factory-entry"].pop("kind"))
+        self.repo.edit("agent-ops/factory-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")  # owned by the invalid entry
         self.repo.commit("broken manifest")
         result = reconcile.run(self.repo.root, self.base)
         self.assertEqual(result["result"], "CONFLICT")
