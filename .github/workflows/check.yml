@@ -6,8 +6,8 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: method-checks-${{ github.ref }}
-  cancel-in-progress: true
+  group: method-checks-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   method-checks:
     name: Method checks
@@ -17,5 +17,17 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
         with:
           persist-credentials: false
+          fetch-depth: 0
       - run: python3 scripts/check.py
       - run: python3 -m unittest discover -s tests -v
+      # Mandatory visible reconciliation (#122): read-only, no credential; a no-op is reported too.
+      - name: Documentation reconciliation
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python3 scripts/reconcile.py --base "$BASE" --json reconciliation.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: documentation-reconciliation
+          path: reconciliation.json
+          if-no-files-found: warn

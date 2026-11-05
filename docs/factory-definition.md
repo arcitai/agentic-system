@@ -1,6 +1,6 @@
 # Factory definition and source ownership
 
-Revision: 0.1.30 · Updated: 2026-10-30
+Revision: 0.1.33 · Updated: 2026-11-05
 
 The [Notion YAML code block](https://gustavanderson.notion.site/4056d2e17f56811b96fec7b970741916) is Factory Lab's only editable declaration. [factory.yaml](../factory.yaml) is a version-marked export: one small description of its purpose, context, roles, selected methods, review
 settings, automation and routine ideas and evaluation proposals. An adopting project chooses its own declaration and context home. A repository is optional for non-software work.
@@ -63,6 +63,11 @@ retained distribution path, not a requirement that the shared evaluator or every
 Factory project is software work. Native loading and one real Lab task remain
 separate acceptance work.
 
+For 0.1.33, `scripts/export.py` exports `factory-agent-ops` and `factory-entry` 0.1.32 and
+the first portable `factory-brief` 0.1.32, which both reference, from the canonical revisions
+recorded in `docs/sources.json`. Foundation and Evaluate re-export byte-identically and gain
+their bindings. Existing software/defence versions remain unchanged.
+
 For 0.1.26, the native Skills API snapshot supplies AgentOps/Foundation and all
 their supporting files. The portable export normalizes native frontmatter,
 Notion-only preambles, line breaks and inline-code markup, restoring portable relative reference links; supporting files retain
@@ -73,6 +78,71 @@ A maintainer changes an owning Notion source and explicitly exports the selected
 revision and resources. Review and record the actual readback, then freeze the
 portable candidate for checks and release. Do not infer that merely fetching a
 page exercised Notion's Skills API or installed its directory in a harness.
+
+## Documentation reconciliation and propagation
+
+[`docs/sources.json`](sources.json) gives each public artifact a stable Key, its owner and its
+label. The owner is the Notion page that is the original, or the Git path that is the original
+or a deliberate export. Propagation follows that ownership; there is no two-way sync:
+
+- **Notion-owned originals** (core skills, the Lab declaration, guide pages) reach Git only
+  through a deliberate export. `scripts/notion_snapshot.py` freezes the originals read-only;
+  `scripts/export.py` restores the portable form from Notion's rendering, copies supporting
+  files byte for byte and records the canonical revision as the export's binding. A newer
+  original is "export pending"; Git never overwrites it.
+- **Git-owned released references** (the software and defence skills) reach their existing
+  Notion Skills pages through `scripts/publish.py`: the whole skill directory plus the Version,
+  Status and Source properties, with Source pinned to the release commit.
+- **Editorial changes to a Notion page** are recorded as a `pending` handoff with its exact
+  before/after text and holder, until the canonical readback shows them applied.
+- **Git-owned explanations** (README, docs, code) are published natively by this public
+  repository.
+
+`scripts/reconcile.py` runs on every pull request and every main push (each push in its own CI
+concurrency group) and always reports a result:
+NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. These are
+reported, and a conflict fails the check:
+
+- a Git edit of an export without a new binding (`docs/sources.json` for skills, the recorded
+  hash for the declaration), even if its version metadata is bumped;
+- an edited released reference without a new version line;
+- an ownership change (moving a Notion original to Git, by key, path or page id, is a conflict
+  unless the entry carries a `cutover` record naming the owner decision);
+- a declaration export whose header block holds anything but comments;
+- a removed artifact still marked active;
+- an unowned path or a private path.
+
+IN-SYNC also requires the canonical, binding and Git versions to agree. With a snapshot it compares every distribution with its original, including link
+targets and supporting bytes, and lists the pending exports and handoffs.
+
+Publication runs one at a time from main or a `v*` release tag. The commit status
+`factory/docs-propagation` is set pending before any write. Each write is by page identity, and
+an uncertain write is read back before one same-identity retry. A Notion copy newer than Git is
+never downgraded, and the publisher never writes a page whose Status is not "Released reference"
+unless the manifest records a `cutover`. After all writes, every released reference is read
+back: its files, body and Version/Status/Source, with each page's revision and file hashes kept
+as the receipt. A released-reference change without its release tag stays "release pending".
+For each affected page, an anonymous request must stay on the page's host and return its
+expected content: name, version and first instruction. HTTP 200 alone is not enough, since a
+login page or an empty app shell also returns 200. Anything less leaves a visible pending public
+browser readback that lists the exact pages and expected content.
+
+A `success` status therefore covers only the released-reference pages: the API readback of the
+whole set, plus anonymous page content for the affected pages. The publisher does not read back
+the guide overview, the skills catalogue and its filters, or anonymous file downloads. These, and
+the first live run itself, wait for the bounded live proof: one authorized live change from a
+release tag, a read-only rerun, and a browser readback of those public views. Until that proof
+the publisher is not operational, and "complete only after the coherent public set is read
+back" (#122) is only partly met. Content templates and other pages outside `docs/sources.json`
+are never planned, and the status rule refuses them.
+
+The workflow stays inactive until a dedicated connection, limited to the public guide subtree
+and the released-reference pages, is provisioned for an environment restricted to main and `v*`
+tags, with a required reviewer and a tag ruleset limiting who may create `v*` tags. The release
+or dispatch workflow runs from the tag's own commit, so those settings, not a workflow step, are
+the boundary. A newer queued propagation run replaces a pending one; a dispatch reruns it. A
+main working revision is never labelled a release: a release is the tag that matches `VERSION`.
+These checks verify sources and their propagation, not installation or adoption.
 
 ## Inspiration and credit
 

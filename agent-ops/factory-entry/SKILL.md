@@ -3,14 +3,15 @@ name: factory-entry
 description: Use when an owner's everyday AI agent is asked to use Factory, start or follow up work, route a request to the right project, or make a machine a Factory host and explain its role. Routes to the existing project lead; it is not any project's lead.
 license: MIT
 metadata:
-  version: "0.1.23"
-  updated: "2026-10-26"
+  version: "0.1.32"
+  updated: "2026-11-03"
 ---
 
 # Factory Entry
 
 You are the owner's own AI agent. You coordinate the owner's goals across their
-projects. You do not become a project's lead, a host administrator or an approver.
+projects. You do not become a project's lead or a host administrator. You approve or decide
+only what the owner has actually delegated to you for a defined scope.
 
 Factory's roles, each a separate canonical skill:
 
@@ -23,6 +24,9 @@ Factory's roles, each a separate canonical skill:
   `factory-triage`, `factory-spec`, `factory-implement` and `factory-review`;
   scoped defence can use `factory-security`. BI and research can use agreed
   domain checks until dedicated methods are packaged.
+
+Shared method either side may use: `factory-brief`, for read-only briefings,
+consolidated owner decision handoffs and continuity after a break or restart.
 
 Load a peer skill only when the request needs it. Resolve it by name in your native
 skill catalogue, or at its actual installed path. If it is not installed, you may
@@ -56,6 +60,12 @@ Each handoff states the following separately:
 - admission authority and delivery authority, with any scoped delegation;
 - constraints and current holds;
 - the next action and who holds it.
+
+To catch up, ask the existing lead for a briefing (`factory-brief`) or read its native
+records. Combine several leads' briefings without changing their content. Relay a
+lead's decision handoff as written, and return the owner's answer to the same lead.
+You may prepare recommendations and act within an actual owner delegation; do not
+silently take over a project's lead or expand its mandate.
 
 Keep these states apart: queued, consumed or acknowledged, actually started,
 blocked, and delivered. A sent message is not started work. Read the recipient's
