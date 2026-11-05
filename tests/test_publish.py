@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -12,16 +13,28 @@ sys.path.insert(0, str(ROOT / "scripts"))
 spec = importlib.util.spec_from_file_location("publish", ROOT / "scripts/publish.py")
 publish = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(publish)
+import reconcile  # noqa: E402
+
+_, KEYS, _ = reconcile.load_manifest(ROOT)
+RELEASED = {k: i for k, i in KEYS.items() if i["label"] == "released-reference"}
 
 
-class FakeTable:
-    """In-memory stand-in for the public status table, with injected failures per (operation, key)."""
+class FakeSkills:
+    """Notion Skills pages of the released references, with failures injected per (operation, key)."""
 
     def __init__(self, public=200):
-        self.rows, self.next, self.failures, self.public, self.writes = {}, 0, {}, public, []
+        self.pages, self.failures, self.public, self.writes = {}, {}, public, []
+        for key, item in RELEASED.items():
+            version = reconcile.git_skill_version(ROOT, item["path"])
+            files = publish.desired_files(ROOT, item, version)
+            pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", item["path"]).strip()
+            self.pages[item["notion"]] = {"files": {k: v.decode() for k, v in files.items()}, "Version": version, "Status": "Released reference",
+                                          "Source": f"{reconcile.REPO_URL}/blob/{pin}/{item['path']}/SKILL.md",
+                                          "public_url": f"https://example.invalid/{key}"}
 
-    def _fail(self, operation, key, apply):
-        mode = self.failures.get((operation, key), [None]).pop(0) if self.failures.get((operation, key)) else None
+    def _fail(self, operation, page, apply):
+        modes = self.failures.get((operation, page)) or [None]
+        mode = modes.pop(0)
         if mode == "access":
             raise publish.AccessError("HTTP 401 (expired)")
         if mode == "lost":
@@ -30,154 +43,189 @@ class FakeTable:
         if mode == "applied":
             raise publish.UncertainWrite("timeout after apply")
 
-    def query(self, key):
-        self._fail("query", key, lambda: None)
-        return [{"id": i, **{f: r.get(f, "") for f in publish.FIELDS}} for i, r in self.rows.items() if r["key"] == key]
+    def read(self, page, name):
+        self._fail("read", page, lambda: None)
+        state = self.pages[page]
+        return {**{k: v for k, v in state.items() if k != "files"}, "files": dict(state["files"]),
+                "types": {"Version": "rich_text", "Status": "select", "Source": "rich_text"}}
 
-    def create(self, key, row):
+    def upload(self, page, name, files):
         def apply():
-            self.next += 1
-            self.rows[f"row{self.next}"] = {"key": key, **{f: str(v) for f, v in row.items()}}
-            self.writes.append(("create", key))
-        self._fail("create", key, apply)
+            self.pages[page]["files"] = {k: v.decode() for k, v in files.items()}
+            self.writes.append(("upload", page))
+        self._fail("upload", page, apply)
 
-    def update(self, row_id, key, row):
+    def set_properties(self, page, values, types):
         def apply():
-            self.rows[row_id].update({f: str(v) for f, v in row.items()})
-            self.writes.append(("update", key))
-        self._fail("update", key, apply)
+            self.pages[page].update(values)
+            self.writes.append(("properties", page))
+        self._fail("properties", page, apply)
 
-    def anonymous_status(self):
+    def anonymous_status(self, url):
         return self.public
 
-    def state(self, key):
-        return [r for r in self.rows.values() if r["key"] == key]
+
+class FakeStatus:
+    def __init__(self):
+        self.states = []
+
+    def set(self, state, description):
+        self.states.append((state, description))
 
 
-def rows(summary_suffix=""):
-    out = [{"key": "status/release", "label": "main-working", "summary": "Main working 0.1.33" + summary_suffix, "commit": "c1"},
-           {"key": "skill/factory-review", "label": "released-reference", "summary": "released-reference 0.1.18", "commit": "c1"}]
-    for row in out:
-        row["hash"] = str(hash((row["key"], row["summary"])))
-    return out
+def action(key, **change):
+    item = RELEASED[key]
+    pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", item["path"]).strip()
+    return {"key": key, "page": item["notion"], "path": item["path"], "version": reconcile.git_skill_version(ROOT, item["path"]),
+            "status": "Released reference", "source": f"{reconcile.REPO_URL}/blob/{pin}/{item['path']}/SKILL.md", **change}
 
 
 class PublishTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.lock = Path(self.temporary.name) / "lock"
+        self.target, self.status = FakeSkills(), FakeStatus()
+        self.review = RELEASED["skill/factory-review"]["notion"]
 
     def tearDown(self):
         self.temporary.cleanup()
 
-    def marker(self, table):
-        (row,) = table.state(publish.MARKER)
-        return row["propagation"].split()[0]
+    def run_actions(self, actions):
+        return publish.run(ROOT, actions, KEYS, self.target, self.status, self.lock)
 
-    def test_first_delivery_creates_rows_and_marks_complete_after_readback(self):
-        table = FakeTable()
-        result = publish.run(rows(), table, self.lock)
-        self.assertEqual(result["result"], "PUBLISHED")
-        self.assertEqual(len(table.state("status/release")), 1)
-        self.assertEqual(self.marker(table), "complete")
-        self.assertFalse(self.lock.exists())
+    def damage(self):
+        page = self.target.pages[self.review]
+        page["files"]["SKILL.md"] = page["files"]["SKILL.md"].replace("Use a context separate", "Use any context", 1)
+        page["Status"] = "Draft"
 
-    def test_repeat_delivery_is_a_no_op(self):
-        table = FakeTable()
-        publish.run(rows(), table, self.lock)
-        before = list(table.writes)
-        result = publish.run(rows(), table, self.lock)
+    def test_no_op_is_success_only_after_readback_and_anonymous_access(self):
+        result = self.run_actions([])
         self.assertEqual(result["result"], "NO-OP")
-        self.assertEqual([w for w in table.writes[len(before):] if w[1] != publish.MARKER], [])
+        self.assertEqual(self.status.states[0][0], "pending")
+        self.assertEqual(self.status.states[-1][0], "success")
+        self.assertEqual(self.target.writes, [])
 
-    def test_changed_source_updates_only_its_key(self):
-        table = FakeTable()
-        publish.run(rows(), table, self.lock)
-        before = len(table.writes)
-        result = publish.run(rows(" (changed)"), table, self.lock)
-        self.assertEqual(result["changed"], ["status/release"])
-        self.assertEqual([w for w in table.writes[before:] if w[1] != publish.MARKER], [("update", "status/release")])
+    def test_no_op_with_refused_anonymous_access_is_not_complete(self):
+        self.target.public = 403
+        result = self.run_actions([])
+        self.assertEqual(result["result"], "ANONYMOUS-PENDING")
+        self.assertEqual(self.status.states[-1][0], "pending")
+        self.assertIn("browser check", self.status.states[-1][1])
 
-    def test_uncertain_write_that_was_applied_is_read_back_not_duplicated(self):
-        table = FakeTable()
-        table.failures[("create", "status/release")] = ["applied"]
-        result = publish.run(rows(), table, self.lock)
+    def test_damaged_copy_is_restored_body_and_properties(self):
+        self.damage()
+        result = self.run_actions([action("skill/factory-review")])
         self.assertEqual(result["result"], "PUBLISHED")
-        self.assertEqual(len(table.state("status/release")), 1)
-        self.assertIn({"key": "status/release", "action": "confirmed-after-uncertain-write"}, result["log"])
+        self.assertEqual(self.target.writes, [("upload", self.review), ("properties", self.review)])
+        self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])
+        self.assertIn("Pinned released reference", self.target.pages[self.review]["files"]["SKILL.md"])
+        self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
 
-    def test_lost_write_is_retried_once_with_the_same_identity(self):
-        table = FakeTable()
-        publish.run(rows(), table, self.lock)
-        table.failures[("update", "status/release")] = ["lost"]
-        result = publish.run(rows(" (changed)"), table, self.lock)
+    def test_changed_property_content_with_equal_body_updates_only_properties(self):
+        self.target.pages[self.review]["Source"] = "edited by hand"
+        result = self.run_actions([action("skill/factory-review")])
         self.assertEqual(result["result"], "PUBLISHED")
-        self.assertEqual(len(table.state("status/release")), 1)
-        self.assertTrue(table.state("status/release")[0]["summary"].endswith("(changed)"))
+        self.assertEqual(self.target.writes, [("properties", self.review)])
 
-    def test_partial_update_stays_visible_and_a_later_run_resumes(self):
-        table = FakeTable()
-        table.failures[("create", "skill/factory-review")] = ["lost", "lost"]
-        result = publish.run(rows(), table, self.lock)
+    def test_repeat_delivery_writes_nothing(self):
+        self.damage()
+        self.run_actions([action("skill/factory-review")])
+        writes = list(self.target.writes)
+        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+        self.assertEqual(self.target.writes, writes)
+
+    def test_uncertain_upload_that_was_applied_is_read_back_not_repeated(self):
+        self.damage()
+        self.target.failures[("upload", self.review)] = ["applied"]
+        result = self.run_actions([action("skill/factory-review")])
+        self.assertEqual(result["result"], "PUBLISHED")
+        self.assertEqual([w for w in self.target.writes if w[0] == "upload"], [("upload", self.review)])
+        self.assertIn("upload-confirmed-after-uncertain-write", [e["action"] for e in result["log"]])
+
+    def test_lost_upload_is_retried_once_with_the_same_identity(self):
+        self.damage()
+        self.target.failures[("upload", self.review)] = ["lost"]
+        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+
+    def test_partial_failure_stays_visible_and_a_later_run_completes(self):
+        self.damage()
+        self.target.failures[("properties", self.review)] = ["lost", "lost"]
+        result = self.run_actions([action("skill/factory-review")])
         self.assertEqual(result["result"], "FAILED")
-        self.assertEqual(self.marker(table), "failed")
-        self.assertEqual(len(table.state("status/release")), 1)  # applied part kept, not rolled back or deleted
-        result = publish.run(rows(), table, self.lock)
-        self.assertEqual((result["result"], result["changed"]), ("PUBLISHED", ["skill/factory-review"]))
-        self.assertEqual(self.marker(table), "complete")
+        self.assertEqual(self.status.states[-1][0], "failure")
+        self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])  # applied part kept
+        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+        self.assertEqual(self.status.states[-1][0], "success")
 
-    def test_expired_access_stops_the_run_and_leaves_pending_visible(self):
-        table = FakeTable()
-        table.failures[("create", "status/release")] = ["access"]
-        result = publish.run(rows(), table, self.lock)
+    def test_expired_access_stops_with_a_failure_receipt(self):
+        self.damage()
+        self.target.failures[("upload", self.review)] = ["access"]
+        result = self.run_actions([action("skill/factory-review")])
         self.assertEqual(result["result"], "FAILED-ACCESS")
-        self.assertEqual(self.marker(table), "pending")
-        self.assertEqual(table.state("skill/factory-review"), [])
+        self.assertEqual(self.status.states[-1][0], "failure")
         self.assertFalse(self.lock.exists())
 
-    def test_duplicate_keys_stop_without_deleting(self):
-        table = FakeTable()
-        publish.run(rows(), table, self.lock)
-        table.rows["dup"] = dict(table.state("status/release")[0])
-        result = publish.run(rows(" (changed)"), table, self.lock)
+    def test_final_readback_covers_every_released_reference(self):
+        other = RELEASED["skill/factory-spec"]["notion"]
+        page = self.target.pages[other]
+        page["files"]["SKILL.md"] += "\nInjected.\n"
+        result = self.run_actions([])
         self.assertEqual(result["result"], "FAILED")
-        self.assertEqual(len(table.state("status/release")), 2)
-
-    def test_duplicate_marker_rows_also_stop_without_deleting(self):
-        table = FakeTable()
-        publish.run(rows(), table, self.lock)
-        table.rows["dup-marker"] = dict(table.state(publish.MARKER)[0])
-        result = publish.run(rows(" (changed)"), table, self.lock)
-        self.assertEqual(result["result"], "FAILED")
-        self.assertEqual(len(table.state(publish.MARKER)), 2)
-        self.assertFalse(table.state("status/release")[0]["summary"].endswith("(changed)"))
-
-    def test_incomplete_public_readback_is_not_complete(self):
-        table = FakeTable(public=403)
-        result = publish.run(rows(), table, self.lock)
-        self.assertEqual(result["result"], "FAILED")
-        self.assertEqual(self.marker(table), "failed")
+        self.assertIn("skill/factory-spec", result["reason"])
 
     def test_concurrent_run_is_refused(self):
         self.lock.write_text("held")
-        table = FakeTable()
-        self.assertEqual(publish.run(rows(), table, self.lock)["result"], "BUSY")
-        self.assertEqual(table.rows, {})
+        self.assertEqual(self.run_actions([])["result"], "BUSY")
+        self.assertEqual(self.status.states, [])
+
+    def test_notion_owned_originals_are_never_planned(self):
+        self.assertTrue(all(KEYS[a["key"]]["owner"] == "git" for a in [action(k) for k in RELEASED]))
+        with tempfile.TemporaryDirectory() as temporary:
+            snap = {"format": 1, "errors": [], "artifacts": {"skill/factory-agent-ops": {"revision": "x", "version": "9.9.9", "files": {"SKILL.md": "---\nname: x\n---\nchanged"}}}}
+            (Path(temporary) / "snapshot.json").write_text(json.dumps(snap))
+            self.assertEqual(reconcile.plan(ROOT, KEYS, temporary), [])
+
+    def test_a_notion_owned_action_is_refused_before_any_write(self):
+        item = KEYS["skill/factory-agent-ops"]
+        result = self.run_actions([{**action("skill/factory-review"), "key": "skill/factory-agent-ops", "page": item["notion"]}])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertEqual(self.target.writes, [])
+
+    def test_release_plan_restores_a_released_reference_but_never_a_notion_original(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary) / "repo"
+            shutil.copytree(ROOT, repo, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
+            for command in (["init", "-q"], ["add", "-A"], ["commit", "-q", "-m", "release"], ["tag", "v" + (repo / "VERSION").read_text().strip()]):
+                subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *command], cwd=repo, check=True, capture_output=True)
+            target = FakeSkills()
+            artifacts = {}
+            for key, item in KEYS.items():
+                if item["kind"] == "skill" and item.get("path"):
+                    files = {k: v.decode() for k, v in reconcile.bundle_files(repo, item["path"]).items()}
+                    artifacts[key] = {"revision": (item.get("binding") or {}).get("revision", "x"), "version": reconcile.git_skill_version(repo, item["path"]), "files": files}
+                    if item["label"] == "released-reference":
+                        head = reconcile.git(repo, "rev-parse", "HEAD").strip()
+                        page = target.pages[item["notion"]]
+                        artifacts[key].update(files=page["files"], version=page["Version"], status=page["Status"],
+                                              source=f"{reconcile.REPO_URL}/blob/{head}/{item['path']}/SKILL.md")
+            artifacts["skill/factory-agent-ops"]["files"]["SKILL.md"] += "\nNewer canonical rule.\n"
+            artifacts["skill/factory-agent-ops"]["revision"] = "newer"
+            artifacts["skill/factory-review"]["status"] = "Draft"
+            (Path(temporary) / "snapshot.json").write_text(json.dumps({"format": 1, "errors": [], "artifacts": artifacts}))
+            _, keys, _ = reconcile.load_manifest(repo)
+            plan = reconcile.plan(repo, keys, temporary)
+        self.assertEqual([a["key"] for a in plan], ["skill/factory-review"])
 
     def test_live_mode_without_dedicated_connection_reports_missing_setup(self):
         env = {k: v for k, v in os.environ.items() if not k.startswith("FACTORY_PUBLIC_DOCS_")}
         env["FACTORY_NOTION_TOKEN"] = "must-not-be-used"
-        result = subprocess.run([sys.executable, str(ROOT / "scripts/publish.py"), "--live"], cwd=ROOT, env=env,
-                                capture_output=True, text=True)
+        with tempfile.TemporaryDirectory() as temporary:
+            (Path(temporary) / "snapshot.json").write_text(json.dumps({"format": 1, "errors": [], "artifacts": {}}))
+            result = subprocess.run([sys.executable, str(ROOT / "scripts/publish.py"), "--snapshot", temporary, "--live"], cwd=ROOT, env=env,
+                                    capture_output=True, text=True)
         self.assertEqual(result.returncode, 3)
         self.assertIn("not configured: FACTORY_PUBLIC_DOCS_TOKEN", result.stdout)
         self.assertNotIn("must-not-be-used", result.stdout + result.stderr)
-
-    def test_plan_writes_nothing_and_contains_only_projection_keys(self):
-        result = subprocess.run([sys.executable, str(ROOT / "scripts/publish.py")], cwd=ROOT, capture_output=True, text=True, check=True)
-        plan = json.loads(result.stdout)
-        self.assertEqual(plan["result"], "PLAN")
-        self.assertFalse([r["key"] for r in plan["rows"] if r["key"].startswith(("guide/", "declaration/"))])
 
 
 if __name__ == "__main__":

@@ -63,6 +63,11 @@ retained distribution path, not a requirement that the shared evaluator or every
 Factory project is software work. Native loading and one real Lab task remain
 separate acceptance work.
 
+For 0.1.33, `scripts/export.py` exports `factory-agent-ops` and `factory-entry` 0.1.32 and
+the first portable `factory-brief` 0.1.32, which both reference, from the canonical revisions
+recorded in `docs/sources.json`. Foundation and Evaluate re-export byte-identically and gain
+their bindings. Existing software/defence versions remain unchanged.
+
 For 0.1.26, the native Skills API snapshot supplies AgentOps/Foundation and all
 their supporting files. The portable export normalizes native frontmatter,
 Notion-only preambles, line breaks and inline-code markup, restoring portable relative reference links; supporting files retain
@@ -76,26 +81,38 @@ page exercised Notion's Skills API or installed its directory in a harness.
 
 ## Documentation reconciliation and propagation
 
-[`docs/sources.json`](sources.json) records each public artifact's owner, label and stable Key: the
-Notion page that is the original, or the Git path that is the original or a deliberate export.
-`scripts/reconcile.py` runs in CI on every pull request and main merge. It reports a visible
-NO-OP, CHANGES, ATTENTION or CONFLICT result in the job summary and as an artifact. A Git edit
-of a Notion-owned export without a new canonical binding (skill metadata, or the declaration's
-recorded hash), an edited released reference, a removed artifact still marked active, an
-unowned path or a private path is reported; a conflict fails the check. With a frozen canonical
-snapshot (`scripts/notion_snapshot.py`, read-only), it also compares each export with its
-original. It normalizes Notion's rendering and compares supporting files byte for byte. A newer
-original stays "export pending"; Git never overwrites it.
+[`docs/sources.json`](sources.json) gives each public artifact a stable Key, its owner and its
+label. The owner is the Notion page that is the original, or the Git path that is the original
+or a deliberate export. Propagation follows that ownership; there is no two-way sync:
 
-`scripts/publish.py` writes only Git-owned projections to one dedicated public status table:
-the release label (released edition or main working revision), the Lab workspace declaration
-and each skill's distribution state. It never writes a Notion-owned original. One run at a
-time marks propagation pending, upserts rows by Key and content hash, and reads an uncertain
-write back before one same-identity retry. It then reads the affected set back, plus anonymous
-access, before marking it complete; a failure stays visible. The publishing workflow stays
-inactive until a dedicated connection, limited to that public table, is provisioned. Main
-working revisions are never relabelled as releases: a release is the tag that matches
-`VERSION`. These checks verify sources and their propagation, not installation or adoption.
+- **Notion-owned originals** (core skills, the Lab declaration, guide pages) reach Git only
+  through a deliberate export. `scripts/notion_snapshot.py` freezes the originals read-only;
+  `scripts/export.py` restores the portable form from Notion's rendering, copies supporting
+  files byte for byte and records the canonical revision as the export's binding. A newer
+  original is "export pending"; Git never overwrites it.
+- **Git-owned released references** (the software and defence skills) reach their existing
+  Notion Skills pages through `scripts/publish.py`: the whole skill directory plus the Version,
+  Status and Source properties, with Source pinned to the release commit.
+- **Editorial changes to a Notion page** are recorded as a `pending` handoff with its exact
+  before/after text and holder, until the canonical readback shows them applied.
+- **Git-owned explanations** (README, docs, code) are published natively by this public
+  repository.
+
+`scripts/reconcile.py` runs on every pull request and main merge and always reports a result:
+NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. A Git
+edit of an export without a new canonical binding, an edited released reference, a removed
+artifact still marked active, an unowned path or a private path is reported; a conflict fails
+the check. With a snapshot it compares every distribution with its original, including link
+targets and supporting bytes, and lists the pending exports and handoffs.
+
+Publication runs one at a time. The commit status `factory/docs-propagation` is set pending
+before any write. Each write is by page identity, and an uncertain write is read back before
+one same-identity retry. Every released-reference page is read back, then anonymous access is
+checked. Success requires all of it; an anonymous check the site refuses stays a visible
+pending browser check. The workflow stays inactive until a dedicated connection, limited to
+the public guide subtree and the released-reference pages, is provisioned. A main working
+revision is never labelled a release: a release is the tag that matches `VERSION`. These
+checks verify sources and their propagation, not installation or adoption.
 
 ## Inspiration and credit
 

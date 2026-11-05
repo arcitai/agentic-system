@@ -1,158 +1,231 @@
 #!/usr/bin/env python3
-"""Publish Factory's Git-owned documentation projections to one public status table (#122).
+"""Propagate Git-owned released references to their existing Notion Skills pages (#122).
 
-Writes only rows keyed by stable Keys from scripts/reconcile.py projections: release label,
-Lab workspace declaration and per-skill distribution state. It never writes a Notion-owned
-original. One run is serialized (CI concurrency plus a local lock), marks propagation pending
-first, upserts idempotently by Key and content hash, reads an uncertain write back before one
-same-identity retry, reads the whole affected set back, and only then marks it complete. A
-failure stays visible as failed. Without --live it prints the plan and touches nothing.
+Writes only artifacts whose manifest owner is git and label released-reference: the whole skill
+directory through the Notion Skills API and the row's Version, Status and Source properties.
+It never writes a Notion-owned original (those reach Git through scripts/export.py), and the
+Source pin moves only to a release-tag commit. One run at a time (CI concurrency plus a local
+lock) sets the commit status pending, writes serially by page identity, reads an uncertain write
+back before one same-identity retry, reads every affected page back, then checks anonymous
+access. Only a complete readback is success; an anonymous check the site refuses stays a visible
+pending browser check. Without --live it prints the plan and writes nothing.
 """
 
 import argparse
-import datetime
+import io
 import json
 import os
 from pathlib import Path
+import re
 import sys
+import tarfile
 import urllib.error
 import urllib.request
+import uuid
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import notion_snapshot  # noqa: E402
 import reconcile  # noqa: E402
 
-MARKER = "run/propagation"
-FIELDS = ("label", "summary", "commit", "hash", "propagation")
+CONTEXT = "factory/docs-propagation"
 
 
 class AccessError(Exception):
-    """Missing, expired or unshared access: stop the whole run; nothing else is attempted."""
+    """Missing, expired or unshared access: stop the run."""
 
 
 class UncertainWrite(Exception):
     """Timeout, rate limit or server error: the write may or may not have been applied."""
 
 
-class NotionTable:
-    """Rows of one dedicated public data source; properties are Key (title) and rich text."""
+def notion_edition(git_text, version):
+    """The Notion copy of a released reference: Git's instructions with the pinned-reference preamble."""
+    lines = git_text.split("\n")
+    end = lines.index("---", 1)
+    meta = dict(line.split(": ", 1) for line in lines[1:end] if ": " in line and not line.startswith(" "))
+    body = "\n".join(lines[end + 1:]).lstrip("\n")
+    title = re.match(r"# (.+)\n", body)
+    if title:
+        body = body[title.end():].lstrip("\n")
+    head = f"**{title[1] if title else meta['name']}** · {version}\n\nPinned released reference; this copy preserves the published method for its version.\n\n"
+    return f"---\nname: {meta['name']}\ndescription: {meta['description']}\n---\n\n" + head + body
 
+
+def desired_files(root, item, version):
+    files = reconcile.bundle_files(root, item["path"])
+    files["SKILL.md"] = notion_edition(files["SKILL.md"].decode("utf-8"), version).encode("utf-8")
+    return files
+
+
+def tarball(name, files):
+    buffer = io.BytesIO()
+    with tarfile.open(fileobj=buffer, mode="w:gz") as tar:
+        for rel, data in sorted(files.items()):
+            info = tarfile.TarInfo(f"{name}/{rel}")
+            info.size, info.mode, info.mtime = len(data), 0o644, 0
+            tar.addfile(info, io.BytesIO(data))
+    return buffer.getvalue()
+
+
+class NotionSkills:
     API = "https://api.notion.com/v1"
-    NAMES = {"label": "Label", "summary": "Summary", "commit": "Commit", "hash": "Content hash", "propagation": "Propagation"}
 
-    def __init__(self, token, data_source, public_url):
-        self.token, self.data_source, self.public_url = token, data_source, public_url
+    def __init__(self, token):
+        self.token = token
+        self.reader = notion_snapshot.Reader(token)
 
-    def _call(self, method, path, body=None):
-        request = urllib.request.Request(self.API + path, method=method, data=None if body is None else json.dumps(body).encode(),
-                                         headers={"Authorization": "Bearer " + self.token, "Notion-Version": "2026-03-11",
-                                                  "Content-Type": "application/json"})
+    def _call(self, method, path, body=None, raw=None, content_type="application/json"):
+        request = urllib.request.Request(self.API + path, method=method, data=raw if raw is not None else (None if body is None else json.dumps(body).encode()),
+                                         headers={"Authorization": "Bearer " + self.token, "Notion-Version": notion_snapshot.NOTION_VERSION,
+                                                  "Content-Type": content_type})
         try:
-            with urllib.request.urlopen(request, timeout=60) as response:
+            with urllib.request.urlopen(request, timeout=120) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:
             if error.code in (401, 403, 404):
-                raise AccessError(f"HTTP {error.code} on {method} {path.split('?')[0]}") from None
-            raise UncertainWrite(f"HTTP {error.code} on {method}") from None
+                raise AccessError(f"HTTP {error.code} on {method} {path}") from None
+            raise UncertainWrite(f"HTTP {error.code} on {method} {path}") from None
         except (urllib.error.URLError, TimeoutError) as error:
-            raise UncertainWrite(str(error)) from None
+            raise UncertainWrite(f"{method} {path}: {error}") from None
 
-    def _props(self, key, row):
-        props = {"Key": {"title": [{"text": {"content": key}}]}}
-        for field in FIELDS:
-            if field in row:
-                props[self.NAMES[field]] = {"rich_text": [{"text": {"content": str(row[field])[:1900]}}]}
-        return props
-
-    def query(self, key):
-        found = self._call("POST", f"/data_sources/{self.data_source}/query",
-                           {"filter": {"property": "Key", "title": {"equals": key}}, "page_size": 10})["results"]
-        rows = []
-        for page in found:
-            p = page["properties"]
-            rows.append({"id": page["id"], **{f: "".join(t.get("plain_text", "") for t in p.get(n, {}).get("rich_text", []))
-                                             for f, n in self.NAMES.items()}})
-        return rows
-
-    def create(self, key, row):
-        return self._call("POST", "/pages", {"parent": {"data_source_id": self.data_source}, "properties": self._props(key, row)})["id"]
-
-    def update(self, row_id, key, row):
-        self._call("PATCH", f"/pages/{row_id}", {"properties": self._props(key, row)})
-
-    def anonymous_status(self):
+    def read(self, page, name):
         try:
-            with urllib.request.urlopen(urllib.request.Request(self.public_url, headers={"User-Agent": "factory-docs-readback"}), timeout=30) as r:
-                return r.status
+            props = self.reader.get(f"/pages/{page}")
+            skill = self.reader.get(f"/ai/skills/{page}")
+            files = notion_snapshot.skill_files(self.reader.download(skill["url"]), name)
+        except notion_snapshot.AccessError as error:
+            raise AccessError(str(error)) from None
+        except (urllib.error.URLError, TimeoutError, ValueError, tarfile.TarError) as error:
+            raise UncertainWrite(f"readback {name}: {error}") from None
+        p = props["properties"]
+        return {"files": files, "public_url": props.get("public_url"), "types": {k: v.get("type") for k, v in p.items()},
+                "Version": notion_snapshot.prop_text(p.get("Version")), "Status": notion_snapshot.prop_text(p.get("Status")),
+                "Source": notion_snapshot.prop_text(p.get("Source"))}
+
+    def upload(self, page, name, files):
+        boundary = uuid.uuid4().hex
+        body = (f'--{boundary}\r\nContent-Disposition: form-data; name="file"; filename="{name}.tar.gz"\r\n'
+                f"Content-Type: application/gzip\r\n\r\n").encode() + tarball(name, files) + f"\r\n--{boundary}--\r\n".encode()
+        self._call("POST", f"/ai/skills/{page}/upload", raw=body, content_type=f"multipart/form-data; boundary={boundary}")
+
+    def set_properties(self, page, values, types):
+        props = {}
+        for name, value in values.items():
+            kind = types.get(name)
+            if kind in ("select", "status"):
+                props[name] = {kind: {"name": value}}
+            elif kind == "url":
+                props[name] = {"url": value}
+            elif kind == "rich_text":
+                props[name] = {"rich_text": [{"text": {"content": value}}]}
+            else:
+                raise AccessError(f"property {name} has unsupported type {kind!r}; adjust the table schema")
+        self._call("PATCH", f"/pages/{page}", {"properties": props})
+
+    def anonymous_status(self, url):
+        if not url:
+            return None
+        request = urllib.request.Request(url, headers={"User-Agent": "factory-docs-readback (https://github.com/arcitai/factory)"})
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                return response.status
         except urllib.error.HTTPError as error:
             return error.code
         except urllib.error.URLError:
             return None
 
 
-def upsert(target, key, row, log):
-    """Create or update one Key; on an uncertain write, read back before one same-identity retry."""
+class CommitStatus:
+    """The native, visible receipt: one GitHub commit status per propagated commit."""
+
+    def __init__(self, token, repository, sha):
+        self.token, self.repository, self.sha = token, repository, sha
+
+    def set(self, state, description):
+        if not self.token:
+            return
+        request = urllib.request.Request(f"https://api.github.com/repos/{self.repository}/statuses/{self.sha}", method="POST",
+                                         data=json.dumps({"state": state, "context": CONTEXT, "description": description[:140]}).encode(),
+                                         headers={"Authorization": "Bearer " + self.token, "Accept": "application/vnd.github+json"})
+        urllib.request.urlopen(request, timeout=30).close()
+
+
+def matches(root, item, action, current):
+    differ = reconcile.bundle_differences(root, item["path"], current["files"])
+    props = {k: action[k.lower()] for k in ("Version", "Status", "Source")}
+    return not differ and all(current.get(k) == v for k, v in props.items()), differ
+
+
+def write_with_readback(write, check, log, key, what):
+    """One write; on an uncertain result read back first, then retry once with the same identity."""
     for attempt in (1, 2):
-        existing = target.query(key)
-        if len(existing) > 1:
-            raise RuntimeError(f"{key}: {len(existing)} rows share this Key; resolve the duplicate by hand (nothing deleted)")
-        if existing and all(existing[0].get(f, "") == str(row.get(f, "")) for f in row):
-            log.append({"key": key, "action": "unchanged" if attempt == 1 else "confirmed-after-uncertain-write"})
-            return
         try:
-            if existing:
-                target.update(existing[0]["id"], key, row)
-            else:
-                target.create(key, row)
-            log.append({"key": key, "action": "updated" if existing else "created"})
-            return
+            write()
+            if check():
+                log.append({"key": key, "action": what})
+                return
+            log.append({"key": key, "action": f"{what}-readback-differs", "attempt": attempt})
         except UncertainWrite as error:
-            log.append({"key": key, "action": "uncertain", "attempt": attempt, "error": str(error)})
-    after = target.query(key)
-    if len(after) == 1 and all(after[0].get(f, "") == str(row.get(f, "")) for f in row):
-        log.append({"key": key, "action": "confirmed-after-uncertain-write"})
-        return
-    raise RuntimeError(f"{key}: write still uncertain after readback and one retry")
+            log.append({"key": key, "action": "uncertain", "what": what, "attempt": attempt, "error": str(error)})
+            try:
+                if check():
+                    log.append({"key": key, "action": f"{what}-confirmed-after-uncertain-write"})
+                    return
+            except UncertainWrite:
+                pass
+    raise RuntimeError(f"{key}: {what} not confirmed after readback and one retry")
 
 
-def run(rows, target, lock_path, now=None):
-    now = now or datetime.datetime.now(datetime.timezone.utc).isoformat()
+def run(root, actions, keys, target, status, lock_path):
     lock = Path(lock_path)
     try:
         fd = os.open(lock, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
     except FileExistsError:
         return {"result": "BUSY", "reason": f"another publication holds {lock}", "log": []}
     os.close(fd)
-    log, commit = [], rows[0]["commit"] if rows else ""
+    log, urls = [], {}
     try:
-        planned = {r["key"]: {f: r[f] for f in ("label", "summary", "commit", "hash")} for r in rows}
-        changed = []
-        for key, row in planned.items():
-            existing = target.query(key)
-            if len(existing) > 1:
-                raise RuntimeError(f"{key}: {len(existing)} rows share this Key; resolve the duplicate by hand (nothing deleted)")
-            if not existing or existing[0].get("hash") != row["hash"]:
-                changed.append(key)
-        if not changed:
-            upsert(target, MARKER, {"summary": f"no-op at {commit[:12]}", "commit": commit, "propagation": f"complete {now}"}, log)
-            return {"result": "NO-OP", "log": log, "public": target.anonymous_status()}
-        upsert(target, MARKER, {"summary": f"{len(changed)} pending: {', '.join(changed)[:1500]}", "commit": commit,
-                                "propagation": f"pending {now}"}, log)
-        for key in changed:
-            upsert(target, key, planned[key], log)
-        wrong = [k for k in changed if [r.get("hash") for r in target.query(k)] != [planned[k]["hash"]]]
-        public = target.anonymous_status()
-        if wrong or public != 200:
-            raise RuntimeError(f"readback failed: rows {wrong or 'ok'}, anonymous status {public}")
-        upsert(target, MARKER, {"summary": f"{len(changed)} propagated: {', '.join(changed)[:1500]}", "commit": commit,
-                                "propagation": f"complete {now}"}, log)
-        return {"result": "PUBLISHED", "changed": changed, "log": log, "public": public}
+        status.set("pending", f"propagating {len(actions)} released reference(s)" if actions else "verifying released references")
+        for action in actions:  # only Git-owned released references are ever written
+            item = keys.get(action["key"], {})
+            if item.get("owner") != "git" or item.get("label") != "released-reference" or action.get("page") != item.get("notion"):
+                raise RuntimeError(f"{action['key']}: refused; only Git-owned released references are propagated")
+        for action in actions:
+            item, name = keys[action["key"]], action["key"].split("/", 1)[1]
+            current = target.read(action["page"], name)
+            same, differ = matches(root, item, action, current)
+            if same:
+                log.append({"key": action["key"], "action": "unchanged"})
+                continue
+            if differ:
+                files = desired_files(root, item, action["version"])
+                write_with_readback(lambda: target.upload(action["page"], name, files),
+                                    lambda: not reconcile.bundle_differences(root, item["path"], target.read(action["page"], name)["files"]),
+                                    log, action["key"], "upload")
+            values = {k: action[k.lower()] for k in ("Version", "Status", "Source")}
+            types = current["types"]
+            write_with_readback(lambda: target.set_properties(action["page"], values, types),
+                                lambda: all(target.read(action["page"], name).get(k) == v for k, v in values.items()),
+                                log, action["key"], "properties")
+        for key, item in sorted(keys.items()):
+            if item.get("label") != "released-reference" or item.get("status", "active") != "active":
+                continue
+            current = target.read(item["notion"], key.split("/", 1)[1])
+            if reconcile.bundle_differences(root, item["path"], current["files"]):
+                raise RuntimeError(f"{key}: final readback differs from the released reference")
+            urls[key] = current["public_url"]
+        anonymous = {key: target.anonymous_status(url) for key, url in urls.items()}
+        refused = sorted(k for k, code in anonymous.items() if code != 200)
+        if refused:
+            status.set("pending", f"API readback complete; anonymous readback pending (browser check): {', '.join(refused)}")
+            return {"result": "ANONYMOUS-PENDING", "refused": refused, "anonymous": anonymous, "log": log}
+        status.set("success", f"{len(actions)} propagated; all released references read back, anonymous access 200")
+        return {"result": "PUBLISHED" if actions else "NO-OP", "anonymous": anonymous, "log": log}
     except AccessError as error:
+        status.set("failure", f"access missing or expired: {error}")
         return {"result": "FAILED-ACCESS", "reason": str(error), "log": log}
     except (RuntimeError, UncertainWrite) as error:
-        try:
-            upsert(target, MARKER, {"summary": str(error)[:1500], "commit": commit, "propagation": f"failed {now}"}, log)
-        except (AccessError, RuntimeError, UncertainWrite):
-            pass
+        status.set("failure", str(error))
         return {"result": "FAILED", "reason": str(error), "log": log}
     finally:
         lock.unlink()
@@ -160,25 +233,26 @@ def run(rows, target, lock_path, now=None):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--live", action="store_true", help="Write to the configured public table (requires the dedicated connection)")
+    parser.add_argument("--snapshot", type=Path, required=True, help="Canonical snapshot frozen just before (scripts/notion_snapshot.py)")
+    parser.add_argument("--live", action="store_true", help="Write through the dedicated connection")
     parser.add_argument("--lock", default=".factory-docs-publish.lock")
     args = parser.parse_args(argv)
     _, keys, errors = reconcile.load_manifest()
     if errors:
         print("\n".join(errors))
         return 1
-    rows = reconcile.projections(keys=keys)
+    actions = reconcile.plan(reconcile.ROOT, keys, args.snapshot)
     if not args.live:
-        print(json.dumps({"result": "PLAN", "rows": rows}, indent=2))
+        print(json.dumps({"result": "PLAN", "actions": actions}, indent=2))
         return 0
-    env = {name: os.environ.get(name, "") for name in ("FACTORY_PUBLIC_DOCS_TOKEN", "FACTORY_PUBLIC_DOCS_DATA_SOURCE", "FACTORY_PUBLIC_DOCS_URL")}
-    missing = [name for name, value in env.items() if not value]
-    if missing:
-        print(json.dumps({"result": "FAILED-ACCESS", "reason": f"not configured: {', '.join(missing)}"}))
+    token = os.environ.get("FACTORY_PUBLIC_DOCS_TOKEN", "")
+    if not token:
+        print(json.dumps({"result": "FAILED-ACCESS", "reason": "not configured: FACTORY_PUBLIC_DOCS_TOKEN"}))
         return 3
-    result = run(rows, NotionTable(*env.values()), args.lock)
+    status = CommitStatus(os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_REPOSITORY", ""), os.environ.get("FACTORY_DOCS_SHA", ""))
+    result = run(reconcile.ROOT, actions, keys, NotionSkills(token), status, args.lock)
     print(json.dumps(result, indent=2))
-    return {"PUBLISHED": 0, "NO-OP": 0, "BUSY": 2, "FAILED-ACCESS": 3}.get(result["result"], 4)
+    return {"PUBLISHED": 0, "NO-OP": 0, "ANONYMOUS-PENDING": 5, "BUSY": 2, "FAILED-ACCESS": 3}.get(result["result"], 4)
 
 
 if __name__ == "__main__":

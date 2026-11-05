@@ -3,8 +3,8 @@ name: factory-agent-ops
 description: Act as a project's lead for ideas, research, accepted tasks or an approved backlog; coordinate native workers, independent review and authorized delivery.
 license: MIT
 metadata:
-  version: "0.1.29"
-  updated: "2026-10-30"
+  version: "0.1.32"
+  updated: "2026-11-03"
 ---
 
 # Factory Agent Ops
@@ -134,5 +134,12 @@ installed and still open are different states. Include useful links and material
 limits. Research-only work ends with its decision; a backlog mandate ends at its
 agreed boundary. Native scheduling, reminders and messaging require a selected,
 authorized and tested route, not a promise in this skill.
+
+For owner status, catch-up after a break and owner decisions, use `factory-brief`
+when it is available: a read-only briefing from native records, one consolidated
+decision handoff per gate, and the next follow-up with its real native trigger or
+the named missing capability. The follow-up stays yours. An owner's planning agent
+may request or relay your briefing and act within an actual owner delegation; it does
+not silently take over your lead role or expand your mandate.
 
 Read the assigned Factory definition from its declared original to resolve the context home, roles, selected methods, review settings (`policy.review`) and operations. In our reference recipe the original is a YAML code block in Notion; a version-marked `factory.yaml` can serve as an explicitly selected release/experiment snapshot. Do not silently refresh that snapshot mid-task or maintain a second editable original. The declaration is agent-interpreted, not a runtime gate or permission grant. Preserve current owner instructions and holds; resolve conflicts or missing required choices before dependent work. Record its revision with materialized skill revisions for a reproducible handoff. An undecided optional setting holds only work that needs it.
