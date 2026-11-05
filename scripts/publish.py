@@ -220,6 +220,9 @@ def run(root, actions, keys, target, status, lock_path):
         for action in actions:
             item, name = keys[action["key"]], action["key"].split("/", 1)[1]
             current = target.read(action["page"], name)
+            if current.get("Status") != reconcile.RELEASED_STATUS and not item.get("cutover"):
+                raise RuntimeError(f"{action['key']}: page Status is {current.get('Status')!r}, not {reconcile.RELEASED_STATUS!r}; "
+                                   "refusing to write a page that is not a released-reference copy without a cutover record")
             if reconcile.version_tuple(current.get("Version")) > reconcile.version_tuple(action["version"]):
                 raise RuntimeError(f"{action['key']}: Notion copy {current.get('Version')} is newer than {action['version']}; refusing a downgrade")
             same, differ = matches(root, item, action, current)

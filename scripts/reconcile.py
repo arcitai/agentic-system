@@ -86,8 +86,9 @@ def validate(data, root):
                 paths[path] = key
     for item in keys.values():
         if item.get("label") == "released-reference" and item.get("status", "active") == "active":
-            shared = [k for k, other in keys.items() if other is not item and other.get("status", "active") == "active"
-                      and other.get("notion") == item.get("notion")]
+            # never share a page with another active entry, nor with any Notion-owned entry (even retired) without a cutover record
+            shared = [k for k, other in keys.items() if other is not item and other.get("notion") == item.get("notion")
+                      and (other.get("status", "active") == "active" or (other.get("owner") == "notion" and not item.get("cutover")))]
             if shared:
                 errors.append(f"{item['key']}: its Notion copy's page id is also used by {', '.join(shared)}")
     skills = {p.parent.relative_to(root).as_posix() for g in GROUPS for p in (Path(root) / g).glob("*/SKILL.md")}
@@ -142,6 +143,10 @@ def binding_changed(root, item, base, head):
 def impact(root, keys, base, head):
     items = []
     before = manifest_at(root, base)
+    # Ownership is tracked by key, by path and by Notion page id, including retired or deleted base entries,
+    # so renaming or retiring a key cannot move a Notion original to Git without a cutover record.
+    notion_paths = {i["path"]: k for k, i in before.items() if i.get("owner") == "notion" and i.get("path")}
+    notion_pages = {i["notion"]: k for k, i in before.items() if i.get("owner") == "notion" and i.get("notion")}
     for key, item in sorted(keys.items()):
         old = before.get(key)
         if old and (old.get("owner"), old.get("label")) != (item.get("owner"), item.get("label")):
@@ -150,6 +155,14 @@ def impact(root, keys, base, head):
             items.append({"key": key, "level": level, "reason": f"ownership change {old.get('owner')}/{old.get('label')} -> "
                           f"{item.get('owner')}/{item.get('label')}: a source cutover needs an owner decision and its own review"
                           + ("; moving a Notion original to Git also needs an explicit `cutover` record (decision reference)" if level == "CONFLICT" else "")})
+        if item.get("owner") == "git" and item.get("status", "active") == "active" and not item.get("cutover"):
+            moved = {f"path {item['path']}": notion_paths.get(item.get("path")), f"Notion page {item.get('notion')}": notion_pages.get(item.get("notion"))}
+            for what, source in moved.items():
+                if source and source != key:
+                    items.append({"key": key, "level": "CONFLICT", "reason": f"{what} belonged to Notion-owned {source}; moving a Notion "
+                                  "original to Git under another key needs an explicit `cutover` record"})
+        if old and item.get("label") == "released-reference" and old.get("notion") and old.get("notion") != item.get("notion") and not item.get("cutover"):
+            items.append({"key": key, "level": "CONFLICT", "reason": "released reference now points at a different Notion page; needs an explicit `cutover` record"})
     for line in git(root, "diff", "--name-status", "-M", base, head).splitlines():
         status, *names = line.split("\t")
         old, new = names[0], names[-1]

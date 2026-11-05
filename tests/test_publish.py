@@ -105,7 +105,7 @@ class PublishTests(unittest.TestCase):
     def damage(self):
         page = self.target.pages[self.review]
         page["files"]["SKILL.md"] = page["files"]["SKILL.md"].replace("Use a context separate", "Use any context", 1)
-        page["Status"] = "Draft"
+        page["Version"] = "0.1.17"
 
     def test_no_op_is_success_only_after_readback_and_anonymous_access(self):
         result = self.run_actions([])
@@ -185,6 +185,26 @@ class PublishTests(unittest.TestCase):
                 self.assertNotIn(result["result"], ("NO-OP", "PUBLISHED"))
                 self.assertNotEqual(self.status.states[-1][0], "success")
 
+    def test_a_page_that_is_not_a_released_reference_copy_is_never_written(self):
+        for status in ("Authoring edition", "Draft", None):
+            with self.subTest(status):
+                self.target.writes = []
+                self.damage()
+                self.target.pages[self.review]["Status"] = status
+                result = self.run_actions([action("skill/factory-review")])
+                self.assertEqual(result["result"], "FAILED")
+                self.assertIn("not a released-reference copy", result["reason"])
+                self.assertEqual(self.target.writes, [])
+
+    def test_a_cutover_record_allows_taking_over_a_page(self):
+        self.damage()
+        self.target.pages[self.review]["Status"] = "Authoring edition"
+        keys = {k: dict(v) for k, v in KEYS.items()}
+        keys["skill/factory-review"]["cutover"] = "https://github.com/arcitai/factory/issues/122#decision"
+        result = publish.run(ROOT, [action("skill/factory-review")], keys, self.target, self.status, self.lock)
+        self.assertEqual(result["result"], "PUBLISHED")
+        self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
+
     def test_a_newer_notion_copy_is_never_downgraded(self):
         self.damage()
         self.target.pages[self.review]["Version"] = "9.9.9"
@@ -200,7 +220,7 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.target.writes, [("upload", self.review), ("properties", self.review)])
         self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])
         self.assertIn("Pinned released reference", self.target.pages[self.review]["files"]["SKILL.md"])
-        self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
+        self.assertEqual(self.target.pages[self.review]["Version"], "0.1.18")
 
     def test_changed_property_content_with_equal_body_updates_only_properties(self):
         self.target.pages[self.review]["Source"] = "edited by hand"

@@ -105,8 +105,8 @@ reported, and a conflict fails the check:
 - a Git edit of an export without a new binding (`docs/sources.json` for skills, the recorded
   hash for the declaration), even if its version metadata is bumped;
 - an edited released reference without a new version line;
-- an ownership change (moving a Notion original to Git is a conflict unless its entry carries a
-  `cutover` record naming the owner decision);
+- an ownership change (moving a Notion original to Git, by key, path or page id, is a conflict
+  unless the entry carries a `cutover` record naming the owner decision);
 - a declaration export whose header block holds anything but comments;
 - a removed artifact still marked active;
 - an unowned path or a private path.
@@ -123,7 +123,10 @@ released-reference change without its release tag stays "release pending". For e
 page, an anonymous request must stay on the page's host and return its expected content: name,
 version and first instruction. HTTP 200 alone is not enough, since a login page or an empty app
 shell also returns 200. Anything less leaves a visible pending public browser readback with the
-exact pages and expected content. Success requires all of it. The workflow stays inactive until
+exact pages and expected content. The guide overview, the skills catalogue and its filters and
+anonymous file downloads are not read back automatically; they belong to that browser readback.
+The publisher never writes a page whose Status is not "Released reference" unless the manifest
+records a `cutover`. Success requires all of it. The workflow stays inactive until
 a dedicated connection, limited to the public guide subtree and the released-reference pages,
 is provisioned for an environment restricted to main and `v*` tags, with a required reviewer
 and a tag ruleset limiting who may create `v*` tags. The release or dispatch workflow runs from

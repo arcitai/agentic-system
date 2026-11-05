@@ -242,6 +242,33 @@ class ImpactTests(unittest.TestCase):
         items = self.repo.impact(self.base)[1]
         self.assertEqual(next(i for i in items if "ownership" in i.get("reason", ""))["level"], "ATTENTION")
 
+    def test_retiring_or_deleting_a_notion_key_cannot_move_its_original_to_git(self):
+        for mode in ("retire", "delete"):
+            with self.subTest(mode):
+                repo = Repo(Path(self.temporary.name) / mode, self)
+                base = git(repo.root, "rev-parse", "HEAD")
+
+                def move(k, a):
+                    old = k["skill/factory-evaluate"]
+                    a.append({**{x: y for x, y in old.items() if x != "binding"}, "key": "skill/factory-evaluate-ref",
+                              "owner": "git", "label": "released-reference"})
+                    if mode == "retire":
+                        old["status"] = "retired"
+                    else:
+                        a.remove(old)
+                repo.manifest(move)
+                repo.commit(mode)
+                _, keys, errors = reconcile.load_manifest(repo.root)
+                items = reconcile.impact(repo.root, keys, base, git(repo.root, "rev-parse", "HEAD"))
+                self.assertIn(("skill/factory-evaluate-ref", "CONFLICT"), levels(items))
+                if mode == "retire":
+                    self.assertTrue(any("page id is also used" in e for e in errors))
+
+    def test_pointing_a_released_reference_at_another_page_is_a_conflict(self):
+        self.repo.manifest(lambda k, a: k["skill/factory-review"].update(notion="00000000-0000-0000-0000-000000000001"))
+        self.repo.commit("repoint")
+        self.assertIn(("skill/factory-review", "CONFLICT"), levels(self.repo.impact(self.base)[1]))
+
     def test_a_shallow_clone_says_pin_ancestry_is_unverifiable(self):
         self.repo.commit("second")
         shallow = Path(self.temporary.name) / "shallow"
@@ -425,6 +452,8 @@ class WorkflowTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/check.yml").read_text(encoding="utf-8")
         self.assertIn("python3 scripts/reconcile.py --base", workflow)
         self.assertIn("fetch-depth: 0", workflow)
+        # a main push is never cancelled, so no merge skips its impact diff
+        self.assertIn("cancel-in-progress: ${{ github.event_name == 'pull_request' }}", workflow)
 
     def test_propagation_workflow_is_inactive_without_the_dedicated_connection(self):
         workflow = (ROOT / ".github/workflows/docs-publish.yml").read_text(encoding="utf-8")
