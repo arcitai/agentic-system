@@ -67,6 +67,8 @@ def validate(data, root):
             errors.append(f"{key}: a Notion-owned artifact needs its page id")
         if item.get("label") == "released-reference" and not re.fullmatch(r"[0-9a-f-]{36}", item.get("notion", "")):
             errors.append(f"{key}: a released reference needs the page id of its Notion copy")
+        if item.get("cutover") is not None and not (isinstance(item["cutover"], str) and item["cutover"].strip()):
+            errors.append(f"{key}: cutover must name the owner decision (issue/comment URL)")
         binding = item.get("binding")
         if binding is not None and (item.get("label") != "export" or not binding.get("revision") or not binding.get("version")):
             errors.append(f"{key}: binding needs label export, revision and version")
@@ -143,8 +145,11 @@ def impact(root, keys, base, head):
     for key, item in sorted(keys.items()):
         old = before.get(key)
         if old and (old.get("owner"), old.get("label")) != (item.get("owner"), item.get("label")):
-            items.append({"key": key, "level": "ATTENTION", "reason": f"ownership change {old.get('owner')}/{old.get('label')} -> "
-                          f"{item.get('owner')}/{item.get('label')}: a source cutover needs an owner decision and its own review"})
+            to_git = old.get("owner") == "notion" and item.get("owner") == "git"
+            level = "CONFLICT" if to_git and not item.get("cutover") else "ATTENTION"
+            items.append({"key": key, "level": level, "reason": f"ownership change {old.get('owner')}/{old.get('label')} -> "
+                          f"{item.get('owner')}/{item.get('label')}: a source cutover needs an owner decision and its own review"
+                          + ("; moving a Notion original to Git also needs an explicit `cutover` record (decision reference)" if level == "CONFLICT" else "")})
     for line in git(root, "diff", "--name-status", "-M", base, head).splitlines():
         status, *names = line.split("\t")
         old, new = names[0], names[-1]
@@ -325,11 +330,13 @@ def compare(root, keys, snapshot_dir):
         if item["kind"] == "declaration":
             text = (Path(root) / item["path"]).read_text(encoding="utf-8")
             header = re.search(r"Canonical YAML SHA-256 [^:]*: ([0-9a-f]{64})", text)
-            # The export is a comment header, one blank line, then the canonical YAML exactly as hashed.
-            body = text.split("\n\n", 1)[1] if "\n\n" in text else ""
+            # The export is a comment-only header, one blank line, then the canonical YAML exactly as hashed.
+            head, _, body = text.partition("\n\n")
             actual = hashlib.sha256(body.encode("utf-8")).hexdigest()
             claimed = header[1] if header else None
-            if claimed != actual:
+            if not head or not all(line.startswith("#") for line in head.splitlines()):
+                level, reason = "CONFLICT", "export header block must contain only comments; anything else would be interpreted outside the hashed original"
+            elif claimed != actual:
                 level, reason = "CONFLICT", "export body does not hash to the canonical hash its header claims"
             elif actual == canon.get("sha256"):
                 level, reason = "IN-SYNC", "export body hashes to the canonical hash"
@@ -353,6 +360,8 @@ def compare(root, keys, snapshot_dir):
             drift = [f"{name}: {have!r} -> {want!r}" for name, (have, want) in props.items() if have != want]
             if not differ and not drift:
                 entry.update(level="IN-SYNC", reason="Notion copy equals the released reference and its pinned source")
+            elif pin is None and not re.fullmatch(re.escape(REPO_URL) + r"/blob/[0-9a-f]{40}/" + re.escape(item["path"]) + r"/SKILL\.md", canon.get("source") or ""):
+                entry.update(level="ATTENTION", reason="invalid or foreign Source pin on the Notion copy; the next release run re-pins it", drift=drift)
             elif pin is None:
                 entry.update(level="ATTENTION", reason="released-reference change awaits its release tag before the Notion copy is updated", drift=drift)
             else:

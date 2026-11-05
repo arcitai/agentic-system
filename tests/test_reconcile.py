@@ -95,6 +95,7 @@ class ManifestTests(unittest.TestCase):
             "pending on a Git-owned artifact": lambda k, a: k["doc/readme"].update(pending=[{"id": "x", "after": "y", "holder": "z"}]),
             "missing kind": lambda k, a: k["doc/vision"].pop("kind"),
             "released-reference page id reused": lambda k, a: k["skill/factory-spec"].update(notion=k["skill/factory-review"]["notion"]),
+            "empty cutover record": lambda k, a: k["skill/factory-spec"].update(cutover=""),
         }
         for name, mutate in cases.items():
             with self.subTest(name), tempfile.TemporaryDirectory() as temporary:
@@ -217,12 +218,36 @@ class ImpactTests(unittest.TestCase):
         base_pin = f"{reconcile.REPO_URL}/blob/{self.base}/{item['path']}/SKILL.md"
         self.assertEqual(reconcile.released_pin(self.repo.root, item, base_pin), base_pin)
 
+    def test_an_ancestor_pin_whose_bundle_changed_is_not_kept(self):
+        _, keys, _ = reconcile.load_manifest(self.repo.root)
+        item = keys["skill/factory-review"]
+        self.repo.edit("adlc/factory-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
+        self.repo.commit("unreleased version bump")
+        base_pin = f"{reconcile.REPO_URL}/blob/{self.base}/{item['path']}/SKILL.md"
+        self.assertIsNone(reconcile.released_pin(self.repo.root, item, base_pin))  # ancestor, but the bundle changed
+        git(self.repo.root, "tag", "v" + (self.repo.root / "VERSION").read_text().strip())
+        head = git(self.repo.root, "rev-parse", "HEAD")
+        self.assertEqual(reconcile.released_pin(self.repo.root, item, base_pin), f"{reconcile.REPO_URL}/blob/{head}/{item['path']}/SKILL.md")
+
+    def test_moving_a_notion_original_to_git_needs_a_cutover_record(self):
+        def flip(k, a):
+            k["skill/factory-evaluate"].update(owner="git", label="released-reference")
+            k["skill/factory-evaluate"].pop("binding")
+        self.repo.manifest(flip)
+        self.repo.commit("flip")
+        items = self.repo.impact(self.base)[1]
+        self.assertEqual(next(i for i in items if "ownership" in i.get("reason", ""))["level"], "CONFLICT")
+        self.repo.manifest(lambda k, a: k["skill/factory-evaluate"].update(cutover="https://github.com/arcitai/factory/issues/122#decision"))
+        self.repo.commit("cutover record")
+        items = self.repo.impact(self.base)[1]
+        self.assertEqual(next(i for i in items if "ownership" in i.get("reason", ""))["level"], "ATTENTION")
+
     def test_a_shallow_clone_says_pin_ancestry_is_unverifiable(self):
         self.repo.commit("second")
         shallow = Path(self.temporary.name) / "shallow"
         git(Path(self.temporary.name), "clone", "-q", "--depth", "1", f"file://{self.repo.root}", str(shallow))
         result = reconcile.run(shallow)
-        self.assertTrue(any("shallow clone" in i["reason"] for i in result["items"]))
+        self.assertTrue(any("shallow clone" in i["reason"] and i["level"] == "ATTENTION" for i in result["items"]))
         self.assertNotIn("shallow clone", " ".join(i["reason"] for i in reconcile.run(self.repo.root)["items"]))
 
     def test_unowned_and_private_paths_are_reported(self):
@@ -303,6 +328,9 @@ class CanonicalTests(unittest.TestCase):
             self.assertEqual(level(), "IN-SYNC")
             decl.write_text(text.replace("status: candidate", "status: candidate\nmalicious: true"))
             self.assertEqual(level(), "CONFLICT")  # header unchanged, body edited
+            for injected in ("approval: automatic\n" + text, text.replace("# Edit the original", "approval: automatic\n# Edit the original", 1)):
+                decl.write_text(injected)
+                self.assertEqual(level(), "CONFLICT")  # a YAML key in the header block is never in sync
             body = text.split("\n\n", 1)[1] + "extra: 1\n"
             new = hashlib.sha256(body.encode()).hexdigest()
             decl.write_text(text.split("\n\n", 1)[0].replace(canonical, new) + "\n\n" + body)
@@ -352,6 +380,10 @@ class CanonicalTests(unittest.TestCase):
             f["source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/factory-review/SKILL.md"
         main, _, _ = self.snapshot(body)
         self.assertIn("awaits its release tag", main["skill/factory-review"]["reason"])
+
+        def foreign(s):
+            s["artifacts"]["skill/factory-review"]["source"] = "https://example.com/blob/" + "a" * 40 + "/x"
+        self.assertIn("invalid or foreign Source pin", self.snapshot(foreign)[0]["skill/factory-review"]["reason"])
 
     def test_only_an_exact_ancestor_pin_of_this_repository_and_skill_is_valid(self):
         item = reconcile.load_manifest(ROOT)[1]["skill/factory-review"]
