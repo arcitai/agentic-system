@@ -1,6 +1,6 @@
 # Factory definition and source ownership
 
-Revision: 0.1.30 · Updated: 2026-10-30
+Revision: 0.1.33 · Updated: 2026-11-05
 
 The [Notion YAML code block](https://gustavanderson.notion.site/4056d2e17f56811b96fec7b970741916) is Factory Lab's only editable declaration. [factory.yaml](../factory.yaml) is a version-marked export: one small description of its purpose, context, roles, selected methods, review
 settings, automation and routine ideas and evaluation proposals. An adopting project chooses its own declaration and context home. A repository is optional for non-software work.
@@ -73,6 +73,29 @@ A maintainer changes an owning Notion source and explicitly exports the selected
 revision and resources. Review and record the actual readback, then freeze the
 portable candidate for checks and release. Do not infer that merely fetching a
 page exercised Notion's Skills API or installed its directory in a harness.
+
+## Documentation reconciliation and propagation
+
+[`docs/sources.json`](sources.json) records each public artifact's owner, label and stable Key: the
+Notion page that is the original, or the Git path that is the original or a deliberate export.
+`scripts/reconcile.py` runs in CI on every pull request and main merge. It reports a visible
+NO-OP, CHANGES, ATTENTION or CONFLICT result in the job summary and as an artifact. A Git edit
+of a Notion-owned export without a new canonical binding (skill metadata, or the declaration's
+recorded hash), an edited released reference, a removed artifact still marked active, an
+unowned path or a private path is reported; a conflict fails the check. With a frozen canonical
+snapshot (`scripts/notion_snapshot.py`, read-only), it also compares each export with its
+original. It normalizes Notion's rendering and compares supporting files byte for byte. A newer
+original stays "export pending"; Git never overwrites it.
+
+`scripts/publish.py` writes only Git-owned projections to one dedicated public status table:
+the release label (released edition or main working revision), the Lab workspace declaration
+and each skill's distribution state. It never writes a Notion-owned original. One run at a
+time marks propagation pending, upserts rows by Key and content hash, and reads an uncertain
+write back before one same-identity retry. It then reads the affected set back, plus anonymous
+access, before marking it complete; a failure stays visible. The publishing workflow stays
+inactive until a dedicated connection, limited to that public table, is provisioned. Main
+working revisions are never relabelled as releases: a release is the tag that matches
+`VERSION`. These checks verify sources and their propagation, not installation or adoption.
 
 ## Inspiration and credit
 
