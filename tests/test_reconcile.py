@@ -384,6 +384,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn("refs/heads/main", workflow)
         self.assertIn("startsWith(github.ref, 'refs/tags/v')", workflow)
         self.assertIn("head_branch == 'main'", workflow)
+        self.assertIn('git merge-base --is-ancestor "$FACTORY_DOCS_SHA" origin/main', workflow)
         self.assertNotIn("FACTORY_NOTION_TOKEN", workflow)
         self.assertNotIn("contents: write", workflow)
 
