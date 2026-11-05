@@ -263,7 +263,7 @@ def run(root, actions, keys, target, status, lock_path):
         if unverified:
             status.set("pending", f"API readback complete; public browser readback pending for {len(unverified)} page(s)")
             return {"result": "PUBLIC-READBACK-PENDING", "browser_checklist": unverified, "receipts": receipts, "log": log}
-        status.set("success", f"{len(actions)} propagated; set read back; public content verified for {len(checks)} page(s)")
+        status.set("success", f"released references only: {len(actions)} propagated; set read back; public content verified for {len(checks)} page(s)")
         return {"result": "PUBLISHED" if actions else "NO-OP", "public": checks, "receipts": receipts, "log": log}
     except AccessError as error:
         status.set("failure", f"access missing or expired: {error}")

@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -196,6 +197,13 @@ class ImpactTests(unittest.TestCase):
         self.assertIn(("skill/factory-security", "CHANGE"), levels(items))
         self.assertNotIn("CONFLICT", {i["level"] for i in items})
 
+    def test_manifest_errors_with_a_base_do_not_crash(self):
+        self.repo.manifest(lambda k, a: k["doc/vision"].pop("kind"))
+        self.repo.commit("broken manifest")
+        result = reconcile.run(self.repo.root, self.base)
+        self.assertEqual(result["result"], "CONFLICT")
+        self.assertTrue(any("kind" in i["reason"] for i in result["items"]))
+
     def test_unowned_and_private_paths_are_reported(self):
         (self.repo.root / "notes.md").write_text("x")
         (self.repo.root / "docs/.claude").mkdir()
@@ -259,6 +267,26 @@ class CanonicalTests(unittest.TestCase):
         self.assertEqual(item["level"], "ATTENTION")
         self.assertIn("never overwrite Notion from Git", item["reason"])
 
+    def test_declaration_body_is_hashed_not_just_its_header_claim(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "r"
+            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
+            decl = root / "factory.yaml"
+            text = decl.read_text()
+            canonical = re.search(r"SHA-256 [^:]*: ([0-9a-f]{64})", text)[1]
+            _, keys, _ = reconcile.load_manifest(root)
+            snap = Path(temporary) / "snap"
+            snap.mkdir()
+            (snap / "snapshot.json").write_text(json.dumps({"format": 1, "errors": [], "artifacts": {"declaration/factory-lab": {"revision": "t", "sha256": canonical}}}))
+            level = lambda: next(i for i in reconcile.compare(root, keys, snap) if i["key"] == "declaration/factory-lab")["level"]
+            self.assertEqual(level(), "IN-SYNC")
+            decl.write_text(text.replace("status: candidate", "status: candidate\nmalicious: true"))
+            self.assertEqual(level(), "CONFLICT")  # header unchanged, body edited
+            body = text.split("\n\n", 1)[1] + "extra: 1\n"
+            new = hashlib.sha256(body.encode()).hexdigest()
+            decl.write_text(text.split("\n\n", 1)[0].replace(canonical, new) + "\n\n" + body)
+            self.assertEqual(level(), "ATTENTION")  # self-consistent export, canonical differs: export pending
+
     def test_version_disagreement_with_equal_body_is_not_in_sync(self):
         for revision in ("same", "new"):
             with self.subTest(revision):
@@ -303,6 +331,24 @@ class CanonicalTests(unittest.TestCase):
             f["source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/factory-review/SKILL.md"
         main, _, _ = self.snapshot(body)
         self.assertIn("awaits its release tag", main["skill/factory-review"]["reason"])
+
+    def test_only_an_exact_ancestor_pin_of_this_repository_and_skill_is_valid(self):
+        item = reconcile.load_manifest(ROOT)[1]["skill/factory-review"]
+        pin = git(ROOT, "log", "-1", "--format=%H", "--", item["path"])
+        good = f"{reconcile.REPO_URL}/blob/{pin}/{item['path']}/SKILL.md"
+        self.assertEqual(reconcile.released_pin(ROOT, item, good), good)
+        bad = {"fork": good.replace("arcitai/factory", "attacker/fork"),
+               "wrong skill": good.replace("factory-review", "factory-spec"),
+               "non-URL": f"javascript:alert(1)//x/blob/{pin}/",
+               "unknown commit": good.replace(pin, "0" * 40),
+               "suffix": good + "?x"}
+        for name, source in bad.items():
+            with self.subTest(name):
+                self.assertNotEqual(reconcile.released_pin(ROOT, item, source), source)
+
+        def forged(s):
+            s["artifacts"]["skill/factory-review"]["source"] = bad["fork"]
+        self.assertNotEqual(self.snapshot(forged)[0]["skill/factory-review"]["level"], "IN-SYNC")
 
     def test_pending_handoffs_report_pending_applied_and_stale(self):
         _, pending, _ = self.snapshot()

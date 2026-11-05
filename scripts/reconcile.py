@@ -270,10 +270,12 @@ def release_context(root):
 
 
 def released_pin(root, item, current_source):
-    """Keep an existing pin while the bundle there equals the working tree; else pin the release commit."""
-    match = re.search(r"/blob/([0-9a-f]{40})/", current_source or "")
+    """Keep an existing pin only if it is exactly this repository's URL for this skill at a commit that is an
+    ancestor of HEAD and whose bundle equals the working tree; else pin the release commit (or None before it)."""
+    match = re.fullmatch(re.escape(REPO_URL) + r"/blob/([0-9a-f]{40})/" + re.escape(item["path"]) + r"/SKILL\.md", current_source or "")
     if match:
         try:
+            subprocess.run(["git", "merge-base", "--is-ancestor", match[1], "HEAD"], cwd=root, check=True, capture_output=True)
             subprocess.run(["git", "diff", "--quiet", match[1], "HEAD", "--", item["path"]], cwd=root, check=True,
                            capture_output=True)
             return current_source
@@ -321,10 +323,19 @@ def compare(root, keys, snapshot_dir):
         if item["kind"] == "page":
             continue
         if item["kind"] == "declaration":
-            header = re.search(r"Canonical YAML SHA-256 [^:]*: ([0-9a-f]{64})", (Path(root) / item["path"]).read_text(encoding="utf-8"))
-            same = bool(header) and header[1] == canon.get("sha256")
-            items.append({**entry, "level": "IN-SYNC" if same else "ATTENTION",
-                          "reason": "export binding equals the canonical hash" if same else "canonical declaration changed after this export; export pending"})
+            text = (Path(root) / item["path"]).read_text(encoding="utf-8")
+            header = re.search(r"Canonical YAML SHA-256 [^:]*: ([0-9a-f]{64})", text)
+            # The export is a comment header, one blank line, then the canonical YAML exactly as hashed.
+            body = text.split("\n\n", 1)[1] if "\n\n" in text else ""
+            actual = hashlib.sha256(body.encode("utf-8")).hexdigest()
+            claimed = header[1] if header else None
+            if claimed != actual:
+                level, reason = "CONFLICT", "export body does not hash to the canonical hash its header claims"
+            elif actual == canon.get("sha256"):
+                level, reason = "IN-SYNC", "export body hashes to the canonical hash"
+            else:
+                level, reason = "ATTENTION", "canonical declaration changed after this export; export pending"
+            items.append({**entry, "level": level, "reason": reason})
             continue
         if not item.get("path"):
             items.append({**entry, "level": "INFO", "reason": "authoring edition without a portable export; export it deliberately when a distribution needs it"})
@@ -404,7 +415,7 @@ def run(root, base=None, head="HEAD", canonical=None):
     data, keys, errors = load_manifest(root)
     result = {"head": git(root, "rev-parse", head).strip(), "base": None, "items": [], "canonical": "NOT RUN (no snapshot supplied)"}
     result["items"] += [{"level": "CONFLICT", "reason": e} for e in errors]
-    if base and not re.fullmatch(r"0+", base):
+    if base and not re.fullmatch(r"0+", base) and not errors:
         result["base"] = git(root, "rev-parse", base).strip()
         result["items"] += impact(root, keys, result["base"], result["head"])
     if canonical and not errors:

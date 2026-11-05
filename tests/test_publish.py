@@ -174,6 +174,17 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.status.states[-1][0], "pending")
         self.assertEqual(self.target.writes, [])
 
+    def test_forged_or_wrong_sources_are_never_a_successful_readback(self):
+        pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", "adlc/factory-review").strip()
+        good = self.target.pages[self.review]["Source"]
+        for source in (good.replace("arcitai/factory", "attacker/fork"), good.replace("factory-review", "factory-spec"),
+                       f"javascript:alert(1)//x/blob/{pin}/"):
+            with self.subTest(source):
+                self.target.pages[self.review]["Source"], self.status.states = source, []
+                result = self.run_actions([])
+                self.assertNotIn(result["result"], ("NO-OP", "PUBLISHED"))
+                self.assertNotEqual(self.status.states[-1][0], "success")
+
     def test_a_newer_notion_copy_is_never_downgraded(self):
         self.damage()
         self.target.pages[self.review]["Version"] = "9.9.9"
