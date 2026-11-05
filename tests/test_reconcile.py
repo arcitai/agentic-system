@@ -447,12 +447,22 @@ class CanonicalTests(unittest.TestCase):
         self.assertIn("re-prepare", next(p for p in pending if p["pending"] == "guide-status-20261105")["reason"])
 
 
+class DocsTests(unittest.TestCase):
+    def test_docs_do_not_claim_coverage_the_publisher_does_not_check(self):
+        text = (ROOT / "docs/factory-definition.md").read_text(encoding="utf-8")
+        self.assertNotIn("Success requires all of it", text)
+        self.assertIn("covers only the released-reference pages", text)
+        self.assertIn("does not read back", text)
+        self.assertIn("not operational", text)
+
+
 class WorkflowTests(unittest.TestCase):
     def test_ci_runs_the_visible_reconciliation(self):
         workflow = (ROOT / ".github/workflows/check.yml").read_text(encoding="utf-8")
         self.assertIn("python3 scripts/reconcile.py --base", workflow)
         self.assertIn("fetch-depth: 0", workflow)
-        # a main push is never cancelled, so no merge skips its impact diff
+        # each main push has its own concurrency group and is never cancelled or replaced
+        self.assertIn("group: method-checks-${{ github.event_name == 'pull_request' && github.ref || github.sha }}", workflow)
         self.assertIn("cancel-in-progress: ${{ github.event_name == 'pull_request' }}", workflow)
 
     def test_propagation_workflow_is_inactive_without_the_dedicated_connection(self):

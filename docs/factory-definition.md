@@ -98,7 +98,8 @@ or a deliberate export. Propagation follows that ownership; there is no two-way 
 - **Git-owned explanations** (README, docs, code) are published natively by this public
   repository.
 
-`scripts/reconcile.py` runs on every pull request and main merge and always reports a result:
+`scripts/reconcile.py` runs on every pull request and every main push (each push in its own CI
+concurrency group) and always reports a result:
 NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. These are
 reported, and a conflict fails the check:
 
@@ -117,22 +118,31 @@ targets and supporting bytes, and lists the pending exports and handoffs.
 Publication runs one at a time from main or a `v*` release tag. The commit status
 `factory/docs-propagation` is set pending before any write. Each write is by page identity, and
 an uncertain write is read back before one same-identity retry. A Notion copy newer than Git is
-never downgraded. After all writes, every released reference is read back: its files, body and
-Version/Status/Source, with each page's revision and file hashes kept as the receipt. A
-released-reference change without its release tag stays "release pending". For each affected
-page, an anonymous request must stay on the page's host and return its expected content: name,
-version and first instruction. HTTP 200 alone is not enough, since a login page or an empty app
-shell also returns 200. Anything less leaves a visible pending public browser readback with the
-exact pages and expected content. The guide overview, the skills catalogue and its filters and
-anonymous file downloads are not read back automatically; they belong to that browser readback.
-The publisher never writes a page whose Status is not "Released reference" unless the manifest
-records a `cutover`. Success requires all of it. The workflow stays inactive until
-a dedicated connection, limited to the public guide subtree and the released-reference pages,
-is provisioned for an environment restricted to main and `v*` tags, with a required reviewer
-and a tag ruleset limiting who may create `v*` tags. The release or dispatch workflow runs from
-the tag's own commit, so those settings, not a workflow step, are the boundary. A main working revision is
-never labelled a release: a release is the tag that matches `VERSION`. These checks verify
-sources and their propagation, not installation or adoption.
+never downgraded, and the publisher never writes a page whose Status is not "Released reference"
+unless the manifest records a `cutover`. After all writes, every released reference is read
+back: its files, body and Version/Status/Source, with each page's revision and file hashes kept
+as the receipt. A released-reference change without its release tag stays "release pending".
+For each affected page, an anonymous request must stay on the page's host and return its
+expected content: name, version and first instruction. HTTP 200 alone is not enough, since a
+login page or an empty app shell also returns 200. Anything less leaves a visible pending public
+browser readback that lists the exact pages and expected content.
+
+A `success` status therefore covers only the released-reference pages: the API readback of the
+whole set, plus anonymous page content for the affected pages. The publisher does not read back
+the guide overview, the skills catalogue and its filters, or anonymous file downloads. These, and
+the first live run itself, wait for the bounded live proof: one authorized live change from a
+release tag, a read-only rerun, and a browser readback of those public views. Until that proof
+the publisher is not operational, and "complete only after the coherent public set is read
+back" (#122) is only partly met. Content templates and other pages outside `docs/sources.json`
+are never planned, and the status rule refuses them.
+
+The workflow stays inactive until a dedicated connection, limited to the public guide subtree
+and the released-reference pages, is provisioned for an environment restricted to main and `v*`
+tags, with a required reviewer and a tag ruleset limiting who may create `v*` tags. The release
+or dispatch workflow runs from the tag's own commit, so those settings, not a workflow step, are
+the boundary. A newer queued propagation run replaces a pending one; a dispatch reruns it. A
+main working revision is never labelled a release: a release is the tag that matches `VERSION`.
+These checks verify sources and their propagation, not installation or adoption.
 
 ## Inspiration and credit
 
