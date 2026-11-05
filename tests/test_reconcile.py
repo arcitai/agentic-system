@@ -199,10 +199,31 @@ class ImpactTests(unittest.TestCase):
 
     def test_manifest_errors_with_a_base_do_not_crash(self):
         self.repo.manifest(lambda k, a: k["doc/vision"].pop("kind"))
+        self.repo.edit("VISION.md", "#", "# ")  # a changed path owned by the invalid entry
         self.repo.commit("broken manifest")
         result = reconcile.run(self.repo.root, self.base)
         self.assertEqual(result["result"], "CONFLICT")
         self.assertTrue(any("kind" in i["reason"] for i in result["items"]))
+
+    def test_a_pin_on_a_non_ancestor_commit_is_not_kept(self):
+        _, keys, _ = reconcile.load_manifest(self.repo.root)
+        item = keys["skill/factory-review"]
+        git(self.repo.root, "switch", "-q", "-c", "side")
+        side = self.repo.commit("side branch, same bundle")
+        git(self.repo.root, "switch", "-q", "-")
+        self.repo.commit("main moves on")
+        source = f"{reconcile.REPO_URL}/blob/{side}/{item['path']}/SKILL.md"
+        self.assertIsNone(reconcile.released_pin(self.repo.root, item, source))
+        base_pin = f"{reconcile.REPO_URL}/blob/{self.base}/{item['path']}/SKILL.md"
+        self.assertEqual(reconcile.released_pin(self.repo.root, item, base_pin), base_pin)
+
+    def test_a_shallow_clone_says_pin_ancestry_is_unverifiable(self):
+        self.repo.commit("second")
+        shallow = Path(self.temporary.name) / "shallow"
+        git(Path(self.temporary.name), "clone", "-q", "--depth", "1", f"file://{self.repo.root}", str(shallow))
+        result = reconcile.run(shallow)
+        self.assertTrue(any("shallow clone" in i["reason"] for i in result["items"]))
+        self.assertNotIn("shallow clone", " ".join(i["reason"] for i in reconcile.run(self.repo.root)["items"]))
 
     def test_unowned_and_private_paths_are_reported(self):
         (self.repo.root / "notes.md").write_text("x")

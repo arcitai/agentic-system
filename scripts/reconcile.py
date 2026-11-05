@@ -415,6 +415,8 @@ def run(root, base=None, head="HEAD", canonical=None):
     data, keys, errors = load_manifest(root)
     result = {"head": git(root, "rev-parse", head).strip(), "base": None, "items": [], "canonical": "NOT RUN (no snapshot supplied)"}
     result["items"] += [{"level": "CONFLICT", "reason": e} for e in errors]
+    if git(root, "rev-parse", "--is-shallow-repository").strip() == "true":
+        result["items"].append({"key": None, "level": "ATTENTION", "reason": "shallow clone: released-reference pin ancestry cannot be verified; use full history (fetch-depth: 0)"})
     if base and not re.fullmatch(r"0+", base) and not errors:
         result["base"] = git(root, "rev-parse", base).strip()
         result["items"] += impact(root, keys, result["base"], result["head"])
