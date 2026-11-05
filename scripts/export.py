@@ -11,7 +11,7 @@ is reported, never guessed.
 import argparse
 import base64
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import sys
 
@@ -116,6 +116,10 @@ def export(root, snapshot_dir, key, title=None):
         heading = re.search(r"^# (.+)$", existing.read_text(encoding="utf-8"), re.M)
         title = heading[1] if heading else None
     files = canon["files"]
+    for rel in files:  # the snapshot is input: never write outside the bundle
+        parts = PurePosixPath(rel).parts
+        if not rel or "\\" in rel or PurePosixPath(rel).is_absolute() or ".." in parts or not parts:
+            raise ValueError(f"{key}: unsafe file path {rel!r} in the snapshot")
     bundled = set(files)
     hints = {}
     if existing.is_file():

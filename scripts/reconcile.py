@@ -27,12 +27,15 @@ GROUPS = ("foundation", "agent-ops", "adlc")
 KEY = re.compile(r"^[a-z]+/[a-z0-9]+(?:-[a-z0-9]+)*$")
 LABELS = {"notion": {"authoring-edition", "export"}, "git": {"released-reference", "main-working"}}
 STATUSES = {"active", "renamed", "retired"}
+KINDS = {"page", "database", "declaration", "skill", "doc", "code", "asset"}
 PRIVATE = (".factory-task", ".claude", ".git", "dist", ".venv")
 REPO_URL = "https://github.com/arcitai/factory"
 RELEASED_STATUS = "Released reference"
-# Lines that bind an export or release to its source; editing the artifact without changing them bypasses the original.
-BINDING = {"declaration": re.compile(r"^# Canonical YAML SHA-256 .*$|^definition_version: .*$", re.M),
-           "skill": re.compile(r'^  (?:version|updated): ".*"$', re.M)}
+# What binds an artifact to its source. A Notion-owned skill export is bound by its docs/sources.json binding
+# (written by scripts/export.py); a declaration export by its recorded canonical hash; a released reference by
+# its version line. Editing the artifact without changing that binding bypasses the original.
+BINDING = {"declaration": re.compile(r"^# Canonical YAML SHA-256 .*$", re.M),
+           "released-reference": re.compile(r'^  version: ".*"$', re.M)}
 RANK = {"CONFLICT": 4, "ATTENTION": 3, "CHANGE": 2, "INFO": 1, "IN-SYNC": 0}
 
 
@@ -50,6 +53,8 @@ def validate(data, root):
         if not KEY.fullmatch(key) or key in keys:
             errors.append(f"{key or '?'}: invalid or duplicate key")
         keys[key] = item
+        if item.get("kind") not in KINDS:
+            errors.append(f"{key}: kind must be one of {', '.join(sorted(KINDS))}")
         if item.get("owner") not in LABELS or item.get("label") not in LABELS.get(item.get("owner"), ()):
             errors.append(f"{key}: owner/label combination is not allowed")
         if status not in STATUSES:
@@ -77,6 +82,12 @@ def validate(data, root):
                 if path in paths:
                     errors.append(f"{key}: path {path} already owned by {paths[path]}")
                 paths[path] = key
+    for item in keys.values():
+        if item.get("label") == "released-reference" and item.get("status", "active") == "active":
+            shared = [k for k, other in keys.items() if other is not item and other.get("status", "active") == "active"
+                      and other.get("notion") == item.get("notion")]
+            if shared:
+                errors.append(f"{item['key']}: its Notion copy's page id is also used by {', '.join(shared)}")
     skills = {p.parent.relative_to(root).as_posix() for g in GROUPS for p in (Path(root) / g).glob("*/SKILL.md")}
     mapped = {i["path"] for i in keys.values() if i.get("kind") == "skill" and i.get("path") and i.get("status", "active") == "active"}
     errors += [f"skill {s}: no manifest entry" for s in sorted(skills - mapped)]
@@ -109,7 +120,13 @@ def manifest_at(root, rev):
 
 
 def binding_changed(root, item, base, head):
-    pattern = BINDING.get(item["kind"])
+    if item["kind"] == "skill" and item["owner"] == "notion":
+        before = manifest_at(root, base).get(item["key"], {}).get("binding")
+        after = manifest_at(root, head).get(item["key"], {}).get("binding")
+        return after is not None and before != after
+    pattern = BINDING.get("released-reference" if item["label"] == "released-reference" else item["kind"])
+    if pattern is None:
+        return False
     target = item["path"] + ("/SKILL.md" if item["kind"] == "skill" else "")
 
     def lines(rev):
@@ -117,13 +134,17 @@ def binding_changed(root, item, base, head):
             return pattern.findall(git(root, "show", f"{rev}:{target}"))
         except subprocess.CalledProcessError:
             return None
-    before = manifest_at(root, base).get(item["key"], {}).get("binding")
-    after = manifest_at(root, head).get(item["key"], {}).get("binding")
-    return pattern is not None and (lines(base) != lines(head) or before != after)
+    return lines(base) != lines(head)
 
 
 def impact(root, keys, base, head):
     items = []
+    before = manifest_at(root, base)
+    for key, item in sorted(keys.items()):
+        old = before.get(key)
+        if old and (old.get("owner"), old.get("label")) != (item.get("owner"), item.get("label")):
+            items.append({"key": key, "level": "ATTENTION", "reason": f"ownership change {old.get('owner')}/{old.get('label')} -> "
+                          f"{item.get('owner')}/{item.get('label')}: a source cutover needs an owner decision and its own review"})
     for line in git(root, "diff", "--name-status", "-M", base, head).splitlines():
         status, *names = line.split("\t")
         old, new = names[0], names[-1]
@@ -312,6 +333,10 @@ def compare(root, keys, snapshot_dir):
         gv, cv = git_skill_version(root, item["path"]), canon.get("version", "")
         entry.update(git_version=gv, differences=differ)
         if item["owner"] == "git":
+            if version_tuple(cv) > version_tuple(gv):
+                items.append({**entry, "level": "ATTENTION", "downgrade": True,
+                              "reason": f"Notion copy {cv} is newer than this Git revision's {gv}; refusing a downgrade"})
+                continue
             pin = released_pin(root, item, canon.get("source"))
             props = {"Version": (canon.get("version"), gv), "Status": (canon.get("status"), RELEASED_STATUS), "Source": (canon.get("source"), pin)}
             drift = [f"{name}: {have!r} -> {want!r}" for name, (have, want) in props.items() if have != want]
@@ -324,7 +349,11 @@ def compare(root, keys, snapshot_dir):
             items.append(entry)
             continue
         binding = item.get("binding")
-        if binding and binding["revision"] == canon.get("revision"):
+        versions = {cv, gv} | ({binding["version"]} if binding else set())
+        if len(versions) > 1 and not differ:
+            entry.update(level="ATTENTION", reason=f"versions disagree (canonical {cv}, export {gv}"
+                         + (f", binding {binding['version']}" if binding else "") + "); deliberate export pending")
+        elif binding and binding["revision"] == canon.get("revision"):
             entry.update(level="IN-SYNC" if not differ else "CONFLICT",
                          reason="export equals its bound canonical revision" if not differ else "export differs from the canonical revision it claims")
         elif not differ:
@@ -345,7 +374,7 @@ def plan(root, keys, snapshot_dir):
     actions = []
     for entry in compare(root, keys, snapshot_dir):
         item = keys.get(entry.get("key") or "", {})
-        if item.get("label") == "released-reference" and entry["level"] == "ATTENTION" and "pending" not in entry:
+        if item.get("label") == "released-reference" and entry["level"] == "ATTENTION" and "pending" not in entry and not entry.get("downgrade"):
             pin = released_pin(root, item, snap.get(item["key"], {}).get("source"))
             if pin:
                 actions.append({"key": item["key"], "page": item["notion"], "path": item["path"],

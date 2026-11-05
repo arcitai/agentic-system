@@ -107,6 +107,16 @@ class ExportCommandTests(unittest.TestCase):
         after = {p: p.read_bytes() for p in before}
         self.assertEqual(before, after)
 
+    def test_unsafe_snapshot_paths_are_refused_before_any_write(self):
+        notion = "---\nname: |-\n  factory-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nText.\n"
+        for bad in ("../escape.md", "/abs.md", "references/../../x.md", "a\\b.md"):
+            with self.subTest(bad):
+                before = (self.root / "docs/sources.json").read_bytes()
+                with self.assertRaises(ValueError):
+                    export.export(self.root, self.snapshot("skill/factory-evaluate", {"SKILL.md": notion, bad: "x"}), "skill/factory-evaluate")
+                self.assertFalse((self.root.parent / "escape.md").exists())
+                self.assertEqual((self.root / "docs/sources.json").read_bytes(), before)
+
     def test_first_export_needs_only_its_own_bundle(self):
         manifest = self.root / "docs/sources.json"
         data = json.loads(manifest.read_text())

@@ -22,8 +22,8 @@ RELEASED = {k: i for k, i in KEYS.items() if i["label"] == "released-reference"}
 class FakeSkills:
     """Notion Skills pages of the released references, with failures injected per (operation, key)."""
 
-    def __init__(self, public=200):
-        self.pages, self.failures, self.public, self.writes = {}, {}, public, []
+    def __init__(self, public="content"):
+        self.pages, self.failures, self.public, self.writes, self.receipts = {}, {}, public, [], []
         for key, item in RELEASED.items():
             version = reconcile.git_skill_version(ROOT, item["path"])
             files = publish.desired_files(ROOT, item, version)
@@ -46,7 +46,7 @@ class FakeSkills:
     def read(self, page, name):
         self._fail("read", page, lambda: None)
         state = self.pages[page]
-        return {**{k: v for k, v in state.items() if k != "files"}, "files": dict(state["files"]),
+        return {**{k: v for k, v in state.items() if k != "files"}, "files": dict(state["files"]), "revision": f"v-{page}",
                 "types": {"Version": "rich_text", "Status": "select", "Source": "rich_text"}}
 
     def upload(self, page, name, files):
@@ -61,8 +61,17 @@ class FakeSkills:
             self.writes.append(("properties", page))
         self._fail("properties", page, apply)
 
-    def anonymous_status(self, url):
-        return self.public
+    def public_receipt(self, url, markers):
+        """Anonymous responses as a site can return them; only real content may verify."""
+        self.receipts.append(url)
+        page = next(p for p in self.pages.values() if p["public_url"] == url)
+        responses = {"content": (200, url, page["files"]["SKILL.md"] + " " + page["Version"]),
+                     "login": (200, url, "<html><title>Log in</title>Continue with email</html>"),
+                     "shell": (200, url, "<html><div id=\"notion-app\"></div><script src=app.js></script></html>"),
+                     "redirect": (200, "https://www.notion.so/login", page["files"]["SKILL.md"]),
+                     "forbidden": (403, url, "")}
+        status, final, body = responses[self.public]
+        return publish.verify_receipt({"url": url, "markers": markers, "verified": False, "status": status, "final_url": final}, body)
 
 
 class FakeStatus:
@@ -105,12 +114,73 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.status.states[-1][0], "success")
         self.assertEqual(self.target.writes, [])
 
-    def test_no_op_with_refused_anonymous_access_is_not_complete(self):
-        self.target.public = 403
+    def test_http_200_without_the_expected_public_content_is_never_success(self):
+        for response in ("forbidden", "login", "shell", "redirect"):
+            with self.subTest(response):
+                self.target.public, self.status.states = response, []
+                result = self.run_actions([])
+                self.assertEqual(result["result"], "PUBLIC-READBACK-PENDING")
+                self.assertEqual(self.status.states[-1][0], "pending")
+                self.assertIn("public browser readback pending", self.status.states[-1][1])
+                checklist = result["browser_checklist"]
+                self.assertEqual(len(checklist), len(RELEASED))
+                self.assertTrue(all(c["url"] and len(c["markers"]) == 3 and not c["verified"] for c in checklist))
+
+    def test_public_receipt_covers_the_changed_pages_with_their_content(self):
+        self.damage()
+        result = self.run_actions([action("skill/factory-review")])
+        self.assertEqual(result["result"], "PUBLISHED")
+        self.assertEqual(self.target.receipts, [self.target.pages[self.review]["public_url"]])
+        self.assertIn("0.1.18", result["public"][0]["markers"])
+
+    def test_final_readback_checks_properties_of_the_whole_set_even_without_actions(self):
+        other = RELEASED["skill/factory-spec"]["notion"]
+        self.target.pages[other]["Status"] = "Draft"  # drift on a page the plan did not touch
         result = self.run_actions([])
-        self.assertEqual(result["result"], "ANONYMOUS-PENDING")
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("skill/factory-spec", result["reason"])
+        self.assertIn("Status", result["reason"])
+        self.assertEqual(self.status.states[-1][0], "failure")
+
+    def test_concurrent_property_drift_after_a_write_is_caught(self):
+        self.damage()
+        original = self.target.set_properties
+
+        def racing(page, values, types):
+            original(page, values, types)
+            if page == self.review and ("race", page) not in self.target.writes:
+                self.target.writes.append(("race", page))
+                spec = RELEASED["skill/factory-spec"]["notion"]
+                self.target.pages[spec]["Version"] = "0.0.9"
+        self.target.set_properties = racing
+        result = self.run_actions([action("skill/factory-review")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("skill/factory-spec", result["reason"])
+
+    def test_receipts_record_revision_and_file_identity_for_every_page(self):
+        result = self.run_actions([])
+        self.assertEqual(set(result["receipts"]), set(RELEASED))
+        receipt = result["receipts"]["skill/factory-review"]
+        self.assertEqual(receipt["revision"], f"v-{self.review}")
+        self.assertEqual(set(receipt["files"]), set(self.target.pages[self.review]["files"]))
+        self.assertTrue(all(len(h) == 64 for h in receipt["files"].values()))
+
+    def test_unreleased_change_is_release_pending_not_failure(self):
+        page = self.target.pages[self.review]
+        page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/factory-review/SKILL.md"
+        result = self.run_actions([])
+        self.assertEqual(result["result"], "RELEASE-PENDING")
+        self.assertEqual(result["pending_release"], ["skill/factory-review"])
         self.assertEqual(self.status.states[-1][0], "pending")
-        self.assertIn("browser check", self.status.states[-1][1])
+        self.assertEqual(self.target.writes, [])
+
+    def test_a_newer_notion_copy_is_never_downgraded(self):
+        self.damage()
+        self.target.pages[self.review]["Version"] = "9.9.9"
+        result = self.run_actions([action("skill/factory-review")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("refusing a downgrade", result["reason"])
+        self.assertEqual(self.target.writes, [])
 
     def test_damaged_copy_is_restored_body_and_properties(self):
         self.damage()

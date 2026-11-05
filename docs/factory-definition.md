@@ -99,20 +99,33 @@ or a deliberate export. Propagation follows that ownership; there is no two-way 
   repository.
 
 `scripts/reconcile.py` runs on every pull request and main merge and always reports a result:
-NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. A Git
-edit of an export without a new canonical binding, an edited released reference, a removed
-artifact still marked active, an unowned path or a private path is reported; a conflict fails
-the check. With a snapshot it compares every distribution with its original, including link
+NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. These are
+reported, and a conflict fails the check:
+
+- a Git edit of an export without a new binding (`docs/sources.json` for skills, the recorded
+  hash for the declaration), even if its version metadata is bumped;
+- an edited released reference without a new version line;
+- an ownership change;
+- a removed artifact still marked active;
+- an unowned path or a private path.
+
+IN-SYNC also requires the canonical, binding and Git versions to agree. With a snapshot it compares every distribution with its original, including link
 targets and supporting bytes, and lists the pending exports and handoffs.
 
-Publication runs one at a time. The commit status `factory/docs-propagation` is set pending
-before any write. Each write is by page identity, and an uncertain write is read back before
-one same-identity retry. Every released-reference page is read back, then anonymous access is
-checked. Success requires all of it; an anonymous check the site refuses stays a visible
-pending browser check. The workflow stays inactive until a dedicated connection, limited to
-the public guide subtree and the released-reference pages, is provisioned. A main working
-revision is never labelled a release: a release is the tag that matches `VERSION`. These
-checks verify sources and their propagation, not installation or adoption.
+Publication runs one at a time from main or a `v*` release tag. The commit status
+`factory/docs-propagation` is set pending before any write. Each write is by page identity, and
+an uncertain write is read back before one same-identity retry. A Notion copy newer than Git is
+never downgraded. After all writes, every released reference is read back: its files, body and
+Version/Status/Source, with each page's revision and file hashes kept as the receipt. A
+released-reference change without its release tag stays "release pending". For each affected
+page, an anonymous request must stay on the page's host and return its expected content: name,
+version and first instruction. HTTP 200 alone is not enough, since a login page or an empty app
+shell also returns 200. Anything less leaves a visible pending public browser readback with the
+exact pages and expected content. Success requires all of it. The workflow stays inactive until
+a dedicated connection, limited to the public guide subtree and the released-reference pages,
+is provisioned for an environment restricted to main and `v*` tags. A main working revision is
+never labelled a release: a release is the tag that matches `VERSION`. These checks verify
+sources and their propagation, not installation or adoption.
 
 ## Inspiration and credit
 

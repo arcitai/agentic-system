@@ -92,6 +92,8 @@ class ManifestTests(unittest.TestCase):
             "binding on a released reference": lambda k, a: k["skill/factory-review"].update(binding={"revision": "r", "version": "1"}),
             "pending without holder": lambda k, a: k["guide/home"]["pending"][0].pop("holder"),
             "pending on a Git-owned artifact": lambda k, a: k["doc/readme"].update(pending=[{"id": "x", "after": "y", "holder": "z"}]),
+            "missing kind": lambda k, a: k["doc/vision"].pop("kind"),
+            "released-reference page id reused": lambda k, a: k["skill/factory-spec"].update(notion=k["skill/factory-review"]["notion"]),
         }
         for name, mutate in cases.items():
             with self.subTest(name), tempfile.TemporaryDirectory() as temporary:
@@ -131,6 +133,25 @@ class ImpactTests(unittest.TestCase):
         self.repo.edit("agent-ops/factory-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
         self.repo.commit("export edit")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-agent-ops", "CONFLICT")})
+
+    def test_metadata_bump_does_not_disguise_a_git_edit_of_an_export(self):
+        self.repo.edit("agent-ops/factory-entry/SKILL.md", 'version: "0.1.32"', 'version: "0.1.33"')
+        self.repo.edit("agent-ops/factory-entry/SKILL.md", 'updated: "2026-11-03"', 'updated: "2026-11-05"')
+        self.repo.edit("agent-ops/factory-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")
+        self.repo.commit("edit with bump")
+        self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-entry", "CONFLICT")})
+
+    def test_updated_date_alone_does_not_release_a_new_reference_version(self):
+        self.repo.edit("adlc/factory-review/SKILL.md", 'updated: "2026-10-17"', 'updated: "2026-11-05"')
+        self.repo.edit("adlc/factory-review/SKILL.md", "Use a context separate", "Use a context apart")
+        self.repo.commit("in-place edit")
+        self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CONFLICT")})
+
+    def test_ownership_change_needs_an_owner_decision(self):
+        self.repo.manifest(lambda k, a: k["skill/factory-evaluate"].update(owner="git", label="main-working", binding=None) or k["skill/factory-evaluate"].pop("binding"))
+        self.repo.commit("cutover")
+        items = self.repo.impact(self.base)[1]
+        self.assertIn("ownership change", next(i for i in items if i.get("key") == "skill/factory-evaluate" and "ownership" in i["reason"])["reason"])
 
     def test_deliberate_export_with_new_manifest_binding_is_a_change(self):
         self.repo.edit("agent-ops/factory-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
@@ -238,6 +259,25 @@ class CanonicalTests(unittest.TestCase):
         self.assertEqual(item["level"], "ATTENTION")
         self.assertIn("never overwrite Notion from Git", item["reason"])
 
+    def test_version_disagreement_with_equal_body_is_not_in_sync(self):
+        for revision in ("same", "new"):
+            with self.subTest(revision):
+                def bump(s):
+                    a = s["artifacts"]["skill/factory-entry"]
+                    a["version"] = "0.1.40"
+                    if revision == "new":
+                        a["revision"] = "another"
+                item = self.snapshot(bump)[0]["skill/factory-entry"]
+                self.assertEqual(item["level"], "ATTENTION")
+                self.assertIn("versions disagree", item["reason"])
+
+    def test_newer_notion_copy_of_a_released_reference_is_never_planned_down(self):
+        def newer(s):
+            s["artifacts"]["skill/factory-review"]["version"] = "9.9.9"
+        item = self.snapshot(newer)[0]["skill/factory-review"]
+        self.assertTrue(item.get("downgrade"))
+        self.assertIn("refusing a downgrade", item["reason"])
+
     def test_reference_bytes_unreadable_artifacts_and_declaration_drift_are_reported(self):
         def mutate(s):
             s["artifacts"]["skill/factory-foundation"]["files"]["references/setup.md"] += " "
@@ -293,6 +333,11 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn("environment: factory-public-docs", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
         self.assertIn("statuses: write", workflow)
+        publish_step = workflow.split("Propagate released references and read back", 1)[1].split("- uses:", 1)[0]
+        self.assertIn("shell: bash", publish_step)  # pipefail, so tee cannot hide a failed or pending publish
+        self.assertIn("refs/heads/main", workflow)
+        self.assertIn("startsWith(github.ref, 'refs/tags/v')", workflow)
+        self.assertIn("head_branch == 'main'", workflow)
         self.assertNotIn("FACTORY_NOTION_TOKEN", workflow)
         self.assertNotIn("contents: write", workflow)
 

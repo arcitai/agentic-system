@@ -7,11 +7,13 @@ It never writes a Notion-owned original (those reach Git through scripts/export.
 Source pin moves only to a release-tag commit. One run at a time (CI concurrency plus a local
 lock) sets the commit status pending, writes serially by page identity, reads an uncertain write
 back before one same-identity retry, reads every affected page back, then checks anonymous
-access. Only a complete readback is success; an anonymous check the site refuses stays a visible
-pending browser check. Without --live it prints the plan and writes nothing.
+content. Only a complete readback is success: every released reference's body, files and Version/Status/Source,
+and for the affected pages an anonymous response that stays on the page's host and contains its expected content.
+Anything less stays visibly pending (public browser readback, or release pending). Without --live it prints the plan and writes nothing.
 """
 
 import argparse
+import hashlib
 import io
 import json
 import os
@@ -20,6 +22,7 @@ import re
 import sys
 import tarfile
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 
@@ -99,6 +102,7 @@ class NotionSkills:
             raise UncertainWrite(f"readback {name}: {error}") from None
         p = props["properties"]
         return {"files": files, "public_url": props.get("public_url"), "types": {k: v.get("type") for k, v in p.items()},
+                "revision": skill.get("version_id"),
                 "Version": notion_snapshot.prop_text(p.get("Version")), "Status": notion_snapshot.prop_text(p.get("Status")),
                 "Source": notion_snapshot.prop_text(p.get("Source"))}
 
@@ -122,17 +126,40 @@ class NotionSkills:
                 raise AccessError(f"property {name} has unsupported type {kind!r}; adjust the table schema")
         self._call("PATCH", f"/pages/{page}", {"properties": props})
 
-    def anonymous_status(self, url):
+    def public_receipt(self, url, markers, limit=2_000_000):
+        """Plain anonymous GET (honest User-Agent, no browser imitation). Verified only if the response stays on the
+        page's own host and its body contains every expected marker; a login page, error page or empty app shell
+        with HTTP 200 is not a receipt."""
+        result = {"url": url, "markers": markers, "verified": False}
         if not url:
-            return None
+            return {**result, "reason": "no public URL"}
         request = urllib.request.Request(url, headers={"User-Agent": "factory-docs-readback (https://github.com/arcitai/factory)"})
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
-                return response.status
+                body = response.read(limit).decode("utf-8", "replace")
+                result.update(status=response.status, final_url=response.geturl())
         except urllib.error.HTTPError as error:
-            return error.code
-        except urllib.error.URLError:
-            return None
+            return {**result, "status": error.code, "reason": f"HTTP {error.code}"}
+        except urllib.error.URLError as error:
+            return {**result, "reason": str(error.reason)}
+        return verify_receipt(result, body)
+
+
+def verify_receipt(result, body):
+    if urllib.parse.urlsplit(result.get("final_url") or "").netloc != urllib.parse.urlsplit(result["url"]).netloc:
+        return {**result, "reason": f"redirected to {result.get('final_url')}"}
+    missing = [m for m in result["markers"] if m not in body]
+    if result.get("status") != 200 or missing:
+        return {**result, "missing": missing, "reason": f"HTTP {result.get('status')}; expected content not in the anonymous response"}
+    return {**result, "verified": True}
+
+
+def public_markers(root, item):
+    """Content an anonymous reader must see: the skill name, its version and its first instruction sentence."""
+    text = (Path(root) / item["path"] / "SKILL.md").read_text(encoding="utf-8")
+    body = text.split("\n---\n", 1)[1]
+    first = next(line for line in body.splitlines() if line.strip() and not line.startswith("#"))
+    return [item["key"].split("/", 1)[1], reconcile.git_skill_version(root, item["path"]), first.strip()[:60]]
 
 
 class CommitStatus:
@@ -193,6 +220,8 @@ def run(root, actions, keys, target, status, lock_path):
         for action in actions:
             item, name = keys[action["key"]], action["key"].split("/", 1)[1]
             current = target.read(action["page"], name)
+            if reconcile.version_tuple(current.get("Version")) > reconcile.version_tuple(action["version"]):
+                raise RuntimeError(f"{action['key']}: Notion copy {current.get('Version')} is newer than {action['version']}; refusing a downgrade")
             same, differ = matches(root, item, action, current)
             if same:
                 log.append({"key": action["key"], "action": "unchanged"})
@@ -207,20 +236,35 @@ def run(root, actions, keys, target, status, lock_path):
             write_with_readback(lambda: target.set_properties(action["page"], values, types),
                                 lambda: all(target.read(action["page"], name).get(k) == v for k, v in values.items()),
                                 log, action["key"], "properties")
-        for key, item in sorted(keys.items()):
+        receipts, pending_release, drift = {}, [], []
+        for key, item in sorted(keys.items()):  # the whole coherent set, after all writes, actions or not
             if item.get("label") != "released-reference" or item.get("status", "active") != "active":
                 continue
             current = target.read(item["notion"], key.split("/", 1)[1])
-            if reconcile.bundle_differences(root, item["path"], current["files"]):
-                raise RuntimeError(f"{key}: final readback differs from the released reference")
-            urls[key] = current["public_url"]
-        anonymous = {key: target.anonymous_status(url) for key, url in urls.items()}
-        refused = sorted(k for k, code in anonymous.items() if code != 200)
-        if refused:
-            status.set("pending", f"API readback complete; anonymous readback pending (browser check): {', '.join(refused)}")
-            return {"result": "ANONYMOUS-PENDING", "refused": refused, "anonymous": anonymous, "log": log}
-        status.set("success", f"{len(actions)} propagated; all released references read back, anonymous access 200")
-        return {"result": "PUBLISHED" if actions else "NO-OP", "anonymous": anonymous, "log": log}
+            pin = reconcile.released_pin(root, item, current.get("Source"))
+            if pin is None:
+                pending_release.append(key)
+                continue
+            want = {"Version": reconcile.git_skill_version(root, item["path"]), "Status": reconcile.RELEASED_STATUS, "Source": pin}
+            differ = reconcile.bundle_differences(root, item["path"], current["files"])
+            wrong = [f"{k}: {current.get(k)!r} != {v!r}" for k, v in want.items() if current.get(k) != v]
+            if differ or wrong:
+                drift.append(f"{key}: {'; '.join(differ + wrong)}")
+            receipts[key] = {"revision": current.get("revision"), "public_url": current.get("public_url"),
+                             "files": {rel: hashlib.sha256(reconcile.file_bytes(e)).hexdigest() for rel, e in sorted(current["files"].items())}}
+        if drift:
+            raise RuntimeError("final readback differs: " + " | ".join(drift))
+        if pending_release:
+            status.set("pending", f"release pending for {', '.join(pending_release)}; nothing written for them")
+            return {"result": "RELEASE-PENDING", "pending_release": pending_release, "receipts": receipts, "log": log}
+        affected = [a["key"] for a in actions] or sorted(receipts)
+        checks = [target.public_receipt(receipts[k]["public_url"], public_markers(root, keys[k])) for k in affected]
+        unverified = [c for c in checks if not c["verified"]]
+        if unverified:
+            status.set("pending", f"API readback complete; public browser readback pending for {len(unverified)} page(s)")
+            return {"result": "PUBLIC-READBACK-PENDING", "browser_checklist": unverified, "receipts": receipts, "log": log}
+        status.set("success", f"{len(actions)} propagated; set read back; public content verified for {len(checks)} page(s)")
+        return {"result": "PUBLISHED" if actions else "NO-OP", "public": checks, "receipts": receipts, "log": log}
     except AccessError as error:
         status.set("failure", f"access missing or expired: {error}")
         return {"result": "FAILED-ACCESS", "reason": str(error), "log": log}
@@ -252,7 +296,7 @@ def main(argv=None):
     status = CommitStatus(os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_REPOSITORY", ""), os.environ.get("FACTORY_DOCS_SHA", ""))
     result = run(reconcile.ROOT, actions, keys, NotionSkills(token), status, args.lock)
     print(json.dumps(result, indent=2))
-    return {"PUBLISHED": 0, "NO-OP": 0, "ANONYMOUS-PENDING": 5, "BUSY": 2, "FAILED-ACCESS": 3}.get(result["result"], 4)
+    return {"PUBLISHED": 0, "NO-OP": 0, "PUBLIC-READBACK-PENDING": 5, "RELEASE-PENDING": 6, "BUSY": 2, "FAILED-ACCESS": 3}.get(result["result"], 4)
 
 
 if __name__ == "__main__":
