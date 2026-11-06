@@ -9,17 +9,7 @@
       "owner": "notion",
       "label": "authoring-edition",
       "notion": "4046d2e1-7f56-8159-a603-de2dd6b91c2a",
-      "public": true,
-      "pending": [
-        {
-          "id": "guide-status-20261105",
-          "action": "replace",
-          "holder": "Notion canonical writer (owner)",
-          "evidence": "#122; #34 comment 6613129194; docs/qualification.md (Stable 0.1.6 since 2026-11-03); release v0.1.31",
-          "before": "Agentic Systems 0.1.31 is current. The Lab uses T3 Stable 0.1.5, one AgentOps, on-demand isolated workers and two independent reviews.",
-          "after": "Agentic Systems 0.1.31 is the latest release; the repository's main branch can carry newer, unreleased working revisions. Since 3 November 2026 the Lab uses T3 Stable 0.1.6 (Stable 0.1.5 from 29 October), one AgentOps, on-demand isolated workers and two independent reviews."
-        }
-      ]
+      "public": true
     },
     {
       "key": "guide/factory-definition",
