@@ -83,7 +83,7 @@ class ExportCommandTests(unittest.TestCase):
         return folder
 
     def test_git_owned_released_reference_is_refused(self):
-        snap = self.snapshot("skill/factory-review", {"SKILL.md": fixture("agentic-review", "notion")})
+        snap = self.snapshot("skill/factory-review", {"SKILL.md": fixture("factory-review", "notion")})
         with self.assertRaises(ValueError):
             export.export(self.root, snap, "skill/factory-review")
 

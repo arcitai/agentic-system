@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -131,7 +132,7 @@ class PublishTests(unittest.TestCase):
         result = self.run_actions([action("skill/factory-review")])
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.receipts, [self.target.pages[self.review]["public_url"]])
-        self.assertIn("0.1.18", result["public"][0]["markers"])
+        self.assertIn(reconcile.git_skill_version(ROOT, RELEASED["skill/factory-review"]["path"]), result["public"][0]["markers"])
 
     def test_final_readback_checks_properties_of_the_whole_set_even_without_actions(self):
         other = RELEASED["skill/factory-spec"]["notion"]
@@ -168,7 +169,8 @@ class PublishTests(unittest.TestCase):
     def test_unreleased_change_is_release_pending_not_failure(self):
         page = self.target.pages[self.review]
         page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/agentic-review/SKILL.md"
-        result = self.run_actions([])
+        with patch.object(reconcile, "release_context", return_value=("v-unreleased", None, False)):
+            result = self.run_actions([])
         self.assertEqual(result["result"], "RELEASE-PENDING")
         self.assertEqual(result["pending_release"], ["skill/factory-review"])
         self.assertEqual(self.status.states[-1][0], "pending")
@@ -220,7 +222,7 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.target.writes, [("upload", self.review), ("properties", self.review)])
         self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])
         self.assertIn("Pinned released reference", self.target.pages[self.review]["files"]["SKILL.md"])
-        self.assertEqual(self.target.pages[self.review]["Version"], "0.1.18")
+        self.assertEqual(self.target.pages[self.review]["Version"], reconcile.git_skill_version(ROOT, RELEASED["skill/factory-review"]["path"]))
 
     def test_changed_property_content_with_equal_body_updates_only_properties(self):
         self.target.pages[self.review]["Source"] = "edited by hand"
@@ -284,7 +286,9 @@ class PublishTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             snap = {"format": 1, "errors": [], "artifacts": {"skill/factory-agent-ops": {"revision": "x", "version": "9.9.9", "files": {"SKILL.md": "---\nname: x\n---\nchanged"}}}}
             (Path(temporary) / "snapshot.json").write_text(json.dumps(snap))
-            self.assertEqual(reconcile.plan(ROOT, KEYS, temporary), [])
+            actions = reconcile.plan(ROOT, KEYS, temporary)
+            self.assertNotIn("skill/factory-agent-ops", [a["key"] for a in actions])
+            self.assertTrue(all(KEYS[a["key"]]["owner"] == "git" for a in actions))
 
     def test_a_notion_owned_action_is_refused_before_any_write(self):
         item = KEYS["skill/factory-agent-ops"]

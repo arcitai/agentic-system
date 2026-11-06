@@ -1,6 +1,6 @@
 ---
 name: agentic-foundation
-description: Prepare or assess a agentic system's agent environment, project foundation and operating conditions for the intended work, across software, BI, defence and research.
+description: Prepare or assess an agentic system's agent environment, project foundation and operating conditions for the intended work, across software, BI, defence and research.
 license: MIT
 metadata:
   version: "0.1.34"

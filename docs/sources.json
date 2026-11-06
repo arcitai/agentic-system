@@ -95,7 +95,7 @@
       "notion": "4056d2e1-7f56-81ed-b778-c29cc5faa9a0",
       "public": true,
       "binding": {
-        "revision": "c734a5925ccc84d9966b89e30e4e30d3ec45efdd5121f269aed7be2aaeec599a",
+        "revision": "fd62da2e9f35158bbdf15366f1707a37fe32898517f69338dccbfc6d1714e65d",
         "version": "0.1.34"
       },
       "pending": [
@@ -119,7 +119,7 @@
       "notion": "4056d2e1-7f56-819c-be9d-f834bc7819f0",
       "public": true,
       "binding": {
-        "revision": "ba1220aa3649acdac06a7b29b3ee271244d8cf13538b28e83c5d731810019c6b",
+        "revision": "d8808458363946eca70cf62a4430a3d3edf8439a078e2a81670e7439acb2a0d3",
         "version": "0.1.34"
       },
       "pending": [
@@ -143,7 +143,7 @@
       "notion": "4056d2e1-7f56-816a-b0f1-d2627faff508",
       "public": true,
       "binding": {
-        "revision": "abc40e9c4e2de73e0fd7ce965d55dff6fd52cfb0af5b91bb6249ae602614af94",
+        "revision": "e6c189e87654c3d320b0e320f76f0b6faa3271ef89346b2c277fa9d66627aa93",
         "version": "0.1.34"
       },
       "pending": [
@@ -167,7 +167,7 @@
       "notion": "4056d2e1-7f56-81e1-b1b7-d2bc2b5d783c",
       "public": true,
       "binding": {
-        "revision": "4968c354121bf84cb5a2e8ea5e0af620c8a80cfbe0eaf1c1a70804722b5a0fe6",
+        "revision": "879025b97500580fec7ef74d96c4e2e11a1871e75b13e9415ceb5a578d482ffb",
         "version": "0.1.34"
       }
     },
@@ -180,7 +180,7 @@
       "public": true,
       "path": "agent-ops/agentic-brief",
       "binding": {
-        "revision": "5d2c71e1dc4febbccd8bf9c0780f9572b6c0415f426538344abc1fc80f684442",
+        "revision": "205fa16db00eda84f5e929dfb02312534b01c2c56abf58b981037dc1a7db751a",
         "version": "0.1.34"
       },
       "pending": [

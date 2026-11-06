@@ -159,7 +159,7 @@ def public_markers(root, item):
     text = (Path(root) / item["path"] / "SKILL.md").read_text(encoding="utf-8")
     body = text.split("\n---\n", 1)[1]
     first = next(line for line in body.splitlines() if line.strip() and not line.startswith("#"))
-    return [item["key"].split("/", 1)[1], reconcile.git_skill_version(root, item["path"]), first.strip()[:60]]
+    return [Path(item["path"]).name, reconcile.git_skill_version(root, item["path"]), first.strip()[:60]]
 
 
 class CommitStatus:
@@ -218,7 +218,8 @@ def run(root, actions, keys, target, status, lock_path):
             if item.get("owner") != "git" or item.get("label") != "released-reference" or action.get("page") != item.get("notion"):
                 raise RuntimeError(f"{action['key']}: refused; only Git-owned released references are propagated")
         for action in actions:
-            item, name = keys[action["key"]], action["key"].split("/", 1)[1]
+            item = keys[action["key"]]
+            name = Path(item["path"]).name
             current = target.read(action["page"], name)
             if current.get("Status") != reconcile.RELEASED_STATUS and not item.get("cutover"):
                 raise RuntimeError(f"{action['key']}: page Status is {current.get('Status')!r}, not {reconcile.RELEASED_STATUS!r}; "
@@ -243,7 +244,7 @@ def run(root, actions, keys, target, status, lock_path):
         for key, item in sorted(keys.items()):  # the whole coherent set, after all writes, actions or not
             if item.get("label") != "released-reference" or item.get("status", "active") != "active":
                 continue
-            current = target.read(item["notion"], key.split("/", 1)[1])
+            current = target.read(item["notion"], Path(item["path"]).name)
             pin = reconcile.released_pin(root, item, current.get("Source"))
             if pin is None:
                 pending_release.append(key)

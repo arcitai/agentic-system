@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -71,6 +72,9 @@ class Repo:
 
 def levels(items):
     return {(i.get("key"), i["level"]) for i in items}
+
+def current_metadata(path, field):
+    return re.search(r'^  ' + field + r': "([^"]+)"$', (ROOT / path).read_text(), re.M)[1]
 
 
 class ManifestTests(unittest.TestCase):
@@ -137,14 +141,14 @@ class ImpactTests(unittest.TestCase):
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-agent-ops", "CONFLICT")})
 
     def test_metadata_bump_does_not_disguise_a_git_edit_of_an_export(self):
-        self.repo.edit("agent-ops/agentic-entry/SKILL.md", 'version: "0.1.32"', 'version: "0.1.33"')
-        self.repo.edit("agent-ops/agentic-entry/SKILL.md", 'updated: "2026-11-03"', 'updated: "2026-11-05"')
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", f'version: "{current_metadata("agent-ops/agentic-entry/SKILL.md", "version")}"', 'version: "9.9.9"')
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", f'updated: "{current_metadata("agent-ops/agentic-entry/SKILL.md", "updated")}"', 'updated: "2099-01-01"')
         self.repo.edit("agent-ops/agentic-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")
         self.repo.commit("edit with bump")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-entry", "CONFLICT")})
 
     def test_updated_date_alone_does_not_release_a_new_reference_version(self):
-        self.repo.edit("adlc/agentic-review/SKILL.md", 'updated: "2026-10-17"', 'updated: "2026-11-05"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", f'updated: "{current_metadata("adlc/agentic-review/SKILL.md", "updated")}"', 'updated: "2099-01-01"')
         self.repo.edit("adlc/agentic-review/SKILL.md", "Use a context separate", "Use a context apart")
         self.repo.commit("in-place edit")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CONFLICT")})
@@ -170,7 +174,7 @@ class ImpactTests(unittest.TestCase):
         self.repo.edit("adlc/agentic-review/SKILL.md", "Use a context separate", "Use a context apart")
         self.repo.commit("rr")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CONFLICT")})
-        self.repo.edit("adlc/agentic-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", f'version: "{current_metadata("adlc/agentic-review/SKILL.md", "version")}"', 'version: "9.9.9"')
         self.repo.commit("rr version")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CHANGE")})
 
@@ -221,7 +225,7 @@ class ImpactTests(unittest.TestCase):
     def test_an_ancestor_pin_whose_bundle_changed_is_not_kept(self):
         _, keys, _ = reconcile.load_manifest(self.repo.root)
         item = keys["skill/factory-review"]
-        self.repo.edit("adlc/agentic-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", f'version: "{current_metadata("adlc/agentic-review/SKILL.md", "version")}"', 'version: "9.9.9"')
         self.repo.commit("unreleased version bump")
         base_pin = f"{reconcile.REPO_URL}/blob/{self.base}/{item['path']}/SKILL.md"
         self.assertIsNone(reconcile.released_pin(self.repo.root, item, base_pin))  # ancestor, but the bundle changed
@@ -405,12 +409,14 @@ class CanonicalTests(unittest.TestCase):
             f = s["artifacts"]["skill/factory-review"]
             f["files"]["SKILL.md"] = f["files"]["SKILL.md"].replace("Use a context separate", "Use any context", 1)
             f["source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/agentic-review/SKILL.md"
-        main, _, _ = self.snapshot(body)
+        with patch.object(reconcile, "release_context", return_value=("v-unreleased", None, False)):
+            main, _, _ = self.snapshot(body)
         self.assertIn("awaits its release tag", main["skill/factory-review"]["reason"])
 
         def foreign(s):
             s["artifacts"]["skill/factory-review"]["source"] = "https://example.com/blob/" + "a" * 40 + "/x"
-        self.assertIn("invalid or foreign Source pin", self.snapshot(foreign)[0]["skill/factory-review"]["reason"])
+        with patch.object(reconcile, "release_context", return_value=("v-unreleased", None, False)):
+            self.assertIn("invalid or foreign Source pin", self.snapshot(foreign)[0]["skill/factory-review"]["reason"])
 
     def test_only_an_exact_ancestor_pin_of_this_repository_and_skill_is_valid(self):
         item = reconcile.load_manifest(ROOT)[1]["skill/factory-review"]
