@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import notion_snapshot  # noqa: E402
 import reconcile  # noqa: E402
 
-CONTEXT = "factory/docs-propagation"
+CONTEXT = "agentic-system/docs-propagation"
 
 
 class AccessError(Exception):
@@ -133,7 +133,7 @@ class NotionSkills:
         result = {"url": url, "markers": markers, "verified": False}
         if not url:
             return {**result, "reason": "no public URL"}
-        request = urllib.request.Request(url, headers={"User-Agent": "factory-docs-readback (https://github.com/arcitai/factory)"})
+        request = urllib.request.Request(url, headers={"User-Agent": "agentic-system-docs-readback (https://github.com/arcitai/agentic-systems)"})
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
                 body = response.read(limit).decode("utf-8", "replace")
@@ -282,7 +282,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot", type=Path, required=True, help="Canonical snapshot frozen just before (scripts/notion_snapshot.py)")
     parser.add_argument("--live", action="store_true", help="Write through the dedicated connection")
-    parser.add_argument("--lock", default=".factory-docs-publish.lock")
+    parser.add_argument("--lock", default=".agentic-system-docs-publish.lock")
     args = parser.parse_args(argv)
     _, keys, errors = reconcile.load_manifest()
     if errors:
@@ -292,11 +292,11 @@ def main(argv=None):
     if not args.live:
         print(json.dumps({"result": "PLAN", "actions": actions}, indent=2))
         return 0
-    token = os.environ.get("FACTORY_PUBLIC_DOCS_TOKEN", "")
+    token = os.environ.get("AGENTIC_SYSTEMS_PUBLIC_DOCS_TOKEN", "")
     if not token:
-        print(json.dumps({"result": "FAILED-ACCESS", "reason": "not configured: FACTORY_PUBLIC_DOCS_TOKEN"}))
+        print(json.dumps({"result": "FAILED-ACCESS", "reason": "not configured: AGENTIC_SYSTEMS_PUBLIC_DOCS_TOKEN"}))
         return 3
-    status = CommitStatus(os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_REPOSITORY", ""), os.environ.get("FACTORY_DOCS_SHA", ""))
+    status = CommitStatus(os.environ.get("GITHUB_TOKEN", ""), os.environ.get("GITHUB_REPOSITORY", ""), os.environ.get("AGENTIC_SYSTEMS_DOCS_SHA", ""))
     result = run(reconcile.ROOT, actions, keys, NotionSkills(token), status, args.lock)
     print(json.dumps(result, indent=2))
     return {"PUBLISHED": 0, "NO-OP": 0, "PUBLIC-READBACK-PENDING": 5, "RELEASE-PENDING": 6, "BUSY": 2, "FAILED-ACCESS": 3}.get(result["result"], 4)

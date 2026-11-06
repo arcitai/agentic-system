@@ -115,17 +115,17 @@ class CheckTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             (root / "VERSION").write_text("0.1.4\n")
-            private = root / ".factory-task/qualification/result.md"
+            private = root / ".agentic-system-task/qualification/result.md"
             private.parent.mkdir(parents=True)
             private.write_text(invalid)
-            self.assertFalse(any(".factory-task" in e for e in module.check(root)[0]))
+            self.assertFalse(any(".agentic-system-task" in e for e in module.check(root)[0]))
             ordinary = root / "docs/result.md"
             ordinary.parent.mkdir()
             ordinary.write_text(invalid)
             errors = module.check(root)[0]
             self.assertTrue(any("docs/result.md" in e for e in errors))
             self.assertTrue(any("docs/result.md: broken link" in e for e in errors))
-            self.assertFalse(any(".factory-task" in e for e in errors))
+            self.assertFalse(any(".agentic-system-task" in e for e in errors))
 
     def test_links_in_code_spans_fences_and_titles_are_not_reported(self):
         with tempfile.TemporaryDirectory() as temporary:

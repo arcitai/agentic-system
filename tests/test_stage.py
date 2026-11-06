@@ -37,7 +37,7 @@ class StageTests(unittest.TestCase):
             self.assertEqual(json.loads((target / "manifest.json").read_text()), manifest)
             sources = [p.parent for group in module.BUNDLES
                        for p in (ROOT / group).glob("*/SKILL.md")]
-            self.assertIn("factory-entry", {p.name for p in sources})
+            self.assertIn("agentic-entry", {p.name for p in sources})
             staged = sorted(p.name for p in (target / "skills").iterdir())
             self.assertEqual(staged, sorted(p.name for p in sources))
             actual = {p.relative_to(target).as_posix() for p in target.rglob("*")
@@ -77,8 +77,8 @@ class StageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             source = self.full_source_fixture(root)
-            shutil.copytree(source / "agent-ops/factory-agent-ops",
-                            source / "adlc/factory-agent-ops")
+            shutil.copytree(source / "agent-ops/agentic-agent-ops",
+                            source / "adlc/agentic-agent-ops")
             with self.assertRaises(ValueError):
                 module.stage(module.ALL, root / "output", source)
             self.assertFalse((root / "output").exists())
@@ -89,7 +89,7 @@ class StageTests(unittest.TestCase):
             source = self.full_source_fixture(root)
             secret = root / "private"
             secret.write_text("never stage")
-            (source / "adlc/factory-review/leak").symlink_to(secret)
+            (source / "adlc/agentic-review/leak").symlink_to(secret)
             with self.assertRaises(ValueError):
                 module.stage(module.ALL, root / "output", source)
             self.assertFalse((root / "output").exists())
@@ -104,7 +104,7 @@ class StageTests(unittest.TestCase):
             subprocess.run(["git", "-c", "user.name=Fixture", "-c",
                             "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
                             "commit", "-qm", "Fixture"], cwd=source, check=True)
-            (source / "foundation/factory-foundation/untracked.txt").write_text("not reviewed")
+            (source / "foundation/agentic-foundation/untracked.txt").write_text("not reviewed")
             manifest = module.stage(module.ALL, root / "output", source)
             self.assertIsNotNone(manifest["sourceRevision"])
             self.assertTrue(manifest["sourceModified"])
@@ -136,13 +136,13 @@ class StageTests(unittest.TestCase):
             subprocess.run(["git", "-c", "user.name=Fixture", "-c",
                             "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
                             "commit", "-qm", "Fixture"], cwd=source, check=True)
-            secret = source / "agent-ops/factory-agent-ops/.env"
+            secret = source / "agent-ops/agentic-agent-ops/.env"
             secret.write_text("PRIVATE=must-not-stage\n")
             manifest = module.stage("agent-ops", root / "output", source)
             self.assertIsNotNone(manifest["sourceRevision"])
             self.assertFalse(manifest["sourceModified"])
             self.assertFalse(any(name.endswith(".env") for name in manifest["files"]))
-            self.assertFalse((root / "output/skills/factory-agent-ops/.env").exists())
+            self.assertFalse((root / "output/skills/agentic-agent-ops/.env").exists())
             (secret.parent / "untracked.txt").write_text("not reviewed")
             second = module.stage("agent-ops", root / "second", source)
             self.assertTrue(second["sourceModified"])
@@ -185,7 +185,7 @@ class StageTests(unittest.TestCase):
             shutil.copy2(ROOT / "VERSION", source / "VERSION")
             secret = root / "private"
             secret.write_text("never stage")
-            (source / "agent-ops/factory-agent-ops/leak").symlink_to(secret)
+            (source / "agent-ops/agentic-agent-ops/leak").symlink_to(secret)
             with self.assertRaises(ValueError):
                 module.stage("agent-ops", root / "output", source)
             self.assertFalse((root / "output").exists())

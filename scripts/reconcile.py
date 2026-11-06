@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reconcile Factory's public documentation and skill distributions with their owners (#122).
+"""Reconcile Agentic Systems' public documentation and skill distributions with their owners (#122).
 
 Read-only. Validates docs/sources.json, maps a Git diff to the affected artifacts and, with a
 frozen canonical snapshot (scripts/notion_snapshot.py), compares every distribution with its
@@ -28,8 +28,8 @@ KEY = re.compile(r"^[a-z]+/[a-z0-9]+(?:-[a-z0-9]+)*$")
 LABELS = {"notion": {"authoring-edition", "export"}, "git": {"released-reference", "main-working"}}
 STATUSES = {"active", "renamed", "retired"}
 KINDS = {"page", "database", "declaration", "skill", "doc", "code", "asset"}
-PRIVATE = (".factory-task", ".claude", ".git", "dist", ".venv")
-REPO_URL = "https://github.com/arcitai/factory"
+PRIVATE = (".agentic-system-task", ".factory-task", ".claude", ".git", "dist", ".venv")
+REPO_URL = "https://github.com/arcitai/agentic-systems"
 RELEASED_STATUS = "Released reference"
 # What binds an artifact to its source. A Notion-owned skill export is bound by its docs/sources.json binding
 # (written by scripts/export.py); a declaration export by its recorded canonical hash; a released reference by

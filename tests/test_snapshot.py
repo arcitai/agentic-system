@@ -71,6 +71,17 @@ class ArchiveTests(unittest.TestCase):
 
 
 class PaginationTests(unittest.TestCase):
+    def test_renamed_skill_uses_its_path_with_the_same_stable_key(self):
+        fake = FakeNotion({
+            "/pages/p": {"properties": {}, "last_edited_time": "t"},
+            "/ai/skills/p": {"version_id": "v", "url": "https://download/x"},
+            "https://download/x": archive([("agentic-x/SKILL.md", b"name: agentic-x", "file")]),
+        })
+        keys = {"skill/factory-x": {"key": "skill/factory-x", "kind": "skill", "owner": "notion", "notion": "p", "path": "adlc/agentic-x"}}
+        result = snapshot.freeze(keys, snapshot.Reader("token", fake))
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(result["artifacts"]["skill/factory-x"]["files"]["SKILL.md"], "name: agentic-x")
+
     def test_declaration_code_block_on_a_later_page_is_found(self):
         block = {"type": "code", "id": "b", "last_edited_time": "t", "code": {"language": "yaml", "rich_text": [{"plain_text": 'definition_version: "0.9"\n'}]}}
         filler = [{"type": "paragraph", "id": str(i), "paragraph": {"rich_text": []}} for i in range(100)]

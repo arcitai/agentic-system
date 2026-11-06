@@ -43,7 +43,7 @@ class Repo:
 
     def __init__(self, temporary, test):
         self.root, self.test = Path(temporary) / "repo", test
-        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task", "dist"))
+        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task", "dist"))
         git(self.root, "init", "-q")
         self.commit("base")
 
@@ -86,7 +86,7 @@ class ManifestTests(unittest.TestCase):
         cases = {
             "duplicate key": lambda k, a: a.append(dict(a[-1])),
             "git cannot own an authoring edition": lambda k, a: k["doc/readme"].update(label="authoring-edition"),
-            "private path": lambda k, a: a.append({"key": "doc/private", "kind": "doc", "owner": "git", "label": "main-working", "path": ".factory-task/x"}),
+            "private path": lambda k, a: a.append({"key": "doc/private", "kind": "doc", "owner": "git", "label": "main-working", "path": ".agentic-system-task/x"}),
             "escaping path": lambda k, a: a.append({"key": "doc/up", "kind": "doc", "owner": "git", "label": "main-working", "path": "../x"}),
             "notion page id required": lambda k, a: a.append({"key": "guide/x", "kind": "page", "owner": "notion", "label": "authoring-edition"}),
             "skill without entry": lambda k, a: a.remove(k["skill/factory-review"]),
@@ -100,7 +100,7 @@ class ManifestTests(unittest.TestCase):
         for name, mutate in cases.items():
             with self.subTest(name), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary) / "r"
-                shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
+                shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
                 data = json.loads((root / reconcile.MANIFEST).read_text())
                 mutate({i["key"]: i for i in data["artifacts"]}, data["artifacts"])
                 (root / reconcile.MANIFEST).write_text(json.dumps(data))
@@ -132,20 +132,20 @@ class ImpactTests(unittest.TestCase):
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("doc/qualification", "CHANGE")})
 
     def test_export_edit_without_new_binding_is_a_conflict_with_the_newer_original(self):
-        self.repo.edit("agent-ops/factory-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
+        self.repo.edit("agent-ops/agentic-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
         self.repo.commit("export edit")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-agent-ops", "CONFLICT")})
 
     def test_metadata_bump_does_not_disguise_a_git_edit_of_an_export(self):
-        self.repo.edit("agent-ops/factory-entry/SKILL.md", 'version: "0.1.32"', 'version: "0.1.33"')
-        self.repo.edit("agent-ops/factory-entry/SKILL.md", 'updated: "2026-11-03"', 'updated: "2026-11-05"')
-        self.repo.edit("agent-ops/factory-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", 'version: "0.1.32"', 'version: "0.1.33"')
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", 'updated: "2026-11-03"', 'updated: "2026-11-05"')
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")
         self.repo.commit("edit with bump")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-entry", "CONFLICT")})
 
     def test_updated_date_alone_does_not_release_a_new_reference_version(self):
-        self.repo.edit("adlc/factory-review/SKILL.md", 'updated: "2026-10-17"', 'updated: "2026-11-05"')
-        self.repo.edit("adlc/factory-review/SKILL.md", "Use a context separate", "Use a context apart")
+        self.repo.edit("adlc/agentic-review/SKILL.md", 'updated: "2026-10-17"', 'updated: "2026-11-05"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", "Use a context separate", "Use a context apart")
         self.repo.commit("in-place edit")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CONFLICT")})
 
@@ -156,32 +156,32 @@ class ImpactTests(unittest.TestCase):
         self.assertIn("ownership change", next(i for i in items if i.get("key") == "skill/factory-evaluate" and "ownership" in i["reason"])["reason"])
 
     def test_deliberate_export_with_new_manifest_binding_is_a_change(self):
-        self.repo.edit("agent-ops/factory-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
+        self.repo.edit("agent-ops/agentic-agent-ops/SKILL.md", "Start from the owner's", "Start from the agent's")
         self.repo.manifest(lambda k, a: k["skill/factory-agent-ops"]["binding"].update(revision="new-revision"))
         self.repo.commit("export")
         self.assertIn(("skill/factory-agent-ops", "CHANGE"), levels(self.repo.impact(self.base)[1]))
 
     def test_declaration_export_needs_its_canonical_hash(self):
-        self.repo.edit("factory.yaml", "status: candidate", "status: adopted")
+        self.repo.edit("system.yaml", "status: candidate", "status: adopted")
         self.repo.commit("decl")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("declaration/factory-lab", "CONFLICT")})
 
     def test_released_reference_is_immutable_for_its_version(self):
-        self.repo.edit("adlc/factory-review/SKILL.md", "Use a context separate", "Use a context apart")
+        self.repo.edit("adlc/agentic-review/SKILL.md", "Use a context separate", "Use a context apart")
         self.repo.commit("rr")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CONFLICT")})
-        self.repo.edit("adlc/factory-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
         self.repo.commit("rr version")
         self.assertEqual(levels(self.repo.impact(self.base)[1]), {("skill/factory-review", "CHANGE")})
 
     def test_rename_without_manifest_update_fails_and_with_status_passes(self):
-        git(self.repo.root, "mv", "adlc/factory-spec", "adlc/factory-specify")
+        git(self.repo.root, "mv", "adlc/agentic-spec", "adlc/agentic-specify")
         self.repo.commit("rename")
-        self.assertTrue(any("factory-spec" in e for e in self.repo.impact(self.base)[0]))
+        self.assertTrue(any("agentic-spec" in e for e in self.repo.impact(self.base)[0]))
 
         def rename(k, a):
             old = k["skill/factory-spec"]
-            a.append({**old, "key": "skill/factory-specify", "path": "adlc/factory-specify"})
+            a.append({**old, "key": "skill/factory-specify", "path": "adlc/agentic-specify"})
             old.update(status="renamed", renamed_to="skill/factory-specify")
         self.repo.manifest(rename)
         self.repo.commit("manifest")
@@ -190,7 +190,7 @@ class ImpactTests(unittest.TestCase):
         self.assertIn(("skill/factory-spec", "CHANGE"), levels(items))
 
     def test_retirement_keeps_the_key(self):
-        shutil.rmtree(self.repo.root / "adlc/factory-security")
+        shutil.rmtree(self.repo.root / "adlc/agentic-security")
         self.repo.manifest(lambda k, a: k["skill/factory-security"].update(status="retired"))
         self.repo.commit("retire")
         errors, items = self.repo.impact(self.base)
@@ -200,7 +200,7 @@ class ImpactTests(unittest.TestCase):
 
     def test_manifest_errors_with_a_base_do_not_crash(self):
         self.repo.manifest(lambda k, a: k["skill/factory-entry"].pop("kind"))
-        self.repo.edit("agent-ops/factory-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")  # owned by the invalid entry
+        self.repo.edit("agent-ops/agentic-entry/SKILL.md", "You are the owner's own AI agent.", "You are an AI agent.")  # owned by the invalid entry
         self.repo.commit("broken manifest")
         result = reconcile.run(self.repo.root, self.base)
         self.assertEqual(result["result"], "CONFLICT")
@@ -221,7 +221,7 @@ class ImpactTests(unittest.TestCase):
     def test_an_ancestor_pin_whose_bundle_changed_is_not_kept(self):
         _, keys, _ = reconcile.load_manifest(self.repo.root)
         item = keys["skill/factory-review"]
-        self.repo.edit("adlc/factory-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
+        self.repo.edit("adlc/agentic-review/SKILL.md", 'version: "0.1.18"', 'version: "0.1.33"')
         self.repo.commit("unreleased version bump")
         base_pin = f"{reconcile.REPO_URL}/blob/{self.base}/{item['path']}/SKILL.md"
         self.assertIsNone(reconcile.released_pin(self.repo.root, item, base_pin))  # ancestor, but the bundle changed
@@ -237,7 +237,7 @@ class ImpactTests(unittest.TestCase):
         self.repo.commit("flip")
         items = self.repo.impact(self.base)[1]
         self.assertEqual(next(i for i in items if "ownership" in i.get("reason", ""))["level"], "CONFLICT")
-        self.repo.manifest(lambda k, a: k["skill/factory-evaluate"].update(cutover="https://github.com/arcitai/factory/issues/122#decision"))
+        self.repo.manifest(lambda k, a: k["skill/factory-evaluate"].update(cutover="https://github.com/arcitai/agentic-systems/issues/122#decision"))
         self.repo.commit("cutover record")
         items = self.repo.impact(self.base)[1]
         self.assertEqual(next(i for i in items if "ownership" in i.get("reason", ""))["level"], "ATTENTION")
@@ -305,7 +305,7 @@ class CanonicalTests(unittest.TestCase):
                     artifacts[key].update(status=reconcile.RELEASED_STATUS, source=f"{reconcile.REPO_URL}/blob/{pin}/{item['path']}/SKILL.md")
             elif item["kind"] == "page" and item.get("status", "active") == "active":
                 artifacts[key] = {"revision": "t", "text": "\n".join(p.get("before", "") for p in item.get("pending", []))}
-        decl = (ROOT / "factory.yaml").read_text()
+        decl = (ROOT / "system.yaml").read_text()
         artifacts["declaration/factory-lab"] = {"revision": "t", "sha256": re.search(r"SHA-256 [^:]*: ([0-9a-f]{64})", decl)[1]}
         snap = {"format": 1, "artifacts": artifacts, "errors": []}
         mutate(snap)
@@ -343,8 +343,8 @@ class CanonicalTests(unittest.TestCase):
     def test_declaration_body_is_hashed_not_just_its_header_claim(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary) / "r"
-            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
-            decl = root / "factory.yaml"
+            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
+            decl = root / "system.yaml"
             text = decl.read_text()
             canonical = re.search(r"SHA-256 [^:]*: ([0-9a-f]{64})", text)[1]
             _, keys, _ = reconcile.load_manifest(root)
@@ -404,7 +404,7 @@ class CanonicalTests(unittest.TestCase):
         def body(s):
             f = s["artifacts"]["skill/factory-review"]
             f["files"]["SKILL.md"] = f["files"]["SKILL.md"].replace("Use a context separate", "Use any context", 1)
-            f["source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/factory-review/SKILL.md"
+            f["source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/agentic-review/SKILL.md"
         main, _, _ = self.snapshot(body)
         self.assertIn("awaits its release tag", main["skill/factory-review"]["reason"])
 
@@ -417,8 +417,8 @@ class CanonicalTests(unittest.TestCase):
         pin = git(ROOT, "log", "-1", "--format=%H", "--", item["path"])
         good = f"{reconcile.REPO_URL}/blob/{pin}/{item['path']}/SKILL.md"
         self.assertEqual(reconcile.released_pin(ROOT, item, good), good)
-        bad = {"fork": good.replace("arcitai/factory", "attacker/fork"),
-               "wrong skill": good.replace("factory-review", "factory-spec"),
+        bad = {"fork": good.replace("arcitai/agentic-systems", "attacker/fork"),
+               "wrong skill": good.replace("agentic-review", "agentic-spec"),
                "non-URL": f"javascript:alert(1)//x/blob/{pin}/",
                "unknown commit": good.replace(pin, "0" * 40),
                "suffix": good + "?x"}
@@ -449,7 +449,7 @@ class CanonicalTests(unittest.TestCase):
 
 class DocsTests(unittest.TestCase):
     def test_docs_do_not_claim_coverage_the_publisher_does_not_check(self):
-        text = (ROOT / "docs/factory-definition.md").read_text(encoding="utf-8")
+        text = (ROOT / "docs/system-definition.md").read_text(encoding="utf-8")
         self.assertNotIn("Success requires all of it", text)
         self.assertIn("covers only the released-reference pages", text)
         self.assertIn("does not read back", text)
@@ -467,8 +467,8 @@ class WorkflowTests(unittest.TestCase):
 
     def test_propagation_workflow_is_inactive_without_the_dedicated_connection(self):
         workflow = (ROOT / ".github/workflows/docs-publish.yml").read_text(encoding="utf-8")
-        self.assertIn("vars.FACTORY_DOCS_PUBLISH == 'enabled'", workflow)
-        self.assertIn("environment: factory-public-docs", workflow)
+        self.assertIn("vars.AGENTIC_SYSTEMS_DOCS_PUBLISH == 'enabled'", workflow)
+        self.assertIn("environment: agentic-system-public-docs", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
         self.assertIn("statuses: write", workflow)
         publish_step = workflow.split("Propagate released references and read back", 1)[1].split("- uses:", 1)[0]
@@ -476,8 +476,8 @@ class WorkflowTests(unittest.TestCase):
         self.assertIn("refs/heads/main", workflow)
         self.assertIn("startsWith(github.ref, 'refs/tags/v')", workflow)
         self.assertIn("head_branch == 'main'", workflow)
-        self.assertIn('git merge-base --is-ancestor "$FACTORY_DOCS_SHA" origin/main', workflow)
-        self.assertNotIn("FACTORY_NOTION_TOKEN", workflow)
+        self.assertIn('git merge-base --is-ancestor "$AGENTIC_SYSTEMS_DOCS_SHA" origin/main', workflow)
+        self.assertNotIn("AGENTIC_SYSTEMS_NOTION_TOKEN", workflow)
         self.assertNotIn("contents: write", workflow)
 
 

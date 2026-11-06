@@ -1,8 +1,8 @@
 # Security
 
-Revision: 0.1.23 · Updated: 2026-10-26
+Revision: 0.1.34 · Updated: 2026-11-06
 
-Factory ships instructions and local staging/validation helpers. The selected native
+Agentic Systems ships instructions and local staging/validation helpers. The selected native
 agent tools, workspace, OS and service permissions enforce actual access.
 Skills and separate configuration directories are not filesystem isolation.
 

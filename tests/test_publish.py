@@ -167,7 +167,7 @@ class PublishTests(unittest.TestCase):
 
     def test_unreleased_change_is_release_pending_not_failure(self):
         page = self.target.pages[self.review]
-        page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/factory-review/SKILL.md"
+        page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/agentic-review/SKILL.md"
         result = self.run_actions([])
         self.assertEqual(result["result"], "RELEASE-PENDING")
         self.assertEqual(result["pending_release"], ["skill/factory-review"])
@@ -175,9 +175,9 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(self.target.writes, [])
 
     def test_forged_or_wrong_sources_are_never_a_successful_readback(self):
-        pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", "adlc/factory-review").strip()
+        pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", "adlc/agentic-review").strip()
         good = self.target.pages[self.review]["Source"]
-        for source in (good.replace("arcitai/factory", "attacker/fork"), good.replace("factory-review", "factory-spec"),
+        for source in (good.replace("arcitai/agentic-systems", "attacker/fork"), good.replace("agentic-review", "agentic-spec"),
                        f"javascript:alert(1)//x/blob/{pin}/"):
             with self.subTest(source):
                 self.target.pages[self.review]["Source"], self.status.states = source, []
@@ -200,7 +200,7 @@ class PublishTests(unittest.TestCase):
         self.damage()
         self.target.pages[self.review]["Status"] = "Authoring edition"
         keys = {k: dict(v) for k, v in KEYS.items()}
-        keys["skill/factory-review"]["cutover"] = "https://github.com/arcitai/factory/issues/122#decision"
+        keys["skill/factory-review"]["cutover"] = "https://github.com/arcitai/agentic-systems/issues/122#decision"
         result = publish.run(ROOT, [action("skill/factory-review")], keys, self.target, self.status, self.lock)
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
@@ -295,7 +295,7 @@ class PublishTests(unittest.TestCase):
     def test_release_plan_restores_a_released_reference_but_never_a_notion_original(self):
         with tempfile.TemporaryDirectory() as temporary:
             repo = Path(temporary) / "repo"
-            shutil.copytree(ROOT, repo, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
+            shutil.copytree(ROOT, repo, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
             for command in (["init", "-q"], ["add", "-A"], ["commit", "-q", "-m", "release"], ["tag", "v" + (repo / "VERSION").read_text().strip()]):
                 subprocess.run(["git", "-c", "user.name=t", "-c", "user.email=t@t", *command], cwd=repo, check=True, capture_output=True)
             target = FakeSkills()
@@ -318,14 +318,14 @@ class PublishTests(unittest.TestCase):
         self.assertEqual([a["key"] for a in plan], ["skill/factory-review"])
 
     def test_live_mode_without_dedicated_connection_reports_missing_setup(self):
-        env = {k: v for k, v in os.environ.items() if not k.startswith("FACTORY_PUBLIC_DOCS_")}
-        env["FACTORY_NOTION_TOKEN"] = "must-not-be-used"
+        env = {k: v for k, v in os.environ.items() if not k.startswith("AGENTIC_SYSTEMS_PUBLIC_DOCS_")}
+        env["AGENTIC_SYSTEMS_NOTION_TOKEN"] = "must-not-be-used"
         with tempfile.TemporaryDirectory() as temporary:
             (Path(temporary) / "snapshot.json").write_text(json.dumps({"format": 1, "errors": [], "artifacts": {}}))
             result = subprocess.run([sys.executable, str(ROOT / "scripts/publish.py"), "--snapshot", temporary, "--live"], cwd=ROOT, env=env,
                                     capture_output=True, text=True)
         self.assertEqual(result.returncode, 3)
-        self.assertIn("not configured: FACTORY_PUBLIC_DOCS_TOKEN", result.stdout)
+        self.assertIn("not configured: AGENTIC_SYSTEMS_PUBLIC_DOCS_TOKEN", result.stdout)
         self.assertNotIn("must-not-be-used", result.stdout + result.stderr)
 
 

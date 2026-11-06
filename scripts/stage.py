@@ -70,7 +70,7 @@ def stage(bundle, destination, source=ROOT):
                 files[relative.as_posix()] = path.read_bytes()
         files[f"skills/{skill.name}/LICENSE"] = license_bytes
     manifest = {
-        "format": 1, "factoryVersion": version, "bundle": bundle,
+        "format": 1, "systemVersion": version, "bundle": bundle,
         "sourceRevision": revision, "sourceModified": modified,
         "files": {name: hashlib.sha256(data).hexdigest()
                   for name, data in sorted(files.items())},
@@ -97,7 +97,7 @@ def main():
         manifest = stage(args.bundle, args.output)
     except (OSError, ValueError, subprocess.CalledProcessError) as error:
         parser.exit(1, f"Stage failed: {error}\n")
-    print(f"Staged {manifest['bundle']} {manifest['factoryVersion']} at {args.output}")
+    print(f"Staged {manifest['bundle']} {manifest['systemVersion']} at {args.output}")
     print("Inspect manifest.json and files before native adoption; nothing was installed.")
 
 

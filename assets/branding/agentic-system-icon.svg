@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+<title id="title">Agentic Systems</title>
+<desc id="desc">A rounded blue agentic-system silhouette with two chimneys, a sawtooth roof and three transparent windows.</desc>
+<defs><linearGradient id="blue" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#4265a0"/><stop offset="1" stop-color="#8da8cd"/></linearGradient></defs>
+<path fill="url(#blue)" fill-rule="evenodd" d="M40 144Q40 136 48 136H56V60Q56 52 64 52H78Q86 52 86 60V136H102V88Q102 80 110 80H122Q130 80 130 88V134L164 114Q174 108 174 119V136L208 115Q218 109 218 120V196Q218 206 208 206H50Q40 206 40 196Z M67 157H85Q89 157 89 161V179Q89 183 85 183H67Q63 183 63 179V161Q63 157 67 157Z M119 157H137Q141 157 141 161V179Q141 183 137 183H119Q115 183 115 179V161Q115 157 119 157Z M171 157H189Q193 157 193 161V179Q193 183 189 183H171Q167 183 167 179V161Q167 157 171 157Z"/>
+</svg>
