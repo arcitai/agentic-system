@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check Factory's deliberately small metadata format and portable local links."""
+"""Check Agentic Systems' deliberately small metadata format and portable local links."""
 
 from datetime import date
 import json
@@ -12,9 +12,9 @@ from urllib.parse import unquote, urlsplit
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)"
 REVISION = re.compile(rf"^Revision: ({VERSION}) · Updated: (\d{{4}}-\d{{2}}-\d{{2}})$")
-# Generated output, private harness context (including sandbox masks) and Factory's private
-# task records are not Factory sources.
-SKIPPED_DIRS = {".git", "dist", ".venv", ".claude", ".factory-task"}
+# Generated output, private harness context (including sandbox masks) and Agentic Systems' private
+# task records are not Agentic Systems sources.
+SKIPPED_DIRS = {".git", "dist", ".venv", ".claude", ".agentic-system-task", ".factory-task"}
 
 
 def markdown_sources(root):

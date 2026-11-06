@@ -126,7 +126,7 @@ def freeze(keys, reader, read_at=None):
                 props = page["properties"]
                 skill = reader.get(f"/ai/skills/{item['notion']}")
                 archive = reader.download(skill["url"])
-                name = item["key"].split("/", 1)[1]
+                name = Path(item.get("path") or item["key"].split("/", 1)[1]).name
                 artifacts[key] = {"revision": skill.get("version_id"), "version": prop_text(props.get("Version")) or "",
                                   "status": prop_text(props.get("Status")), "source": prop_text(props.get("Source")),
                                   "readAt": read_at, "lastEdited": page.get("last_edited_time"),
@@ -151,7 +151,7 @@ def freeze(keys, reader, read_at=None):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True, help="New snapshot directory")
-    parser.add_argument("--token-env", default="FACTORY_PUBLIC_DOCS_TOKEN")
+    parser.add_argument("--token-env", default="AGENTIC_SYSTEMS_PUBLIC_DOCS_TOKEN")
     args = parser.parse_args(argv)
     token = os.environ.get(args.token_env, "")
     if not token:

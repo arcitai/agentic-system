@@ -69,7 +69,7 @@ class ExportCommandTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name) / "repo"
-        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".factory-task"))
+        shutil.copytree(ROOT, self.root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
         subprocess.run(["git", "init", "-q"], cwd=self.root, check=True)
 
     def tearDown(self):
@@ -88,16 +88,16 @@ class ExportCommandTests(unittest.TestCase):
             export.export(self.root, snap, "skill/factory-review")
 
     def test_export_writes_only_its_bundle_records_the_binding_and_removes_stale_files(self):
-        stale = self.root / "adlc/factory-evaluate/references/old.md"
+        stale = self.root / "adlc/agentic-evaluate/references/old.md"
         stale.parent.mkdir()
         stale.write_text("x")
-        notion = "---\nname: |-\n  factory-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nBody line one<br />line two.\n"
+        notion = "---\nname: |-\n  agentic-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nBody line one<br />line two.\n"
         snap = self.snapshot("skill/factory-evaluate", {"SKILL.md": notion, "references/new.bin": {"base64": "AAEC"}})
-        before = {p: p.read_bytes() for p in self.root.rglob("*") if p.is_file() and "adlc/factory-evaluate" not in p.as_posix() and p.name != "sources.json"}
+        before = {p: p.read_bytes() for p in self.root.rglob("*") if p.is_file() and "adlc/agentic-evaluate" not in p.as_posix() and p.name != "sources.json"}
         result = export.export(self.root, snap, "skill/factory-evaluate")
         self.assertEqual(result["removed"], ["references/old.md"])
-        self.assertEqual((self.root / "adlc/factory-evaluate/references/new.bin").read_bytes(), b"\x00\x01\x02")
-        skill = (self.root / "adlc/factory-evaluate/SKILL.md").read_text()
+        self.assertEqual((self.root / "adlc/agentic-evaluate/references/new.bin").read_bytes(), b"\x00\x01\x02")
+        skill = (self.root / "adlc/agentic-evaluate/SKILL.md").read_text()
         self.assertIn('version: "0.1.40"', skill)
         self.assertIn('updated: "2026-11-05"', skill)
         self.assertIn("Body line one\nline two.", skill)
@@ -108,7 +108,7 @@ class ExportCommandTests(unittest.TestCase):
         self.assertEqual(before, after)
 
     def test_unsafe_snapshot_paths_are_refused_before_any_write(self):
-        notion = "---\nname: |-\n  factory-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nText.\n"
+        notion = "---\nname: |-\n  agentic-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nText.\n"
         for bad in ("../escape.md", "/abs.md", "references/../../x.md", "a\\b.md"):
             with self.subTest(bad):
                 before = (self.root / "docs/sources.json").read_bytes()
@@ -121,13 +121,13 @@ class ExportCommandTests(unittest.TestCase):
         manifest = self.root / "docs/sources.json"
         data = json.loads(manifest.read_text())
         data["artifacts"].append({"key": "skill/factory-new", "kind": "skill", "owner": "notion", "label": "export",
-                                  "path": "agent-ops/factory-new", "notion": "00000000-0000-0000-0000-000000000000", "public": True})
+                                  "path": "agent-ops/agentic-system-new", "notion": "00000000-0000-0000-0000-000000000000", "public": True})
         manifest.write_text(json.dumps(data))
-        notion = "---\nname: |-\n  factory-new\ndescription: |-\n  New.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nText.\n"
-        result = export.export(self.root, self.snapshot("skill/factory-new", {"SKILL.md": notion}), "skill/factory-new", "Factory New")
+        notion = "---\nname: |-\n  agentic-system-new\ndescription: |-\n  New.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nText.\n"
+        result = export.export(self.root, self.snapshot("skill/factory-new", {"SKILL.md": notion}), "skill/factory-new", "Agentic Systems New")
         self.assertEqual(result["files"], ["SKILL.md"])
         self.assertEqual(reconcile.load_manifest(self.root)[2], [])
-        self.assertIn("# Factory New", (self.root / "agent-ops/factory-new/SKILL.md").read_text())
+        self.assertIn("# Agentic Systems New", (self.root / "agent-ops/agentic-system-new/SKILL.md").read_text())
 
 
 if __name__ == "__main__":

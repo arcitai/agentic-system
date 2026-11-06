@@ -1,10 +1,10 @@
 # Technical architecture notes
 
-Revision: 0.1.29 · Updated: 2026-10-30
+Revision: 0.1.34 · Updated: 2026-11-06
 
-The [public guide](https://gustavanderson.notion.site/Factory-a-practical-guide-4046d2e17f568159a603de2dd6b91c2a)
+The [public guide](https://gustavanderson.notion.site/Agentic-Systems-4046d2e17f568159a603de2dd6b91c2a)
 owns the seven-layer overview, diagrams and human explanation. These notes cover
-the repository's integration boundaries. [Source ownership](factory-definition.md)
+the repository's integration boundaries. [Source ownership](system-definition.md)
 identifies the originals and versioned exports.
 
 ## Responsibilities
@@ -20,7 +20,7 @@ identifies the originals and versioned exports.
 
 A personal Planning Agent is optional. Explicitly delegated host maintenance may have an operator; this does not require
 an additional coordinating model, global work queue or privileged project lead. See the
-[host guide](../foundation/factory-foundation/references/setup.md#keep-the-host-ready-after-restart).
+[host guide](../foundation/agentic-foundation/references/setup.md#keep-the-host-ready-after-restart).
 
 ## Three-level access architecture
 
@@ -40,7 +40,7 @@ and creates and removes fresh per-task worker VMs through the native project
 controller (bounded trials on 29–30 October 2026). The earlier prepared worker
 environments were retired on 30 October 2026 and are no longer fallbacks;
 unattended operation and the other open gaps remain
-under [#32](https://github.com/arcitai/factory/issues/32). Explicitly trusted
+under [#32](https://github.com/arcitai/agentic-systems/issues/32). Explicitly trusted
 related projects may share an environment and its access. All processes inside
 one environment share that environment's service bindings; separate conversations
 and worktrees do not isolate those credentials.
@@ -52,7 +52,7 @@ access is acceptable; this is weaker than one fresh sandbox per agent. The curre
 T3 link starts tasks in existing environments, not new Docker microVMs.
 Guest-local Docker can create containers, but that alone does not establish
 per-worker network, credential or kernel isolation. Automatic provisioning,
-cleanup and the chosen boundary still need qualification in [#32](https://github.com/arcitai/factory/issues/32).
+cleanup and the chosen boundary still need qualification in [#32](https://github.com/arcitai/agentic-systems/issues/32).
 
 ## Native configuration and execution
 
@@ -65,13 +65,13 @@ T3 Code is the reference workspace; another capable native setup is valid. Read
 current installed capabilities separately from released upstream functions and
 dated historical observations. The host guide's Nightly examples keep their
 original dates and are not current stable installation commands. The live native
-roadmap remains [#32](https://github.com/arcitai/factory/issues/32), and the held
-host adoption path remains [#34](https://github.com/arcitai/factory/issues/34).
+roadmap remains [#32](https://github.com/arcitai/agentic-systems/issues/32), and the held
+host adoption path remains [#34](https://github.com/arcitai/agentic-systems/issues/34).
 Package source, actual installation changes and remaining holds are recorded separately.
 
 Where enforced separation is needed, compare supported isolation choices against
 the full execution environment, including any workspace server's own tools.
-Qualify the selected container/VM or native boundary for the task. Factory adds no
+Qualify the selected container/VM or native boundary for the task. Agentic Systems adds no
 bridge, approval pump, orchestrator or policy engine to fill a native-tool gap.
 
 ## Results, learning and experiments
@@ -85,7 +85,7 @@ For model comparisons, fork the same frozen session checkpoint into independent
 attempts with the same input and task state, changing only the role/model under
 test. Subsequent outputs may diverge. A transcript alone does not restore tools,
 data, permissions or hidden provider state. Retain limitations and whole-attempt
-results; see [replay #50](https://github.com/arcitai/factory/issues/50).
+results; see [replay #50](https://github.com/arcitai/agentic-systems/issues/50).
 
 Source checks, a rehearsal, installed skills and qualified operation are different
 claims. [Qualification](qualification.md) retains the dated evidence and remaining
