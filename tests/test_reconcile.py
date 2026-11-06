@@ -70,6 +70,22 @@ class Repo:
         return errors, reconcile.impact(self.root, keys, base, git(self.root, "rev-parse", "HEAD"))
 
 
+# A synthetic handoff on a Notion-owned artifact. Tests inject it into their own manifest copy so they
+# never depend on which real pending rows docs/sources.json carries.
+SYNTHETIC_PENDING = {
+    "id": "synthetic-handoff-fixture",
+    "action": "replace",
+    "holder": "Synthetic canonical writer",
+    "before": "Synthetic status sentence before the handoff.",
+    "after": "Synthetic status sentence after the handoff.",
+}
+
+
+def with_synthetic_pending(keys, artifact="guide/home"):
+    """Give `artifact` exactly the synthetic handoff, replacing any real rows it carries."""
+    keys[artifact]["pending"] = [dict(SYNTHETIC_PENDING)]
+
+
 def levels(items):
     return {(i.get("key"), i["level"]) for i in items}
 
@@ -95,7 +111,7 @@ class ManifestTests(unittest.TestCase):
             "notion page id required": lambda k, a: a.append({"key": "guide/x", "kind": "page", "owner": "notion", "label": "authoring-edition"}),
             "skill without entry": lambda k, a: a.remove(k["skill/factory-review"]),
             "binding on a released reference": lambda k, a: k["skill/factory-review"].update(binding={"revision": "r", "version": "1"}),
-            "pending without holder": lambda k, a: k["guide/home"]["pending"][0].pop("holder"),
+            "pending without holder": lambda k, a: k["guide/home"].update(pending=[{n: v for n, v in SYNTHETIC_PENDING.items() if n != "holder"}]),
             "pending on a Git-owned artifact": lambda k, a: k["doc/readme"].update(pending=[{"id": "x", "after": "y", "holder": "z"}]),
             "missing kind": lambda k, a: k["doc/vision"].pop("kind"),
             "released-reference page id reused": lambda k, a: k["skill/factory-spec"].update(notion=k["skill/factory-review"]["notion"]),
@@ -110,6 +126,15 @@ class ManifestTests(unittest.TestCase):
                 (root / reconcile.MANIFEST).write_text(json.dumps(data))
                 self.assertTrue(reconcile.load_manifest(root)[2], name)
 
+    def test_synthetic_pending_fixture_is_valid_on_a_notion_owned_artifact(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary) / "r"
+            shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
+            data = json.loads((root / reconcile.MANIFEST).read_text())
+            with_synthetic_pending({i["key"]: i for i in data["artifacts"]})
+            (root / reconcile.MANIFEST).write_text(json.dumps(data))
+            self.assertEqual(reconcile.load_manifest(root)[2], [])
+
 
 class ImpactTests(unittest.TestCase):
     def setUp(self):
@@ -121,11 +146,13 @@ class ImpactTests(unittest.TestCase):
         self.temporary.cleanup()
 
     def test_unchanged_git_side_without_canonical_is_never_a_no_op(self):
+        self.repo.manifest(lambda k, a: with_synthetic_pending(k))
+        self.base = self.repo.commit("synthetic pending")
         self.repo.commit("empty")
         result = reconcile.run(self.repo.root, self.base)
         self.assertNotEqual(result["result"], "NO-OP")
         self.assertIn("NOT RUN", result["canonical"])
-        self.assertTrue([i for i in result["items"] if i.get("pending") == "guide-status-20261105"])
+        self.assertTrue([i for i in result["items"] if i.get("pending") == SYNTHETIC_PENDING["id"]])
         self.repo.manifest(lambda k, a: [i.pop("pending", None) for i in a])
         self.repo.commit("no pending")
         self.assertEqual(reconcile.run(self.repo.root)["result"], "UNVERIFIED (Git side: NO-OP)")
@@ -294,8 +321,10 @@ class ImpactTests(unittest.TestCase):
 class CanonicalTests(unittest.TestCase):
     """Compare the working tree with a synthetic canonical snapshot that renders it the Notion way."""
 
-    def snapshot(self, mutate=lambda s: None):
+    def snapshot(self, mutate=lambda s: None, synthetic_pending=False):
         _, keys, _ = reconcile.load_manifest(ROOT)
+        if synthetic_pending:
+            with_synthetic_pending(keys)
         artifacts = {}
         for key, item in keys.items():
             if item["kind"] == "skill" and item.get("path"):
@@ -437,20 +466,19 @@ class CanonicalTests(unittest.TestCase):
         self.assertNotEqual(self.snapshot(forged)[0]["skill/factory-review"]["level"], "IN-SYNC")
 
     def test_pending_handoffs_report_pending_applied_and_stale(self):
-        _, pending, _ = self.snapshot()
-        self.assertIn("pending for", next(p for p in pending if p["pending"] == "guide-status-20261105")["reason"])
-        manifest = {i["key"]: i for i in json.loads((ROOT / reconcile.MANIFEST).read_text())["artifacts"]}
-        after = manifest["guide/home"]["pending"][0]["after"]
+        fixture = SYNTHETIC_PENDING["id"]
+        _, pending, _ = self.snapshot(synthetic_pending=True)
+        self.assertIn("pending for", next(p for p in pending if p["pending"] == fixture)["reason"])
 
         def applied(s):
-            s["artifacts"]["guide/home"]["text"] = after
-        _, pending, _ = self.snapshot(applied)
-        self.assertIn("is applied", next(p for p in pending if p["pending"] == "guide-status-20261105")["reason"])
+            s["artifacts"]["guide/home"]["text"] = SYNTHETIC_PENDING["after"]
+        _, pending, _ = self.snapshot(applied, synthetic_pending=True)
+        self.assertIn("is applied", next(p for p in pending if p["pending"] == fixture)["reason"])
 
         def stale(s):
             s["artifacts"]["guide/home"]["text"] = "Someone rewrote the status paragraph."
-        _, pending, _ = self.snapshot(stale)
-        self.assertIn("re-prepare", next(p for p in pending if p["pending"] == "guide-status-20261105")["reason"])
+        _, pending, _ = self.snapshot(stale, synthetic_pending=True)
+        self.assertIn("re-prepare", next(p for p in pending if p["pending"] == fixture)["reason"])
 
 
 class DocsTests(unittest.TestCase):
