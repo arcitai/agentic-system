@@ -150,9 +150,12 @@ class ImpactTests(unittest.TestCase):
         self.base = self.repo.commit("synthetic pending")
         self.repo.commit("empty")
         result = reconcile.run(self.repo.root, self.base)
-        self.assertNotEqual(result["result"], "NO-OP")
+        self.assertEqual(result["result"], "ATTENTION")
         self.assertIn("NOT RUN", result["canonical"])
-        self.assertTrue([i for i in result["items"] if i.get("pending") == SYNTHETIC_PENDING["id"]])
+        pending = [i for i in result["items"] if i.get("pending") == SYNTHETIC_PENDING["id"]]
+        self.assertEqual([(i["key"], i["level"], i["holder"]) for i in pending],
+                         [("guide/home", "ATTENTION", SYNTHETIC_PENDING["holder"])])
+        self.assertFalse([i for i in result["items"] if i["level"] == "CHANGE"])
         self.repo.manifest(lambda k, a: [i.pop("pending", None) for i in a])
         self.repo.commit("no pending")
         self.assertEqual(reconcile.run(self.repo.root)["result"], "UNVERIFIED (Git side: NO-OP)")
