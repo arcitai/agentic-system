@@ -44,7 +44,7 @@ def check(root=ROOT):
     if not re.fullmatch(VERSION, package_version):
         errors.append("VERSION: expected a numeric X.Y.Z release")
         package_version = "0.0.0"
-    skills = [p for group in ("foundation", "agent-ops", "adlc")
+    skills = [p for group in ("foundation", "entry", "evaluation", "defence")
               for p in (root / group).glob("*/SKILL.md")]
     if not skills:
         errors.append("No skills found")

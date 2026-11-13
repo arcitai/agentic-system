@@ -1,93 +1,45 @@
-# Technical architecture notes
+# Architecture
 
-Revision: 0.1.34 · Updated: 2026-11-06
+Revision: 0.2.0 · Updated: 2026-11-13
 
-The [public guide](https://gustavanderson.notion.site/Agentic-Systems-4046d2e17f568159a603de2dd6b91c2a)
-owns the seven-layer overview, diagrams and human explanation. These notes cover
-the repository's integration boundaries. [Source ownership](system-definition.md)
-identifies the originals and versioned exports.
+Agentic System is the garden around agent-led work. Keep workflow, responsibility and deployment views distinct.
+
+## Work
+
+![Agent-led work](diagrams/agent-led-work.svg)
+
+The owner sets the outcome and chooses the model, or explicitly delegates a choice. One project agent normally retains the task through research, planning, action, verification and authorized delivery. It may use focused pairs, fresh reviewers or fan-out. These are useful calls, not required handoffs. Existing project policies can require specific review.
+
+Optional outside planning help assists the owner with ideas, priorities, model choices and native starts. The project agent retains the actual work; no permanent internal AgentOps manager or extra model-selection agent is prescribed. A skill is a procedure the same agent may use, not a separate agent role.
 
 ## Responsibilities
 
-| Responsibility | Scope |
+![Framework responsibilities](diagrams/responsibilities.svg)
+
+| Area | Responsibility |
 | --- | --- |
-| Optional owner entry | Route requests to existing project leads and follow up bounded handoffs |
-| Foundation | Prepare agent environment, project foundation and needed operating conditions |
-| AgentOps | Lead one project within its mandate; assign work and coordinate review and delivery |
-| Domain work | Apply the task method and checks for software, BI, defence, research or other work |
-| Evaluation | Compare agreed outcomes and all-attempt quality, effort, time and available cost |
-| Native tools and services | Execute agents, keep work/history and enforce actual settings and permissions |
+| Access | Human/operator entry, service connections and allowed actions |
+| Work & coordination | Current goal, continuous work and useful conditional helpers |
+| Evaluation | Relevant checks, review and decision-oriented comparisons |
+| Models | Owner-selected capability and actual native model/effort readback |
+| Execution | Harness, tools, task workspaces and enforced isolation where required |
+| Data & Context | Authoritative project sources, native history and necessary continuity |
+| Method & policy | Project intent, mandate, selected methods, constraints and source revisions |
 
-A personal Planning Agent is optional. Explicitly delegated host maintenance may have an operator; this does not require
-an additional coordinating model, global work queue or privileged project lead. See the
-[host guide](../foundation/agentic-foundation/references/setup.md#keep-the-host-ready-after-restart).
+The layers are responsibilities, not a sequence, seven services, seven agents or seven VMs. Foundation prepares Agent Environment, Project Foundation and Operations & Maintenance across these responsibilities. A small project may need little setup in each.
 
-## Three-level access architecture
+## Native boundaries
 
-The intended responsibilities are **owner → AgentOps → bounded workers**.
-Assignments do not inherit the owner's or lead's credentials. Foundation prepares
-and checks the actual boundary. Reviewers and evaluators are bounded workers.
+![Lab access boundaries](diagrams/lab-boundaries.svg)
 
-For our Notion recipe, the lead is to use a connection limited to selected pages.
-It supplies the chosen skills and task context to workers. A worktree or separate
-chat separates work, but does not prevent access to shared credentials. Test the
-allowed and refused operations through the actual selected tool and account.
-Keep private installation facts and credentials out of this repository.
+Lab runs as an isolated project environment on Z13 with a native T3 operator connection. One persistent working conversation retains history. Helpers can use narrower, separately enforced execution boundaries when their task requires them. Their lifecycle is a native capability, not another permanent coordinator LLM.
 
-Each project lead needs a scoped execution boundary. In the current Lab, the
-single AgentOps, pinned in the operator app, runs in its own environment on Z13
-and creates and removes fresh per-task worker VMs through the native project
-controller (bounded trials on 29–30 October 2026). The earlier prepared worker
-environments were retired on 30 October 2026 and are no longer fallbacks;
-unattended operation and the other open gaps remain
-under [#32](https://github.com/arcitai/agentic-systems/issues/32). Explicitly trusted
-related projects may share an environment and its access. All processes inside
-one environment share that environment's service bindings; separate conversations
-and worktrees do not isolate those credentials.
+Credentials remain outside the execution boundary when a broker is required. The project agent retains only its authorized project-service reach; helpers receive selected context and appropriate access. Processes in one environment may share that environment's brokered reach. Fresh contexts, worktrees, names and role instructions do not create an identity or credential boundary.
 
-The owner's target is isolated, on-demand workers controlled by AgentOps inside
-its own environment, with minimal actions on the physical host and no extra LLM
-middleman. A prepared environment can host several fresh sessions when shared
-access is acceptable; this is weaker than one fresh sandbox per agent. The current
-T3 link starts tasks in existing environments, not new Docker microVMs.
-Guest-local Docker can create containers, but that alone does not establish
-per-worker network, credential or kernel isolation. Automatic provisioning,
-cleanup and the chosen boundary still need qualification in [#32](https://github.com/arcitai/agentic-systems/issues/32).
+The workflow change itself neither grants nor removes access, changes network rules nor collapses isolated helpers into a shared environment. Method edits, installation changes, reviews and delivery remain governed by their existing authority. Canonical common-method changes require a concrete owner decision or delegation.
 
-## Native configuration and execution
+## Source and implementation
 
-The YAML original describes composition and links to methods. AgentOps interprets
-it. Actual tool settings, OS/environment controls, mounts, network rules, service
-permissions and repository protections enforce only what they configure.
-`AGENTS.md` provides project instructions and routes; it grants no access.
+The [public guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a) owns the general authoring edition. The selected project definition identifies intent and sources; native systems own applied state. Reviewed releases carry portable methods with their required references. The [reference library](https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8) holds optional domain sources.
 
-T3 Code is the reference workspace; another capable native setup is valid. Read
-current installed capabilities separately from released upstream functions and
-dated historical observations. The host guide's Nightly examples keep their
-original dates and are not current stable installation commands. The live native
-roadmap remains [#32](https://github.com/arcitai/agentic-systems/issues/32), and the held
-host adoption path remains [#34](https://github.com/arcitai/agentic-systems/issues/34).
-Package source, actual installation changes and remaining holds are recorded separately.
-
-Where enforced separation is needed, compare supported isolation choices against
-the full execution environment, including any workspace server's own tools.
-Qualify the selected container/VM or native boundary for the task. Agentic Systems adds no
-bridge, approval pump, orchestrator or policy engine to fill a native-tool gap.
-
-## Results, learning and experiments
-
-Project artifacts, task status, logs and usage retain their native sources. Keep
-accepted decisions and reusable lessons in the relevant original; native memory
-is working context. Model/provider choices and permitted data destinations belong
-to the selected project's setup. A shared account or model name is not a policy.
-
-For model comparisons, fork the same frozen session checkpoint into independent
-attempts with the same input and task state, changing only the role/model under
-test. Subsequent outputs may diverge. A transcript alone does not restore tools,
-data, permissions or hidden provider state. Retain limitations and whole-attempt
-results; see [replay #50](https://github.com/arcitai/agentic-systems/issues/50).
-
-Source checks, a rehearsal, installed skills and qualified operation are different
-claims. [Qualification](qualification.md) retains the dated evidence and remaining
-live work. A released method does not prove automatic scheduling, worker isolation,
-recovery, deployment or useful work in a new installation.
+Diagrams are editable source-backed explanations. Their presence does not prove an installed capability. Runtime versions, holds, failed tests and recovery evidence belong in the dated [qualification record](qualification.md); open work is in [the backlog](backlog.md). Historical source names and observed dates remain unchanged.

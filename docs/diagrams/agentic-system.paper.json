@@ -1,0 +1,7385 @@
+{
+  "format": "openpaperdesign",
+  "version": 1,
+  "name": "Arcitai · Agentic System",
+  "assets": {},
+  "pages": [
+    {
+      "id": "operating-flow",
+      "name": "01 · Agent-led work",
+      "next_id": 44,
+      "root": [
+        1
+      ],
+      "nodes": [
+        {
+          "id": 1,
+          "type": "frame",
+          "name": "01 · Agent-led work",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 1030
+          },
+          "children": [
+            2,
+            3,
+            4,
+            5,
+            9,
+            13,
+            17,
+            18,
+            19,
+            23,
+            25,
+            29,
+            31,
+            32,
+            36,
+            40
+          ],
+          "clip": true,
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 2,
+          "parent": 1,
+          "name": "ARCITAI / AGENTIC SYSTEM",
+          "type": "text",
+          "text": "ARCITAI / AGENTIC SYSTEM",
+          "rect": {
+            "x": 48,
+            "y": 28,
+            "w": 1300,
+            "h": 28
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 3,
+          "parent": 1,
+          "name": "One agent. A good garden.",
+          "type": "text",
+          "text": "One agent. A good garden.",
+          "rect": {
+            "x": 48,
+            "y": 76,
+            "w": 1300,
+            "h": 62
+          },
+          "font_size": 42,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 4,
+          "parent": 1,
+          "name": "Choose the outcome and model. Keep the working context. Call for ",
+          "type": "text",
+          "text": "Choose the outcome and model. Keep the working context. Call for help when it helps.",
+          "rect": {
+            "x": 48,
+            "y": 145,
+            "w": 1300,
+            "h": 60
+          },
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 5,
+          "name": "Owner",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 285,
+            "w": 320,
+            "h": 156
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            6,
+            7,
+            8
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 320,
+            "height": 156
+          },
+          "parent": 1
+        },
+        {
+          "id": 6,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 156
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 7,
+          "name": "Owner",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 272,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Owner",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 8,
+          "parent": 5,
+          "name": "Outcome, model and mandate",
+          "type": "text",
+          "text": "Outcome, model and mandate",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 272,
+            "h": 81
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 9,
+          "name": "Project agent",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 534,
+            "y": 285,
+            "w": 380,
+            "h": 180
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            10,
+            11,
+            12
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 380,
+            "height": 180
+          },
+          "parent": 1
+        },
+        {
+          "id": 10,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 380,
+            "h": 180
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#e8f0ff"
+              }
+            ],
+            "stroke": "#2563eb",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 11,
+          "name": "Project agent",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 332,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Project agent",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "name": "Research · plan · act · check\nOne continuous working context",
+          "type": "text",
+          "text": "Research · plan · act · check\nOne continuous working context",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 332,
+            "h": 105
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 13,
+          "name": "Useful outcome",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1080,
+            "y": 285,
+            "w": 312,
+            "h": 180
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            14,
+            15,
+            16
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 312,
+            "height": 180
+          },
+          "parent": 1
+        },
+        {
+          "id": 14,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 312,
+            "h": 180
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 15,
+          "name": "Useful outcome",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 264,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Useful outcome",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 16,
+          "parent": 13,
+          "name": "Evidence and delivery\nwithin the mandate",
+          "type": "text",
+          "text": "Evidence and delivery\nwithin the mandate",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 264,
+            "h": 105
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 17,
+          "parent": 1,
+          "name": "Relationship",
+          "type": "connector",
+          "rect": {
+            "x": 368,
+            "y": 363,
+            "w": 166,
+            "h": 12
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 83,
+              "y": 0
+            },
+            {
+              "x": 83,
+              "y": 12
+            },
+            {
+              "x": 166,
+              "y": 12
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 5,
+            "end": 9,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "children": [],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 18,
+          "parent": 1,
+          "name": "Relationship",
+          "type": "connector",
+          "rect": {
+            "x": 914,
+            "y": 375,
+            "w": 166,
+            "h": 1
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 83,
+              "y": 0
+            },
+            {
+              "x": 83,
+              "y": 0
+            },
+            {
+              "x": 166,
+              "y": 0
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 9,
+            "end": 13,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "children": [],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 19,
+          "name": "Planning help",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 520,
+            "w": 320,
+            "h": 150
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            20,
+            21,
+            22
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 320,
+            "height": 150
+          },
+          "parent": 1
+        },
+        {
+          "id": 20,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 320,
+            "h": 150
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 19,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 21,
+          "name": "Planning help",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 272,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Planning help",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 19,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 22,
+          "parent": 19,
+          "name": "Outside · optional advice and starts",
+          "type": "text",
+          "text": "Outside · optional advice and starts",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 272,
+            "h": 75
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 23,
+          "parent": 1,
+          "name": "optional",
+          "type": "connector",
+          "rect": {
+            "x": 208,
+            "y": 441,
+            "w": 1,
+            "h": 79
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 79
+            },
+            {
+              "x": 0,
+              "y": 39.5
+            },
+            {
+              "x": 0,
+              "y": 39.5
+            },
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 19,
+            "end": 5,
+            "startSide": "top",
+            "endSide": "bottom"
+          },
+          "children": [
+            24
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 24,
+          "parent": 23,
+          "name": "optional",
+          "type": "text",
+          "text": "optional",
+          "rect": {
+            "x": -55,
+            "y": -10.5,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 25,
+          "name": "Focused help, when useful",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 534,
+            "y": 545,
+            "w": 380,
+            "h": 158
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            26,
+            27,
+            28
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 380,
+            "height": 158
+          },
+          "parent": 1
+        },
+        {
+          "id": 26,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 380,
+            "h": 158
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 27,
+          "name": "Focused help, when useful",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 332,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Focused help, when useful",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 28,
+          "parent": 25,
+          "name": "Pair · fresh reviewer · fan-out\nReturns findings to the same agen",
+          "type": "text",
+          "text": "Pair · fresh reviewer · fan-out\nReturns findings to the same agent",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 332,
+            "h": 83
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 29,
+          "parent": 1,
+          "name": "bounded task",
+          "type": "connector",
+          "rect": {
+            "x": 724,
+            "y": 465,
+            "w": 1,
+            "h": 80
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 40
+            },
+            {
+              "x": 0,
+              "y": 40
+            },
+            {
+              "x": 0,
+              "y": 80
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 9,
+            "end": 25,
+            "startSide": "bottom",
+            "endSide": "top"
+          },
+          "children": [
+            30
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 30,
+          "parent": 29,
+          "name": "bounded task",
+          "type": "text",
+          "text": "bounded task",
+          "rect": {
+            "x": -55,
+            "y": -10,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 31,
+          "parent": 1,
+          "name": "THE GARDEN SUPPORTS THE WHOLE TASK",
+          "type": "text",
+          "text": "THE GARDEN SUPPORTS THE WHOLE TASK",
+          "rect": {
+            "x": 48,
+            "y": 775,
+            "w": 1300,
+            "h": 32
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 32,
+          "name": "Agent Environment",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 828,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            33,
+            34,
+            35
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 420,
+            "height": 138
+          },
+          "parent": 1
+        },
+        {
+          "id": 33,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 32,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 34,
+          "name": "Agent Environment",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 372,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Agent Environment",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 32,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 35,
+          "parent": 32,
+          "name": "Harness, tools, model and access",
+          "type": "text",
+          "text": "Harness, tools, model and access",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 372,
+            "h": 63
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 36,
+          "name": "Project Foundation",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 510,
+            "y": 828,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            37,
+            38,
+            39
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 420,
+            "height": 138
+          },
+          "parent": 1
+        },
+        {
+          "id": 37,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 36,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 38,
+          "name": "Project Foundation",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 372,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Project Foundation",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 36,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 39,
+          "parent": 36,
+          "name": "Goal, sources, conventions and proof",
+          "type": "text",
+          "text": "Goal, sources, conventions and proof",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 372,
+            "h": 63
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 40,
+          "name": "Operations & Maintenance",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 972,
+            "y": 828,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            41,
+            42,
+            43
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 420,
+            "height": 138
+          },
+          "parent": 1
+        },
+        {
+          "id": 41,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 420,
+            "h": 138
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 40,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 42,
+          "name": "Operations & Maintenance",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 372,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Operations & Maintenance",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 40,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 43,
+          "parent": 40,
+          "name": "Continuity, updates and recovery",
+          "type": "text",
+          "text": "Continuity, updates and recovery",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 372,
+            "h": 63
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "responsibilities",
+      "name": "02 · Framework responsibilities",
+      "next_id": 35,
+      "root": [
+        1
+      ],
+      "nodes": [
+        {
+          "id": 1,
+          "type": "frame",
+          "name": "02 · Framework responsibilities",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 1110
+          },
+          "children": [
+            2,
+            3,
+            4,
+            5,
+            9,
+            13,
+            17,
+            21,
+            25,
+            29,
+            33,
+            34
+          ],
+          "clip": true,
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 2,
+          "parent": 1,
+          "name": "ARCITAI / AGENTIC SYSTEM",
+          "type": "text",
+          "text": "ARCITAI / AGENTIC SYSTEM",
+          "rect": {
+            "x": 48,
+            "y": 28,
+            "w": 1300,
+            "h": 28
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 3,
+          "parent": 1,
+          "name": "Architecture",
+          "type": "text",
+          "text": "Architecture",
+          "rect": {
+            "x": 48,
+            "y": 76,
+            "w": 1300,
+            "h": 62
+          },
+          "font_size": 42,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 4,
+          "parent": 1,
+          "name": "Responsibilities around the work — not stages, services or one VM",
+          "type": "text",
+          "text": "Responsibilities around the work — not stages, services or one VM per box.",
+          "rect": {
+            "x": 48,
+            "y": 145,
+            "w": 1300,
+            "h": 60
+          },
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 5,
+          "name": "Access",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 230,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            6,
+            7,
+            8
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 6,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 7,
+          "name": "Access",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Access",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 8,
+          "parent": 5,
+          "name": "Operator entry · scoped service connections · allowed actions",
+          "type": "text",
+          "text": "Operator entry · scoped service connections · allowed actions",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 9,
+          "name": "Work & coordination",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 330,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            10,
+            11,
+            12
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 10,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 11,
+          "name": "Work & coordination",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Work & coordination",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "name": "Current goal · continuous agent · optional pairs and fan-out",
+          "type": "text",
+          "text": "Current goal · continuous agent · optional pairs and fan-out",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 13,
+          "name": "Evaluation",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 430,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            14,
+            15,
+            16
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 14,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 15,
+          "name": "Evaluation",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Evaluation",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 16,
+          "parent": 13,
+          "name": "Useful checks · project review · matched comparisons",
+          "type": "text",
+          "text": "Useful checks · project review · matched comparisons",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 17,
+          "name": "Models",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 530,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            18,
+            19,
+            20
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 18,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 17,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 19,
+          "name": "Models",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Models",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 17,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 20,
+          "parent": 17,
+          "name": "Owner-selected capability · native model and effort readback",
+          "type": "text",
+          "text": "Owner-selected capability · native model and effort readback",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 21,
+          "name": "Execution",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 630,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            22,
+            23,
+            24
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 22,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 21,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 23,
+          "name": "Execution",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Execution",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 21,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 24,
+          "parent": 21,
+          "name": "Harness · tools · workspaces · enforced isolation where needed",
+          "type": "text",
+          "text": "Harness · tools · workspaces · enforced isolation where needed",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 25,
+          "name": "Data & Context",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 730,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            26,
+            27,
+            28
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 26,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 27,
+          "name": "Data & Context",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Data & Context",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 28,
+          "parent": 25,
+          "name": "Authoritative project sources · native history · continuity",
+          "type": "text",
+          "text": "Authoritative project sources · native history · continuity",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 29,
+          "name": "Method & policy",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 830,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            30,
+            31,
+            32
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 1344,
+            "height": 86
+          },
+          "parent": 1
+        },
+        {
+          "id": 30,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1344,
+            "h": 86
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 29,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 31,
+          "name": "Method & policy",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 12,
+            "w": 1296,
+            "h": 32
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Method & policy",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 29,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 32,
+          "parent": 29,
+          "name": "Intent · mandate · selected methods · source revisions",
+          "type": "text",
+          "text": "Intent · mandate · selected methods · source revisions",
+          "rect": {
+            "x": 405,
+            "y": 28,
+            "w": 900,
+            "h": 45
+          },
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 33,
+          "parent": 1,
+          "name": "FOUNDATION",
+          "type": "text",
+          "text": "FOUNDATION",
+          "rect": {
+            "x": 48,
+            "y": 970,
+            "w": 300,
+            "h": 28
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 34,
+          "parent": 1,
+          "name": "Agent Environment · Project Foundation · Operations & Maintenance",
+          "type": "text",
+          "text": "Agent Environment · Project Foundation · Operations & Maintenance",
+          "rect": {
+            "x": 48,
+            "y": 1015,
+            "w": 1344,
+            "h": 42
+          },
+          "font_size": 25,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lab-boundaries-current",
+      "name": "03 · Lab access boundaries",
+      "next_id": 35,
+      "root": [
+        1
+      ],
+      "nodes": [
+        {
+          "id": 1,
+          "type": "frame",
+          "name": "03 · Lab access boundaries",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1440,
+            "h": 1000
+          },
+          "children": [
+            2,
+            3,
+            4,
+            5,
+            9,
+            13,
+            17,
+            19,
+            21,
+            25,
+            29,
+            31,
+            33,
+            34
+          ],
+          "clip": true,
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#ffffff"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 2,
+          "parent": 1,
+          "name": "ARCITAI / AGENTIC SYSTEM",
+          "type": "text",
+          "text": "ARCITAI / AGENTIC SYSTEM",
+          "rect": {
+            "x": 48,
+            "y": 28,
+            "w": 1300,
+            "h": 28
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 3,
+          "parent": 1,
+          "name": "One Lab. Preserved boundaries.",
+          "type": "text",
+          "text": "One Lab. Preserved boundaries.",
+          "rect": {
+            "x": 48,
+            "y": 76,
+            "w": 1300,
+            "h": 62
+          },
+          "font_size": 42,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 4,
+          "parent": 1,
+          "name": "Logical access view. Exact VM topology and versions belong to the",
+          "type": "text",
+          "text": "Logical access view. Exact VM topology and versions belong to the dated installation record.",
+          "rect": {
+            "x": 48,
+            "y": 145,
+            "w": 1300,
+            "h": 60
+          },
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 5,
+          "name": "Operator",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 48,
+            "y": 295,
+            "w": 290,
+            "h": 165
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            6,
+            7,
+            8
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 290,
+            "height": 165
+          },
+          "parent": 1
+        },
+        {
+          "id": 6,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 290,
+            "h": 165
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 7,
+          "name": "Operator",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 242,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Operator",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 8,
+          "parent": 5,
+          "name": "One T3 Code Beta GUI\nMac is the operator client",
+          "type": "text",
+          "text": "One T3 Code Beta GUI\nMac is the operator client",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 242,
+            "h": 90
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 9,
+          "name": "Project environment",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 475,
+            "y": 270,
+            "w": 405,
+            "h": 180
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            10,
+            11,
+            12
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 405,
+            "height": 180
+          },
+          "parent": 1
+        },
+        {
+          "id": 10,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 405,
+            "h": 180
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#e8f0ff"
+              }
+            ],
+            "stroke": "#2563eb",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 11,
+          "name": "Project environment",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 357,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Project environment",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "name": "Continuous Lab agent\nNative history and selected methods",
+          "type": "text",
+          "text": "Continuous Lab agent\nNative history and selected methods",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 357,
+            "h": 105
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 13,
+          "name": "Helper environment",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1010,
+            "y": 270,
+            "w": 382,
+            "h": 180
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            14,
+            15,
+            16
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 382,
+            "height": 180
+          },
+          "parent": 1
+        },
+        {
+          "id": 14,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 382,
+            "h": 180
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 15,
+          "name": "Helper environment",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 334,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Helper environment",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 13,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 16,
+          "parent": 13,
+          "name": "On demand · task-scoped files\nNarrower enforced access",
+          "type": "text",
+          "text": "On demand · task-scoped files\nNarrower enforced access",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 334,
+            "h": 105
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 17,
+          "parent": 1,
+          "name": "native connection",
+          "type": "connector",
+          "rect": {
+            "x": 338,
+            "y": 360,
+            "w": 137,
+            "h": 17.5
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 17.5
+            },
+            {
+              "x": 68.5,
+              "y": 17.5
+            },
+            {
+              "x": 68.5,
+              "y": 0
+            },
+            {
+              "x": 137,
+              "y": 0
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 5,
+            "end": 9,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "children": [
+            18
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 18,
+          "parent": 17,
+          "name": "native connection",
+          "type": "text",
+          "text": "native connection",
+          "rect": {
+            "x": 13.5,
+            "y": -41.25,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 19,
+          "parent": 1,
+          "name": "bounded work",
+          "type": "connector",
+          "rect": {
+            "x": 880,
+            "y": 360,
+            "w": 130,
+            "h": 1
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 65,
+              "y": 0
+            },
+            {
+              "x": 65,
+              "y": 0
+            },
+            {
+              "x": 130,
+              "y": 0
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 9,
+            "end": 13,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "children": [
+            20
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 20,
+          "parent": 19,
+          "name": "bounded work",
+          "type": "text",
+          "text": "bounded work",
+          "rect": {
+            "x": 10,
+            "y": -50,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 21,
+          "name": "Native credential broker",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 475,
+            "y": 600,
+            "w": 520,
+            "h": 155
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            22,
+            23,
+            24
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 520,
+            "height": 155
+          },
+          "parent": 1
+        },
+        {
+          "id": 22,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 520,
+            "h": 155
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f8f9fc"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 21,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 23,
+          "name": "Native credential broker",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 472,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Native credential broker",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 21,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 24,
+          "parent": 21,
+          "name": "Real credentials stay outside execution boundaries",
+          "type": "text",
+          "text": "Real credentials stay outside execution boundaries",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 472,
+            "h": 80
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 25,
+          "name": "Project services",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1070,
+            "y": 600,
+            "w": 322,
+            "h": 176
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            26,
+            27,
+            28
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 322,
+            "height": 176
+          },
+          "parent": 1
+        },
+        {
+          "id": 26,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 322,
+            "h": 176
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#f1f5ff"
+              }
+            ],
+            "stroke": "#bdcbea",
+            "stroke_width": 1.5,
+            "corner_radius": 16,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 27,
+          "name": "Project services",
+          "type": "text",
+          "rect": {
+            "x": 24,
+            "y": 22,
+            "w": 274,
+            "h": 40
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#202733"
+              }
+            ],
+            "opacity": 1
+          },
+          "text": "Project services",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 25,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 28,
+          "parent": 25,
+          "name": "Only granted GitHub / Notion\nor other project-service actions",
+          "type": "text",
+          "text": "Only granted GitHub / Notion\nor other project-service actions",
+          "rect": {
+            "x": 24,
+            "y": 66,
+            "w": 274,
+            "h": 101
+          },
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 29,
+          "parent": 1,
+          "name": "scoped request",
+          "type": "connector",
+          "rect": {
+            "x": 677.5,
+            "y": 450,
+            "w": 57.5,
+            "h": 150
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 75
+            },
+            {
+              "x": 57.5,
+              "y": 75
+            },
+            {
+              "x": 57.5,
+              "y": 150
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 9,
+            "end": 21,
+            "startSide": "bottom",
+            "endSide": "top"
+          },
+          "children": [
+            30
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 30,
+          "parent": 29,
+          "name": "scoped request",
+          "type": "text",
+          "text": "scoped request",
+          "rect": {
+            "x": -26.25,
+            "y": 25,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 31,
+          "parent": 1,
+          "name": "authorized request",
+          "type": "connector",
+          "rect": {
+            "x": 995,
+            "y": 677.5,
+            "w": 75,
+            "h": 10.5
+          },
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 37.5,
+              "y": 0
+            },
+            {
+              "x": 37.5,
+              "y": 10.5
+            },
+            {
+              "x": 75,
+              "y": 10.5
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 21,
+            "end": 25,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "children": [
+            32
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [],
+            "stroke": "#2563eb",
+            "stroke_width": 2,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 32,
+          "parent": 31,
+          "name": "authorized request",
+          "type": "text",
+          "text": "authorized request",
+          "rect": {
+            "x": -17.5,
+            "y": -44.75,
+            "w": 110,
+            "h": 44
+          },
+          "font_size": 14,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 33,
+          "parent": 1,
+          "name": "Z13 / PROJECT-SCOPED EXECUTION",
+          "type": "text",
+          "text": "Z13 / PROJECT-SCOPED EXECUTION",
+          "rect": {
+            "x": 48,
+            "y": 815,
+            "w": 1300,
+            "h": 28
+          },
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563eb"
+              }
+            ],
+            "opacity": 1
+          }
+        },
+        {
+          "id": 34,
+          "parent": 1,
+          "name": "A fresh context or worktree is not a credential boundary. Helpers",
+          "type": "text",
+          "text": "A fresh context or worktree is not a credential boundary. Helpers receive no project connection by default.",
+          "rect": {
+            "x": 48,
+            "y": 870,
+            "w": 1320,
+            "h": 65
+          },
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.25
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#5e6a7b"
+              }
+            ],
+            "opacity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "history-operating-flow",
+      "name": "History · 01 · From signal to outcome",
+      "next_id": 60,
+      "root": [
+        1
+      ],
+      "nodes": [
+        {
+          "id": 1,
+          "name": "01 · From signal to outcome",
+          "type": "frame",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1680,
+            "h": 1230
+          },
+          "clip": true,
+          "children": [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            22,
+            26,
+            30,
+            34,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            45,
+            44,
+            46,
+            47,
+            51,
+            55,
+            59
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FAFAF9"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 2,
+          "parent": 1,
+          "type": "text",
+          "name": "ARCITAI  /  AGENTIC SYSTEMS",
+          "rect": {
+            "x": 64,
+            "y": 36,
+            "w": 1400,
+            "h": 27.950000000000003
+          },
+          "visible": true,
+          "locked": false,
+          "text": "ARCITAI  /  AGENTIC SYSTEMS",
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 3,
+          "parent": 1,
+          "type": "text",
+          "name": "From signal to outcome",
+          "rect": {
+            "x": 64,
+            "y": 68,
+            "w": 1500,
+            "h": 61.7
+          },
+          "visible": true,
+          "locked": false,
+          "text": "From signal to outcome",
+          "font_size": 42,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 4,
+          "parent": 1,
+          "type": "text",
+          "name": "A shared method for software, research, BI and other agent work.",
+          "rect": {
+            "x": 64,
+            "y": 125,
+            "w": 1500,
+            "h": 33.35
+          },
+          "visible": true,
+          "locked": false,
+          "text": "A shared method for software, research, BI and other agent work.",
+          "font_size": 21,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 5,
+          "parent": 1,
+          "type": "rect",
+          "name": "Owner mandate",
+          "rect": {
+            "x": 64,
+            "y": 185,
+            "w": 1536,
+            "h": 126
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#BED0EE",
+            "stroke_width": 1.25,
+            "corner_radius": 12,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 6,
+          "parent": 1,
+          "type": "text",
+          "name": "People set the mandate",
+          "rect": {
+            "x": 88,
+            "y": 205,
+            "w": 550,
+            "h": 38.75
+          },
+          "visible": true,
+          "locked": false,
+          "text": "People set the mandate",
+          "font_size": 25,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 7,
+          "parent": 1,
+          "type": "text",
+          "name": "Goals & scope     ·     Sources & access     ·     Skills & models     ·     Review & delivery authority",
+          "rect": {
+            "x": 88,
+            "y": 251,
+            "w": 1460,
+            "h": 34.7
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Goals & scope     ·     Sources & access     ·     Skills & models     ·     Review & delivery authority",
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 8,
+          "parent": 1,
+          "type": "text",
+          "name": "01",
+          "rect": {
+            "x": 64,
+            "y": 352,
+            "w": 50,
+            "h": 29.3
+          },
+          "visible": true,
+          "locked": false,
+          "text": "01",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 9,
+          "parent": 1,
+          "type": "text",
+          "name": "Signals",
+          "rect": {
+            "x": 64,
+            "y": 385,
+            "w": 282,
+            "h": 40.1
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Signals",
+          "font_size": 26,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 10,
+          "parent": 1,
+          "type": "text",
+          "name": "02",
+          "rect": {
+            "x": 380,
+            "y": 352,
+            "w": 50,
+            "h": 29.3
+          },
+          "visible": true,
+          "locked": false,
+          "text": "02",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 11,
+          "parent": 1,
+          "type": "text",
+          "name": "Decide & specify",
+          "rect": {
+            "x": 380,
+            "y": 385,
+            "w": 282,
+            "h": 40.1
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Decide & specify",
+          "font_size": 26,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 12,
+          "parent": 1,
+          "type": "text",
+          "name": "03",
+          "rect": {
+            "x": 696,
+            "y": 352,
+            "w": 50,
+            "h": 29.3
+          },
+          "visible": true,
+          "locked": false,
+          "text": "03",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 13,
+          "parent": 1,
+          "type": "text",
+          "name": "Do the work",
+          "rect": {
+            "x": 696,
+            "y": 385,
+            "w": 282,
+            "h": 40.1
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Do the work",
+          "font_size": 26,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 14,
+          "parent": 1,
+          "type": "text",
+          "name": "04",
+          "rect": {
+            "x": 1012,
+            "y": 352,
+            "w": 50,
+            "h": 29.3
+          },
+          "visible": true,
+          "locked": false,
+          "text": "04",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 15,
+          "parent": 1,
+          "type": "text",
+          "name": "Verify & review",
+          "rect": {
+            "x": 1012,
+            "y": 385,
+            "w": 282,
+            "h": 40.1
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Verify & review",
+          "font_size": 26,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 16,
+          "parent": 1,
+          "type": "text",
+          "name": "05",
+          "rect": {
+            "x": 1328,
+            "y": 352,
+            "w": 50,
+            "h": 29.3
+          },
+          "visible": true,
+          "locked": false,
+          "text": "05",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 17,
+          "parent": 1,
+          "type": "text",
+          "name": "Deliver & learn",
+          "rect": {
+            "x": 1328,
+            "y": 385,
+            "w": 282,
+            "h": 40.1
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Deliver & learn",
+          "font_size": 26,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 18,
+          "name": "A reason to act",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 64,
+            "y": 444,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            19,
+            20,
+            21
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 272,
+            "height": 268
+          },
+          "parent": 1
+        },
+        {
+          "id": 19,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 18,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 20,
+          "name": "A reason to act",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 228,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "A reason to act",
+          "font_size": 23,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 18,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 21,
+          "parent": 18,
+          "type": "text",
+          "name": "An idea or request\nAn issue or observation\nA failure or new result",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 228,
+            "h": 158
+          },
+          "visible": true,
+          "locked": false,
+          "text": "An idea or request\nAn issue or observation\nA failure or new result",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 22,
+          "name": "AgentOps",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 380,
+            "y": 444,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            23,
+            24,
+            25
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 272,
+            "height": 268
+          },
+          "parent": 1
+        },
+        {
+          "id": 23,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#A9C4FA",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 22,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 24,
+          "name": "AgentOps",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 228,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "AgentOps",
+          "font_size": 23,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 22,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 25,
+          "parent": 22,
+          "type": "text",
+          "name": "Clarify the outcome.\nSelect accepted work.\nDefine scope and proof.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 228,
+            "h": 158
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Clarify the outcome.\nSelect accepted work.\nDefine scope and proof.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 26,
+          "name": "Bounded workers",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 696,
+            "y": 444,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            27,
+            28,
+            29
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 272,
+            "height": 268
+          },
+          "parent": 1
+        },
+        {
+          "id": 27,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 26,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 28,
+          "name": "Bounded workers",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 228,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Bounded workers",
+          "font_size": 23,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 26,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 29,
+          "parent": 26,
+          "type": "text",
+          "name": "Use the task’s method,\ncontext and tools.\nKeep the result and history.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 228,
+            "h": 158
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Use the task’s method,\ncontext and tools.\nKeep the result and history.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 30,
+          "name": "Checks + fresh review",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1012,
+            "y": 444,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            31,
+            32,
+            33
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 272,
+            "height": 268
+          },
+          "parent": 1
+        },
+        {
+          "id": 31,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 30,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 32,
+          "name": "Checks + fresh review",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 228,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Checks + fresh review",
+          "font_size": 23,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 30,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 33,
+          "parent": 30,
+          "type": "text",
+          "name": "A · Objective evidence\nB · Intent and usefulness\nResolve blocking findings.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 228,
+            "h": 158
+          },
+          "visible": true,
+          "locked": false,
+          "text": "A · Objective evidence\nB · Intent and usefulness\nResolve blocking findings.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 34,
+          "name": "An accepted result",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1328,
+            "y": 444,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            35,
+            36,
+            37
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 272,
+            "height": 268
+          },
+          "parent": 1
+        },
+        {
+          "id": 35,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 272,
+            "h": 268
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#A9C4FA",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 34,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 36,
+          "name": "An accepted result",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 228,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "An accepted result",
+          "font_size": 23,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 34,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 37,
+          "parent": 34,
+          "type": "text",
+          "name": "Deliver within authority.\nObserve real outcomes.\nRetain lessons and defects.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 228,
+            "h": 158
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Deliver within authority.\nObserve real outcomes.\nRetain lessons and defects.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 38,
+          "parent": 1,
+          "type": "connector",
+          "name": "Flow",
+          "rect": {
+            "x": 336,
+            "y": 578,
+            "w": 44,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 44,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 18,
+            "end": 22,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 39,
+          "parent": 1,
+          "type": "connector",
+          "name": "Flow",
+          "rect": {
+            "x": 652,
+            "y": 578,
+            "w": 44,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 44,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 22,
+            "end": 26,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 40,
+          "parent": 1,
+          "type": "connector",
+          "name": "Flow",
+          "rect": {
+            "x": 968,
+            "y": 578,
+            "w": 44,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 44,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 26,
+            "end": 30,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 41,
+          "parent": 1,
+          "type": "connector",
+          "name": "Flow",
+          "rect": {
+            "x": 1284,
+            "y": 578,
+            "w": 44,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 22,
+              "y": 0
+            },
+            {
+              "x": 44,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 30,
+            "end": 34,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 42,
+          "parent": 1,
+          "type": "text",
+          "name": "Owner decides or delegates admission and delivery. Review roles and counts fit the project.",
+          "rect": {
+            "x": 380,
+            "y": 744,
+            "w": 1220,
+            "h": 32
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Owner decides or delegates admission and delivery. Review roles and counts fit the project.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 43,
+          "parent": 1,
+          "type": "connector",
+          "name": "Observed outcomes become new signals",
+          "rect": {
+            "x": 200,
+            "y": 713,
+            "w": 1264,
+            "h": 100
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 1264,
+              "y": 0
+            },
+            {
+              "x": 1264,
+              "y": 100
+            },
+            {
+              "x": 0,
+              "y": 100
+            },
+            {
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "children": []
+        },
+        {
+          "id": 44,
+          "parent": 1,
+          "type": "text",
+          "name": "OBSERVE  →  EVALUATE  →  IMPROVE",
+          "rect": {
+            "x": 566,
+            "y": 796,
+            "w": 620,
+            "h": 30
+          },
+          "visible": true,
+          "locked": false,
+          "text": "OBSERVE  →  EVALUATE  →  IMPROVE",
+          "font_size": 18,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 45,
+          "parent": 1,
+          "type": "rect",
+          "name": "Feedback label backing",
+          "rect": {
+            "x": 548,
+            "y": 791,
+            "w": 600,
+            "h": 42
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1.25,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 46,
+          "parent": 1,
+          "type": "text",
+          "name": "Foundation prepares what the work needs",
+          "rect": {
+            "x": 64,
+            "y": 870,
+            "w": 1500,
+            "h": 41.45
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Foundation prepares what the work needs",
+          "font_size": 27,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 47,
+          "name": "Agent environment",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 64,
+            "y": 921,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            48,
+            49,
+            50
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 488,
+            "height": 221
+          },
+          "parent": 1
+        },
+        {
+          "id": 48,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 47,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 49,
+          "name": "Agent environment",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 444,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Agent environment",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 47,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 50,
+          "parent": 47,
+          "type": "text",
+          "name": "Tasks · skills · models\nHarnesses · tools · CLI\nWorkspace · scoped access",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 444,
+            "h": 111
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Tasks · skills · models\nHarnesses · tools · CLI\nWorkspace · scoped access",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 51,
+          "name": "Project foundation",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 588,
+            "y": 921,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            52,
+            53,
+            54
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 488,
+            "height": 221
+          },
+          "parent": 1
+        },
+        {
+          "id": 52,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 51,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 53,
+          "name": "Project foundation",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 444,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Project foundation",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 51,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 54,
+          "parent": 51,
+          "type": "text",
+          "name": "Goal · context · sources\nStandards · meaningful checks\nSystem definition & policy",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 444,
+            "h": 111
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Goal · context · sources\nStandards · meaningful checks\nSystem definition & policy",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 55,
+          "name": "Operations & maintenance",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1112,
+            "y": 921,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            56,
+            57,
+            58
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 488,
+            "height": 221
+          },
+          "parent": 1
+        },
+        {
+          "id": 56,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 488,
+            "h": 221
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 55,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 57,
+          "name": "Operations & maintenance",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 444,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Operations & maintenance",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 55,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 58,
+          "parent": 55,
+          "type": "text",
+          "name": "Delivery · recovery · history\nUpdates · ownership\nOutcome and usage evidence",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 444,
+            "h": 111
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Delivery · recovery · history\nUpdates · ownership\nOutcome and usage evidence",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 59,
+          "parent": 1,
+          "type": "text",
+          "name": "Native tools run the agents and enforce access. The definition describes the system; it grants no permissions.",
+          "rect": {
+            "x": 64,
+            "y": 1172,
+            "w": 1536,
+            "h": 30.650000000000002
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Native tools run the agents and enforce access. The definition describes the system; it grants no permissions.",
+          "font_size": 19,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "history-lab-boundaries",
+      "name": "History · 02 · How the Lab is separated",
+      "next_id": 43,
+      "root": [
+        1
+      ],
+      "nodes": [
+        {
+          "id": 1,
+          "name": "02 · How the Lab is separated",
+          "type": "frame",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 1680,
+            "h": 1160
+          },
+          "clip": true,
+          "children": [
+            2,
+            3,
+            4,
+            5,
+            9,
+            13,
+            14,
+            15,
+            19,
+            23,
+            27,
+            31,
+            33,
+            34,
+            35,
+            36,
+            38,
+            39,
+            40,
+            41,
+            42
+          ],
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FAFAF9"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 2,
+          "parent": 1,
+          "type": "text",
+          "name": "ARCITAI  /  DEPLOYMENT VIEW",
+          "rect": {
+            "x": 64,
+            "y": 36,
+            "w": 1400,
+            "h": 27.950000000000003
+          },
+          "visible": true,
+          "locked": false,
+          "text": "ARCITAI  /  DEPLOYMENT VIEW",
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 3,
+          "parent": 1,
+          "type": "text",
+          "name": "One visible lead. Separate worker environments.",
+          "rect": {
+            "x": 64,
+            "y": 68,
+            "w": 1500,
+            "h": 61.7
+          },
+          "visible": true,
+          "locked": false,
+          "text": "One visible lead. Separate worker environments.",
+          "font_size": 42,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 4,
+          "parent": 1,
+          "type": "text",
+          "name": "The current Z13 Lab installation — distinct from the general method.",
+          "rect": {
+            "x": 64,
+            "y": 125,
+            "w": 1500,
+            "h": 33.35
+          },
+          "visible": true,
+          "locked": false,
+          "text": "The current Z13 Lab installation — distinct from the general method.",
+          "font_size": 21,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 5,
+          "name": "You · operator app",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 64,
+            "y": 211,
+            "w": 510,
+            "h": 206
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            6,
+            7,
+            8
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 510,
+            "height": 206
+          },
+          "parent": 1
+        },
+        {
+          "id": 6,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 510,
+            "h": 206
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#A9C4FA",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 7,
+          "name": "You · operator app",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 466,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "You · operator app",
+          "font_size": 25,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 5,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 8,
+          "parent": 5,
+          "type": "text",
+          "name": "Follow the same pinned AgentOps\nand its task history in T3 Code.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 466,
+            "h": 96
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Follow the same pinned AgentOps\nand its task history in T3 Code.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 9,
+          "name": "Project services",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1100,
+            "y": 211,
+            "w": 500,
+            "h": 206
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            10,
+            11,
+            12
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 500,
+            "height": 206
+          },
+          "parent": 1
+        },
+        {
+          "id": 10,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 500,
+            "h": 206
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 11,
+          "name": "Project services",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 456,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Project services",
+          "font_size": 25,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 9,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 12,
+          "parent": 9,
+          "type": "text",
+          "name": "Selected repository and Notion pages.\nUpstream grants define the scope.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 456,
+            "h": 96
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Selected repository and Notion pages.\nUpstream grants define the scope.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 13,
+          "parent": 1,
+          "type": "rect",
+          "name": "Z13 runtime boundary",
+          "rect": {
+            "x": 64,
+            "y": 493,
+            "w": 1536,
+            "h": 482
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#F8FAFC"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.25,
+            "corner_radius": 16,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 14,
+          "parent": 1,
+          "type": "text",
+          "name": "Z13 · Omarchy Linux",
+          "rect": {
+            "x": 88,
+            "y": 514,
+            "w": 1000,
+            "h": 37.400000000000006
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Isolated execution on Z13",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 15,
+          "name": "AgentOps environment",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 112,
+            "y": 577,
+            "w": 420,
+            "h": 250
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            16,
+            17,
+            18
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 420,
+            "height": 250
+          },
+          "parent": 1
+        },
+        {
+          "id": 16,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 420,
+            "h": 250
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#A9C4FA",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 15,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 17,
+          "name": "AgentOps environment",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 376,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "AgentOps environment",
+          "font_size": 25,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 15,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 18,
+          "parent": 15,
+          "type": "text",
+          "name": "T3 Stable 0.1.6\nOne project lead and native history.\nScoped project connections.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 376,
+            "h": 140
+          },
+          "visible": true,
+          "locked": false,
+          "text": "T3 Stable 0.1.6\nOne project lead and native history.\nScoped project connections.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 19,
+          "name": "Native project controller",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 594,
+            "y": 577,
+            "w": 420,
+            "h": 250
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            20,
+            21,
+            22
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 420,
+            "height": 250
+          },
+          "parent": 1
+        },
+        {
+          "id": 20,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 420,
+            "h": 250
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 19,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 21,
+          "name": "Native project controller",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 376,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Native project controller",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 19,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 22,
+          "parent": 19,
+          "type": "text",
+          "name": "OpenShell 0.1.7\nCreates task worker VMs on demand.\nNo extra coordinating model.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 376,
+            "h": 140
+          },
+          "visible": true,
+          "locked": false,
+          "text": "OpenShell 0.1.7\nCreates task worker VMs on demand.\nNo extra coordinating model.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 23,
+          "name": "Task worker VMs",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 1076,
+            "y": 577,
+            "w": 476,
+            "h": 250
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            24,
+            25,
+            26
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 476,
+            "height": 250
+          },
+          "parent": 1
+        },
+        {
+          "id": 24,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 476,
+            "h": 250
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 23,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 25,
+          "name": "Task worker VMs",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 432,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "Task worker VMs",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 23,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 26,
+          "parent": 23,
+          "type": "text",
+          "name": "Implementation · review · evaluation\nSelected input and model access.\nNo AgentOps project credentials.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 432,
+            "h": 140
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Implementation · review · evaluation\nSelected input and model access.\nNo AgentOps project credentials.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 27,
+          "name": "External credential broker",
+          "type": "frame",
+          "clip": false,
+          "rect": {
+            "x": 630,
+            "y": 211,
+            "w": 410,
+            "h": 206
+          },
+          "style": {
+            "fills": [],
+            "stroke": null,
+            "stroke_width": 1.5,
+            "opacity": 1,
+            "corner_radius": 0
+          },
+          "visible": true,
+          "locked": false,
+          "children": [
+            28,
+            29,
+            30
+          ],
+          "diagram": {
+            "symbol": "flow-process",
+            "width": 410,
+            "height": 206
+          },
+          "parent": 1
+        },
+        {
+          "id": 28,
+          "name": "Process shape",
+          "type": "rect",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 410,
+            "h": 206
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "stroke": "#C9D2DF",
+            "stroke_width": 1.3,
+            "corner_radius": 12,
+            "opacity": 1
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 27,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 29,
+          "name": "External credential broker",
+          "type": "text",
+          "rect": {
+            "x": 22,
+            "y": 22,
+            "w": 366,
+            "h": 70
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "text": "External credential broker",
+          "font_size": 24,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.2
+          },
+          "visible": true,
+          "locked": false,
+          "parent": 27,
+          "layout_child": {
+            "sizing": [
+              "fixed",
+              "fixed"
+            ],
+            "absolute": true
+          }
+        },
+        {
+          "id": 30,
+          "parent": 27,
+          "type": "text",
+          "name": "Real service keys stay outside the agent execution boundary.",
+          "rect": {
+            "x": 22,
+            "y": 100,
+            "w": 366,
+            "h": 96
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Real service keys stay outside the agent execution boundary.",
+          "font_size": 20,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 31,
+          "parent": 1,
+          "type": "connector",
+          "name": "Operate / observe",
+          "rect": {
+            "x": 319,
+            "y": 417,
+            "w": 3,
+            "h": 160
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 0,
+              "y": 80
+            },
+            {
+              "x": 3,
+              "y": 80
+            },
+            {
+              "x": 3,
+              "y": 160
+            }
+          ],
+          "children": [
+            32
+          ],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 5,
+            "end": 15,
+            "startSide": "bottom",
+            "endSide": "top"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 32,
+          "parent": 31,
+          "type": "text",
+          "name": "Operate / observe",
+          "rect": {
+            "x": -88.5,
+            "y": 46,
+            "w": 180,
+            "h": 28
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Operate / observe",
+          "font_size": 17,
+          "align": "center",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 33,
+          "parent": 1,
+          "type": "connector",
+          "name": "Request task lifecycle",
+          "rect": {
+            "x": 532,
+            "y": 702,
+            "w": 62,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 31,
+              "y": 0
+            },
+            {
+              "x": 31,
+              "y": 0
+            },
+            {
+              "x": 62,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 15,
+            "end": 19,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 34,
+          "parent": 1,
+          "type": "connector",
+          "name": "Provision fresh workers",
+          "rect": {
+            "x": 1014,
+            "y": 702,
+            "w": 62,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 31,
+              "y": 0
+            },
+            {
+              "x": 31,
+              "y": 0
+            },
+            {
+              "x": 62,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 19,
+            "end": 23,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 35,
+          "parent": 1,
+          "type": "connector",
+          "name": "Authenticate scoped service calls",
+          "rect": {
+            "x": 1040,
+            "y": 314,
+            "w": 60,
+            "h": 1
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 0
+            },
+            {
+              "x": 30,
+              "y": 0
+            },
+            {
+              "x": 30,
+              "y": 0
+            },
+            {
+              "x": 60,
+              "y": 0
+            }
+          ],
+          "children": [],
+          "route": "orthogonal",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 27,
+            "end": 9,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 36,
+          "parent": 1,
+          "type": "connector",
+          "name": "Scoped requests",
+          "rect": {
+            "x": 532,
+            "y": 314,
+            "w": 98,
+            "h": 388
+          },
+          "visible": true,
+          "locked": false,
+          "points": [
+            {
+              "x": 0,
+              "y": 388
+            },
+            {
+              "x": 98,
+              "y": 0
+            }
+          ],
+          "children": [
+            37
+          ],
+          "route": "straight",
+          "end_head": "arrow",
+          "bindings": {
+            "start": 15,
+            "end": 27,
+            "startSide": "right",
+            "endSide": "left"
+          },
+          "style": {
+            "fills": [],
+            "stroke": "#2563EB",
+            "stroke_width": 2,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 37,
+          "parent": 36,
+          "type": "text",
+          "name": "Scoped requests",
+          "rect": {
+            "x": -41,
+            "y": 160,
+            "w": 180,
+            "h": 28
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Scoped requests",
+          "font_size": 17,
+          "align": "center",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          },
+          "connectionLabel": true
+        },
+        {
+          "id": 38,
+          "parent": 1,
+          "type": "text",
+          "name": "Workers receive only the bindings needed for the task. Sharing an environment also shares that environment’s access.",
+          "rect": {
+            "x": 112,
+            "y": 869,
+            "w": 1420,
+            "h": 34.7
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Workers receive only the bindings needed for the task. Sharing an environment also shares that environment’s access.",
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 39,
+          "parent": 1,
+          "type": "text",
+          "name": "Preserve verified task history before stopping or retiring workers. Recovery and maintenance remain qualified by scope.",
+          "rect": {
+            "x": 112,
+            "y": 919,
+            "w": 1420,
+            "h": 33.35
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Preserve verified task history before stopping or retiring workers. Recovery and maintenance remain qualified by scope.",
+          "font_size": 21,
+          "align": "left",
+          "text_style": {
+            "bold": false,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#586575"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 40,
+          "parent": 1,
+          "type": "rect",
+          "name": "Dated status",
+          "rect": {
+            "x": 64,
+            "y": 1017,
+            "w": 1536,
+            "h": 92
+          },
+          "visible": true,
+          "locked": false,
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#EFF5FF"
+              }
+            ],
+            "stroke": "#BED0EE",
+            "stroke_width": 1.25,
+            "corner_radius": 12,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 41,
+          "parent": 1,
+          "type": "text",
+          "name": "CHECKED 7 NOV 2026",
+          "rect": {
+            "x": 88,
+            "y": 1036,
+            "w": 330,
+            "h": 27.950000000000003
+          },
+          "visible": true,
+          "locked": false,
+          "text": "CHECKED 7 NOV 2026",
+          "font_size": 17,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#2563EB"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        },
+        {
+          "id": 42,
+          "parent": 1,
+          "type": "text",
+          "name": "Services reachable · 0 active jobs · intake paused · model access needs renewal",
+          "rect": {
+            "x": 430,
+            "y": 1033,
+            "w": 1110,
+            "h": 34.7
+          },
+          "visible": true,
+          "locked": false,
+          "text": "Services reachable · 0 active jobs · intake paused · model access needs renewal",
+          "font_size": 22,
+          "align": "left",
+          "text_style": {
+            "bold": true,
+            "line_height": 1.35
+          },
+          "style": {
+            "fills": [
+              {
+                "type": "solid",
+                "color": "#17212F"
+              }
+            ],
+            "stroke": null,
+            "stroke_width": 1,
+            "corner_radius": 0,
+            "opacity": 1
+          }
+        }
+      ]
+    }
+  ]
+}

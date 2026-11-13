@@ -1,115 +1,55 @@
-# Versioned export; the canonical editable original is the Notion YAML block.
-# Original: https://gustavanderson.notion.site/4056d2e17f56811b96fec7b970741916
-# Canonical block last edited: 2026-11-06T11:05:00.000Z
-# Canonical YAML SHA-256 (UTF-8, LF, trailing newline): 03f167e056d7fdc7f0ca6a97867cb7c60566d216f881c0124c343e55fe8ac68a
-# Declaration version: 0.8; exported 2026-11-06 for Agentic Systems 0.1.34 (owner-selected rebrand; operating choices and holds preserved).
-# Edit the original before a new reviewed export.
+# Version-marked export of the canonical Notion definition; not applied settings.
+# Canonical YAML SHA-256 2026-11-13T22:47:41.019Z: ad6b70540d45bc6bc04395a9cf5c73c6fe974757f0211939245bfa542ddfb087
 
-# Agentic Systems Lab declaration; version 0.8.
-# Interpreted by AgentOps; not applied configuration.
-# Native tools enforce only what is configured and verified in them.
-# This file grants no authority or access and does not override existing holds.
-# Inspired by Warp Factories; not their schema or a compatible Warp definition.
-# Reference: https://www.warp.dev/blog/the-factory-stack
-definition_version: "0.8"
-name: arcitai-agentic-systems-lab
-description: Develop, qualify and publish the portable Agentic Systems method.
-status: candidate
-
+# Agentic System Lab definition 0.9; owner-selected intent, not applied configuration.
+# No access grant, runtime engine or override of native holds.
+definition_version: "0.9"
+name: arcitai-agentic-system-lab
+purpose: Develop and qualify the general Agentic System framework.
 context:
-  home: https://gustavanderson.notion.site/Agentic-Systems-4046d2e17f568159a603de2dd6b91c2a
-  skills: https://gustavanderson.notion.site/5e1552911ffc42b8a999609cc6847a00
-  work: https://github.com/arcitai/agentic-systems/issues
-  native_artifacts: https://github.com/arcitai/agentic-systems
-  lead_source_access: factory-pages-read-update-insert
-  worker_context: selected-versioned-skill-and-context-files
-  upstream_credentials: native-broker-outside-execution-boundary
-
-workspace:
-  selected: t3-code  # Lab choice, not a method requirement
-  channel: stable  # stable preferred; Lab moved to it on 29 October 2026 (#34)
-  candidate_version: 0.1.6
-  environments: separate-project-lead-and-narrower-worker-environments
-  shared_environment: explicit-trusted-related-projects-only
-  operator_view: one-native-gui
-  qualification: required-for-selected-capabilities
-
-models:  # Gustav's selected Lab choices, not universal Agentic Systems requirements
-  implementation:
-    model: claude-sonnet-5-5
-    effort: high
-    fast_mode: false
-  routine_work:
-    model: claude-sonnet-5-5
-    effort: high
-  specification:
-    model: claude-opus-5-5
-    effort: high
-    fast_mode: false
-  review:
-    model: claude-opus-5-5
-    effort: high
-    fast_mode: false
-  optional_gpt:
-    model: gpt-6.1-sol
-    effort: high
-    status: not-qualified-in-lab
-  apply: next-safe-task-boundary
-
-agents:
-  lead:
-    skill: https://gustavanderson.notion.site/4056d2e17f56819cbe9df834bc7819f0
-    briefing: https://gustavanderson.notion.site/40d6d2e17f568162ac85eb119ef33a2b  # shared method from #117; authoring edition
-  foundation:
-    skill: https://gustavanderson.notion.site/4056d2e17f5681edb778c29cc5faa9a0
-  evaluator:
-    skill: https://gustavanderson.notion.site/4056d2e17f5681e1b1b7d2bc2b5d783c
-
-work_modules:
-  software:
-    skills:
-      triage: https://gustavanderson.notion.site/4056d2e17f5681668e80d9aa3cccdf61  # released reference 0.1.4
-      specify: https://gustavanderson.notion.site/4056d2e17f568177aee7f7fc46918863  # released reference 0.1.4
-      implement: https://gustavanderson.notion.site/4056d2e17f5681a4bee6c4d5bc4da0ac  # released reference 0.1.18
-      review: https://gustavanderson.notion.site/4056d2e17f5681c1857be250346718f8  # released reference 0.1.18
-  defence:
-    skill: https://gustavanderson.notion.site/4056d2e17f5681d38bd0feb651c8fd22  # released reference 0.1.4
-    scope: authorized-only
-  bi: not-yet-packaged
-  research: not-yet-packaged
-
+  home: https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a
+  skills: https://www.notion.so/5e1552911ffc42b8a999609cc6847a00
+  library: https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8
+  work: https://github.com/arcitai/agentic-system/issues
+  native_artifacts: https://github.com/arcitai/agentic-system
+work:
+  approach: one-continuous-project-agent
+  helpers: conditional-pairs-review-fan-out
+  software_methods: native-harness-and-repository-instructions
+model:  # Existing owner-selected Lab model; not a universal framework default.
+  selected: claude-opus-5-5
+  effort: high
+  fast_mode: false
+  unavailable: report-no-silent-fallback
+methods:
+  entry: https://www.notion.so/4056d2e17f56816ab0f1d2627faff508
+  foundation: https://www.notion.so/4056d2e17f5681edb778c29cc5faa9a0
+  evaluate: https://www.notion.so/4056d2e17f5681e1b1b7d2bc2b5d783c
 policy:
-  source: https://gustavanderson.notion.site/4056d2e17f56819cbe9df834bc7819f0
-  reference: references/policy.md  # within policy.source skill, not a repo-root path
-  admission: owner-or-explicit-delegate
-  delivery: owner-or-explicit-delegate
-  review:
-    reviewer_count: 2
-    roles: [objective-domain-evidence, qualitative-intent-and-outcome]
-    overrides: project-or-task-within-mandate-and-stronger-requirements
-    blocking: required-reviewers-resolve-blocking-concerns
-    independence: fresh-context-each
-    criteria: original-accepted-task
-  method_changes: concrete-owner-decision-or-explicit-delegation
-  limits: agreed-before-execution
-
-evaluation:
-  role: evaluator
-  benchmarks: []  # none qualified for this recipe
-  proposed_experiments:
-    - https://github.com/arcitai/agentic-systems/issues/97
-
+  source: https://www.notion.so/4056d2e17f5681edb778c29cc5faa9a0
+  reference: references/policy.md
+  admission_and_delivery: owner-or-existing-explicit-delegation
+  common_method_changes: concrete-owner-decision-or-explicit-delegation
+  review:  # Lab's retained project policy, not the portable method's minimum.
+    count: 2
+    perspectives: [objective-evidence, qualitative-outcome]
+    independent_contexts: true
+  access: existing-project-scoped-native-grants
+  credentials: native-broker-outside-execution-boundary
+  helper_access: selected-context-and-task-specific-enforced-boundary
+workspace:
+  selected: t3-code
+  channel: stable
+  target_version: 0.1.9
+  client_label: Beta
+  installed_state: private-native-installation-record
 operations:
-  notes: https://gustavanderson.notion.site/4056d2e17f5681a79c09f46f42742989
-  automations: disabled-during-qualification  # existing Lab-only 180-minute native schedule retained, not enabled
-  maintenance_owner: to-be-decided
-  access_and_isolation: qualify-in-native-tools
-  owner_contact: project-issues-and-lead-thread  # no direct route selected (#117)
-  follow_up: lead-owned-native-trigger-or-named-gap
-
+  scheduling: disabled-until-selected-and-qualified
+  update_owner: owner-or-explicitly-delegated-maintenance
+  history: preserve-native-records-and-verified-recovery-copies
 qualification:
-  installed_recipe: bounded-lab-qualification-in-progress
-  evidence: https://github.com/arcitai/agentic-systems/blob/main/docs/qualification.md
-  worker_boundaries: https://github.com/arcitai/agentic-systems/issues/32
-  native_maintenance: https://github.com/arcitai/agentic-systems/issues/34#issuecomment-6613129194
-  holds: [general-intake, retirement, issue-114-delivery]
+  evidence: https://github.com/arcitai/agentic-system/blob/main/docs/qualification.md
+  boundaries: https://github.com/arcitai/agentic-system/issues/32
+  maintenance: https://github.com/arcitai/agentic-system/issues/34
+  startup: https://github.com/arcitai/agentic-system/issues/83
+  holds: [general-intake, automatic-worker-retirement, issue-114-delivery]

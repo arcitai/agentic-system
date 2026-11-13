@@ -133,7 +133,7 @@ class NotionSkills:
         result = {"url": url, "markers": markers, "verified": False}
         if not url:
             return {**result, "reason": "no public URL"}
-        request = urllib.request.Request(url, headers={"User-Agent": "agentic-system-docs-readback (https://github.com/arcitai/agentic-systems)"})
+        request = urllib.request.Request(url, headers={"User-Agent": "agentic-system-docs-readback (https://github.com/arcitai/agentic-system)"})
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
                 body = response.read(limit).decode("utf-8", "replace")

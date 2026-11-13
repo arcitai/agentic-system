@@ -3,8 +3,8 @@ name: agentic-security
 description: Investigate an authorized security or defensive question and distinguish candidate findings, validation, remediation and recovery evidence.
 license: MIT
 metadata:
-  version: "0.1.34"
-  updated: "2026-11-06"
+  version: "0.2.0"
+  updated: "2026-11-13"
 ---
 
 # Security and Defence

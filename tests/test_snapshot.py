@@ -77,7 +77,7 @@ class PaginationTests(unittest.TestCase):
             "/ai/skills/p": {"version_id": "v", "url": "https://download/x"},
             "https://download/x": archive([("agentic-x/SKILL.md", b"name: agentic-x", "file")]),
         })
-        keys = {"skill/factory-x": {"key": "skill/factory-x", "kind": "skill", "owner": "notion", "notion": "p", "path": "adlc/agentic-x"}}
+        keys = {"skill/factory-x": {"key": "skill/factory-x", "kind": "skill", "owner": "notion", "notion": "p", "path": "evaluation/agentic-x"}}
         result = snapshot.freeze(keys, snapshot.Reader("token", fake))
         self.assertEqual(result["errors"], [])
         self.assertEqual(result["artifacts"]["skill/factory-x"]["files"]["SKILL.md"], "name: agentic-x")

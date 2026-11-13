@@ -1,7 +1,7 @@
 {
   "format": 1,
-  "about": "Per-artifact source ownership for Agentic Systems' public documentation and skill distributions (#122). owner=notion: the public Notion page is the editable original; a Git path, if any, is a deliberate export. owner=git: this repository is the original; a Notion copy, if any, is a released reference or a projection. Keys are stable identities: never reuse a key for another artifact; a renamed or retired artifact keeps its key with status renamed/retired. Applied by scripts/reconcile.py and scripts/publish.py; grants no access and does not publish.",
-  "public_site": "https://gustavanderson.notion.site/Agentic-Systems-4046d2e17f568159a603de2dd6b91c2a",
+  "about": "Per-artifact source ownership for Agentic System's public documentation and skill distributions (#122). owner=notion: the public Notion page is the editable original; a Git path, if any, is a deliberate export. owner=git: this repository is the original; a Notion copy, if any, is a released reference or a projection. Keys are stable identities: never reuse a key for another artifact; a renamed or retired artifact keeps its key with status renamed/retired. Applied by scripts/reconcile.py and scripts/publish.py; grants no access and does not publish.",
+  "public_site": "https://gustavanderson.notion.site/Agentic-System-4046d2e17f568159a603de2dd6b91c2a",
   "artifacts": [
     {
       "key": "guide/home",
@@ -85,20 +85,9 @@
       "notion": "4056d2e1-7f56-81ed-b778-c29cc5faa9a0",
       "public": true,
       "binding": {
-        "revision": "fd62da2e9f35158bbdf15366f1707a37fe32898517f69338dccbfc6d1714e65d",
-        "version": "0.1.34"
-      },
-      "pending": [
-        {
-          "id": "context-living-intake-20261105",
-          "action": "insert-after",
-          "file": "references/context.md",
-          "holder": "Notion canonical writer (owner); then a deliberate export",
-          "evidence": "#122 comment 6655896607; OSM #88 (method inspiration only)",
-          "before": "Do not put an application's facts into Agentic Systems' shared references.",
-          "after": "Classify material before keeping it: **durable** (an accepted decision, fact or method with an owner), **provisional** (a working hypothesis or pending decision, with the trigger that confirms or drops it) or **source-only** (evidence kept as a link or excerpt pointing to its original). Keep conclusions and their sources, not raw chats or transcripts; the native tool retains full history.\n\nGive each current topic one stable identity, such as a key, page or issue, and rewrite its current statement concisely in place. Preserve originals and meaningful history through the home's native versions or links instead of copies. Record a relation only with a concrete meaning, such as supersedes, depends on, implements or contradicts, and its evidence.\n\nRetrieve by the task, its controls and authority, and evidence from a comparable time and version, not by the latest import or edit. Report specific needs-attention outcomes: a failed or partial intake, an unknown write, conflicting sources, a due review or a coverage gap. A global truth or health score hides them. A save is complete only after the saved or public result is read back; retry with the same identity rather than creating a second copy."
-        }
-      ]
+        "revision": "bb16d0ca1d8d5d302c30756584f2be28d8e7d09089c298b68eb202398112527d",
+        "version": "0.2.0"
+      }
     },
     {
       "key": "skill/factory-agent-ops",
@@ -112,54 +101,36 @@
         "revision": "d8808458363946eca70cf62a4430a3d3edf8439a078e2a81670e7439acb2a0d3",
         "version": "0.1.34"
       },
-      "pending": [
-        {
-          "id": "agentops-distribution-note-0.1.33",
-          "action": "replace",
-          "file": "SKILL.md",
-          "holder": "Notion canonical writer after release v0.1.33",
-          "evidence": "export bound to revision 1f5970c8…",
-          "before": "[Last reviewed portable distribution: v0.1.29](https://github.com/arcitai/agentic-systems/releases/tag/v0.1.29)",
-          "after": "[Reviewed portable distribution: v0.1.33](https://github.com/arcitai/agentic-systems/releases/tag/v0.1.33)"
-        }
-      ]
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-entry",
       "kind": "skill",
       "owner": "notion",
       "label": "export",
-      "path": "agent-ops/agentic-entry",
+      "path": "entry/agentic-entry",
       "notion": "4056d2e1-7f56-816a-b0f1-d2627faff508",
       "public": true,
       "binding": {
-        "revision": "e6c189e87654c3d320b0e320f76f0b6faa3271ef89346b2c277fa9d66627aa93",
-        "version": "0.1.34"
+        "revision": "19693770cd85cc28c511dc316ffb0dfb59e7c9095f2288dec1da8c5e59500012",
+        "version": "0.2.0"
       },
-      "pending": [
-        {
-          "id": "entry-distribution-note-0.1.33",
-          "action": "replace",
-          "file": "SKILL.md",
-          "holder": "Notion canonical writer after release v0.1.33",
-          "evidence": "export bound to revision 23d95b79…",
-          "before": "[Last portable distribution: v0.1.23](https://github.com/arcitai/agentic-systems/releases/tag/v0.1.23)",
-          "after": "[Reviewed portable distribution: v0.1.33](https://github.com/arcitai/agentic-systems/releases/tag/v0.1.33)"
-        }
-      ]
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-evaluate",
       "kind": "skill",
       "owner": "notion",
       "label": "export",
-      "path": "adlc/agentic-evaluate",
+      "path": "evaluation/agentic-evaluate",
       "notion": "4056d2e1-7f56-81e1-b1b7-d2bc2b5d783c",
       "public": true,
       "binding": {
-        "revision": "879025b97500580fec7ef74d96c4e2e11a1871e75b13e9415ceb5a578d482ffb",
-        "version": "0.1.34"
-      }
+        "revision": "592b9fc7a4ae2ef19e2d68c30733ee5f10df9ef17c0e7e974e6ee31eac8f7ed7",
+        "version": "0.2.0"
+      },
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-brief",
@@ -173,17 +144,8 @@
         "revision": "205fa16db00eda84f5e929dfb02312534b01c2c56abf58b981037dc1a7db751a",
         "version": "0.1.34"
       },
-      "pending": [
-        {
-          "id": "brief-distribution-note-0.1.33",
-          "action": "replace",
-          "file": "SKILL.md",
-          "holder": "Notion canonical writer after release v0.1.33",
-          "evidence": "first export bound to revision f8046669…",
-          "before": "Not yet in a portable distribution; native adoption is checked separately.",
-          "after": "[Reviewed portable distribution: v0.1.33](https://github.com/arcitai/agentic-systems/releases/tag/v0.1.33); native adoption is checked separately."
-        }
-      ]
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-triage",
@@ -192,7 +154,9 @@
       "label": "released-reference",
       "path": "adlc/agentic-triage",
       "notion": "4056d2e1-7f56-8166-8e80-d9aa3cccdf61",
-      "public": true
+      "public": true,
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-spec",
@@ -201,7 +165,9 @@
       "label": "released-reference",
       "path": "adlc/agentic-spec",
       "notion": "4056d2e1-7f56-8177-aee7-f7fc46918863",
-      "public": true
+      "public": true,
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-implement",
@@ -210,7 +176,9 @@
       "label": "released-reference",
       "path": "adlc/agentic-implement",
       "notion": "4056d2e1-7f56-81a4-bee6-c4d5bc4da0ac",
-      "public": true
+      "public": true,
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-review",
@@ -219,14 +187,16 @@
       "label": "released-reference",
       "path": "adlc/agentic-review",
       "notion": "4056d2e1-7f56-81c1-857b-e250346718f8",
-      "public": true
+      "public": true,
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-security",
       "kind": "skill",
       "owner": "git",
       "label": "released-reference",
-      "path": "adlc/agentic-security",
+      "path": "defence/agentic-security",
       "notion": "4056d2e1-7f56-81d3-8bd0-feb651c8fd22",
       "public": true
     },
@@ -308,7 +278,9 @@
       "owner": "git",
       "label": "main-working",
       "path": "adlc/README.md",
-      "public": true
+      "public": true,
+      "status": "retired",
+      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "doc/branding",
@@ -364,6 +336,42 @@
       "owner": "git",
       "label": "main-working",
       "path": "assets",
+      "public": true
+    },
+    {
+      "key": "guide/reference-library",
+      "kind": "page",
+      "owner": "notion",
+      "label": "authoring-edition",
+      "status": "active",
+      "notion": "4176d2e1-7f56-8129-ab71-cfa0b2aecbd8",
+      "public": true
+    },
+    {
+      "key": "guide/method-history",
+      "kind": "page",
+      "owner": "notion",
+      "label": "authoring-edition",
+      "status": "active",
+      "notion": "4176d2e1-7f56-813b-891f-e3d3db612c52",
+      "public": true
+    },
+    {
+      "key": "asset/diagrams",
+      "kind": "asset",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": "docs/diagrams",
+      "public": true
+    },
+    {
+      "key": "doc/backlog",
+      "kind": "doc",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": "docs/backlog.md",
       "public": true
     }
   ]

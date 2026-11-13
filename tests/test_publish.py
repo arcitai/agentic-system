@@ -16,8 +16,29 @@ publish = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(publish)
 import reconcile  # noqa: E402
 
+# A disposable Git fixture includes a second released reference so whole-set
+# readback/race tests remain meaningful when production ships only one domain method.
+_SOURCE_ROOT = ROOT
+_FIXTURE = tempfile.TemporaryDirectory(prefix="publisher-contract-")
+ROOT = Path(_FIXTURE.name) / "repo"
+shutil.copytree(_SOURCE_ROOT, ROOT, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
+manifest = ROOT / reconcile.MANIFEST
+data = json.loads(manifest.read_text())
+original = next(i for i in data["artifacts"] if i["key"] == "skill/factory-security")
+original.pop("cutover", None)  # Tests explicitly add the exception when it is relevant.
+second = {**original, "key": "skill/publisher-second", "path": "defence/publisher-second",
+          "notion": "00000000-0000-0000-0000-000000000002"}
+second.pop("cutover", None)
+shutil.copytree(ROOT / original["path"], ROOT / second["path"])
+skill = ROOT / second["path"] / "SKILL.md"
+skill.write_text(skill.read_text().replace("name: agentic-security", "name: publisher-second"))
+data["artifacts"].append(second)
+manifest.write_text(json.dumps(data))
+for args in (["init", "-q"], ["add", "-A"], ["commit", "-qm", "publisher fixture"], ["tag", "v" + (ROOT / "VERSION").read_text().strip()]):
+    subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", *args], cwd=ROOT, check=True, capture_output=True)
+
 _, KEYS, _ = reconcile.load_manifest(ROOT)
-RELEASED = {k: i for k, i in KEYS.items() if i["label"] == "released-reference"}
+RELEASED = {k: i for k, i in KEYS.items() if i["label"] == "released-reference" and i.get("status", "active") == "active"}
 
 
 class FakeSkills:
@@ -95,7 +116,7 @@ class PublishTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.lock = Path(self.temporary.name) / "lock"
         self.target, self.status = FakeSkills(), FakeStatus()
-        self.review = RELEASED["skill/factory-review"]["notion"]
+        self.review = RELEASED["skill/factory-security"]["notion"]
 
     def tearDown(self):
         self.temporary.cleanup()
@@ -105,7 +126,7 @@ class PublishTests(unittest.TestCase):
 
     def damage(self):
         page = self.target.pages[self.review]
-        page["files"]["SKILL.md"] = page["files"]["SKILL.md"].replace("Use a context separate", "Use any context", 1)
+        page["files"]["SKILL.md"] = page["files"]["SKILL.md"].replace("Identify the authorized target", "Ignore the authorized target", 1)
         page["Version"] = "0.1.17"
 
     def test_no_op_is_success_only_after_readback_and_anonymous_access(self):
@@ -129,17 +150,17 @@ class PublishTests(unittest.TestCase):
 
     def test_public_receipt_covers_the_changed_pages_with_their_content(self):
         self.damage()
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.receipts, [self.target.pages[self.review]["public_url"]])
-        self.assertIn(reconcile.git_skill_version(ROOT, RELEASED["skill/factory-review"]["path"]), result["public"][0]["markers"])
+        self.assertIn(reconcile.git_skill_version(ROOT, RELEASED["skill/factory-security"]["path"]), result["public"][0]["markers"])
 
     def test_final_readback_checks_properties_of_the_whole_set_even_without_actions(self):
-        other = RELEASED["skill/factory-spec"]["notion"]
+        other = RELEASED["skill/publisher-second"]["notion"]
         self.target.pages[other]["Status"] = "Draft"  # drift on a page the plan did not touch
         result = self.run_actions([])
         self.assertEqual(result["result"], "FAILED")
-        self.assertIn("skill/factory-spec", result["reason"])
+        self.assertIn("skill/publisher-second", result["reason"])
         self.assertIn("Status", result["reason"])
         self.assertEqual(self.status.states[-1][0], "failure")
 
@@ -151,35 +172,35 @@ class PublishTests(unittest.TestCase):
             original(page, values, types)
             if page == self.review and ("race", page) not in self.target.writes:
                 self.target.writes.append(("race", page))
-                spec = RELEASED["skill/factory-spec"]["notion"]
+                spec = RELEASED["skill/publisher-second"]["notion"]
                 self.target.pages[spec]["Version"] = "0.0.9"
         self.target.set_properties = racing
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "FAILED")
-        self.assertIn("skill/factory-spec", result["reason"])
+        self.assertIn("skill/publisher-second", result["reason"])
 
     def test_receipts_record_revision_and_file_identity_for_every_page(self):
         result = self.run_actions([])
         self.assertEqual(set(result["receipts"]), set(RELEASED))
-        receipt = result["receipts"]["skill/factory-review"]
+        receipt = result["receipts"]["skill/factory-security"]
         self.assertEqual(receipt["revision"], f"v-{self.review}")
         self.assertEqual(set(receipt["files"]), set(self.target.pages[self.review]["files"]))
         self.assertTrue(all(len(h) == 64 for h in receipt["files"].values()))
 
     def test_unreleased_change_is_release_pending_not_failure(self):
         page = self.target.pages[self.review]
-        page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/adlc/agentic-review/SKILL.md"
+        page["Source"] = f"{reconcile.REPO_URL}/blob/{'0' * 40}/defence/agentic-security/SKILL.md"
         with patch.object(reconcile, "release_context", return_value=("v-unreleased", None, False)):
             result = self.run_actions([])
         self.assertEqual(result["result"], "RELEASE-PENDING")
-        self.assertEqual(result["pending_release"], ["skill/factory-review"])
+        self.assertEqual(result["pending_release"], ["skill/factory-security"])
         self.assertEqual(self.status.states[-1][0], "pending")
         self.assertEqual(self.target.writes, [])
 
     def test_forged_or_wrong_sources_are_never_a_successful_readback(self):
-        pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", "adlc/agentic-review").strip()
+        pin = reconcile.git(ROOT, "log", "-1", "--format=%H", "--", "defence/agentic-security").strip()
         good = self.target.pages[self.review]["Source"]
-        for source in (good.replace("arcitai/agentic-systems", "attacker/fork"), good.replace("agentic-review", "agentic-spec"),
+        for source in (good.replace("arcitai/agentic-system", "attacker/fork"), good.replace("agentic-security", "agentic-other"),
                        f"javascript:alert(1)//x/blob/{pin}/"):
             with self.subTest(source):
                 self.target.pages[self.review]["Source"], self.status.states = source, []
@@ -193,7 +214,7 @@ class PublishTests(unittest.TestCase):
                 self.target.writes = []
                 self.damage()
                 self.target.pages[self.review]["Status"] = status
-                result = self.run_actions([action("skill/factory-review")])
+                result = self.run_actions([action("skill/factory-security")])
                 self.assertEqual(result["result"], "FAILED")
                 self.assertIn("not a released-reference copy", result["reason"])
                 self.assertEqual(self.target.writes, [])
@@ -202,45 +223,45 @@ class PublishTests(unittest.TestCase):
         self.damage()
         self.target.pages[self.review]["Status"] = "Authoring edition"
         keys = {k: dict(v) for k, v in KEYS.items()}
-        keys["skill/factory-review"]["cutover"] = "https://github.com/arcitai/agentic-systems/issues/122#decision"
-        result = publish.run(ROOT, [action("skill/factory-review")], keys, self.target, self.status, self.lock)
+        keys["skill/factory-security"]["cutover"] = "https://github.com/arcitai/agentic-system/issues/122#decision"
+        result = publish.run(ROOT, [action("skill/factory-security")], keys, self.target, self.status, self.lock)
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
 
     def test_a_newer_notion_copy_is_never_downgraded(self):
         self.damage()
         self.target.pages[self.review]["Version"] = "9.9.9"
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "FAILED")
         self.assertIn("refusing a downgrade", result["reason"])
         self.assertEqual(self.target.writes, [])
 
     def test_damaged_copy_is_restored_body_and_properties(self):
         self.damage()
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.writes, [("upload", self.review), ("properties", self.review)])
-        self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])
+        self.assertIn("Identify the authorized target", self.target.pages[self.review]["files"]["SKILL.md"])
         self.assertIn("Pinned released reference", self.target.pages[self.review]["files"]["SKILL.md"])
-        self.assertEqual(self.target.pages[self.review]["Version"], reconcile.git_skill_version(ROOT, RELEASED["skill/factory-review"]["path"]))
+        self.assertEqual(self.target.pages[self.review]["Version"], reconcile.git_skill_version(ROOT, RELEASED["skill/factory-security"]["path"]))
 
     def test_changed_property_content_with_equal_body_updates_only_properties(self):
         self.target.pages[self.review]["Source"] = "edited by hand"
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.writes, [("properties", self.review)])
 
     def test_repeat_delivery_writes_nothing(self):
         self.damage()
-        self.run_actions([action("skill/factory-review")])
+        self.run_actions([action("skill/factory-security")])
         writes = list(self.target.writes)
-        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+        self.assertEqual(self.run_actions([action("skill/factory-security")])["result"], "PUBLISHED")
         self.assertEqual(self.target.writes, writes)
 
     def test_uncertain_upload_that_was_applied_is_read_back_not_repeated(self):
         self.damage()
         self.target.failures[("upload", self.review)] = ["applied"]
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual([w for w in self.target.writes if w[0] == "upload"], [("upload", self.review)])
         self.assertIn("upload-confirmed-after-uncertain-write", [e["action"] for e in result["log"]])
@@ -248,33 +269,33 @@ class PublishTests(unittest.TestCase):
     def test_lost_upload_is_retried_once_with_the_same_identity(self):
         self.damage()
         self.target.failures[("upload", self.review)] = ["lost"]
-        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+        self.assertEqual(self.run_actions([action("skill/factory-security")])["result"], "PUBLISHED")
 
     def test_partial_failure_stays_visible_and_a_later_run_completes(self):
         self.damage()
         self.target.failures[("properties", self.review)] = ["lost", "lost"]
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "FAILED")
         self.assertEqual(self.status.states[-1][0], "failure")
-        self.assertIn("Use a context separate", self.target.pages[self.review]["files"]["SKILL.md"])  # applied part kept
-        self.assertEqual(self.run_actions([action("skill/factory-review")])["result"], "PUBLISHED")
+        self.assertIn("Identify the authorized target", self.target.pages[self.review]["files"]["SKILL.md"])  # applied part kept
+        self.assertEqual(self.run_actions([action("skill/factory-security")])["result"], "PUBLISHED")
         self.assertEqual(self.status.states[-1][0], "success")
 
     def test_expired_access_stops_with_a_failure_receipt(self):
         self.damage()
         self.target.failures[("upload", self.review)] = ["access"]
-        result = self.run_actions([action("skill/factory-review")])
+        result = self.run_actions([action("skill/factory-security")])
         self.assertEqual(result["result"], "FAILED-ACCESS")
         self.assertEqual(self.status.states[-1][0], "failure")
         self.assertFalse(self.lock.exists())
 
     def test_final_readback_covers_every_released_reference(self):
-        other = RELEASED["skill/factory-spec"]["notion"]
+        other = RELEASED["skill/publisher-second"]["notion"]
         page = self.target.pages[other]
         page["files"]["SKILL.md"] += "\nInjected.\n"
         result = self.run_actions([])
         self.assertEqual(result["result"], "FAILED")
-        self.assertIn("skill/factory-spec", result["reason"])
+        self.assertIn("skill/publisher-second", result["reason"])
 
     def test_concurrent_run_is_refused(self):
         self.lock.write_text("held")
@@ -284,15 +305,15 @@ class PublishTests(unittest.TestCase):
     def test_notion_owned_originals_are_never_planned(self):
         self.assertTrue(all(KEYS[a["key"]]["owner"] == "git" for a in [action(k) for k in RELEASED]))
         with tempfile.TemporaryDirectory() as temporary:
-            snap = {"format": 1, "errors": [], "artifacts": {"skill/factory-agent-ops": {"revision": "x", "version": "9.9.9", "files": {"SKILL.md": "---\nname: x\n---\nchanged"}}}}
+            snap = {"format": 1, "errors": [], "artifacts": {"skill/factory-foundation": {"revision": "x", "version": "9.9.9", "files": {"SKILL.md": "---\nname: x\n---\nchanged"}}}}
             (Path(temporary) / "snapshot.json").write_text(json.dumps(snap))
             actions = reconcile.plan(ROOT, KEYS, temporary)
-            self.assertNotIn("skill/factory-agent-ops", [a["key"] for a in actions])
+            self.assertNotIn("skill/factory-foundation", [a["key"] for a in actions])
             self.assertTrue(all(KEYS[a["key"]]["owner"] == "git" for a in actions))
 
     def test_a_notion_owned_action_is_refused_before_any_write(self):
-        item = KEYS["skill/factory-agent-ops"]
-        result = self.run_actions([{**action("skill/factory-review"), "key": "skill/factory-agent-ops", "page": item["notion"]}])
+        item = KEYS["skill/factory-foundation"]
+        result = self.run_actions([{**action("skill/factory-security"), "key": "skill/factory-foundation", "page": item["notion"]}])
         self.assertEqual(result["result"], "FAILED")
         self.assertEqual(self.target.writes, [])
 
@@ -305,7 +326,7 @@ class PublishTests(unittest.TestCase):
             target = FakeSkills()
             artifacts = {}
             for key, item in KEYS.items():
-                if item["kind"] == "skill" and item.get("path"):
+                if item["kind"] == "skill" and item.get("path") and item.get("status", "active") == "active":
                     files = {k: v.decode() for k, v in reconcile.bundle_files(repo, item["path"]).items()}
                     artifacts[key] = {"revision": (item.get("binding") or {}).get("revision", "x"), "version": reconcile.git_skill_version(repo, item["path"]), "files": files}
                     if item["label"] == "released-reference":
@@ -313,13 +334,13 @@ class PublishTests(unittest.TestCase):
                         page = target.pages[item["notion"]]
                         artifacts[key].update(files=page["files"], version=page["Version"], status=page["Status"],
                                               source=f"{reconcile.REPO_URL}/blob/{head}/{item['path']}/SKILL.md")
-            artifacts["skill/factory-agent-ops"]["files"]["SKILL.md"] += "\nNewer canonical rule.\n"
-            artifacts["skill/factory-agent-ops"]["revision"] = "newer"
-            artifacts["skill/factory-review"]["status"] = "Draft"
+            artifacts["skill/factory-foundation"]["files"]["SKILL.md"] += "\nNewer canonical rule.\n"
+            artifacts["skill/factory-foundation"]["revision"] = "newer"
+            artifacts["skill/factory-security"]["status"] = "Draft"
             (Path(temporary) / "snapshot.json").write_text(json.dumps({"format": 1, "errors": [], "artifacts": artifacts}))
             _, keys, _ = reconcile.load_manifest(repo)
             plan = reconcile.plan(repo, keys, temporary)
-        self.assertEqual([a["key"] for a in plan], ["skill/factory-review"])
+        self.assertEqual([a["key"] for a in plan], ["skill/factory-security"])
 
     def test_live_mode_without_dedicated_connection_reports_missing_setup(self):
         env = {k: v for k, v in os.environ.items() if not k.startswith("AGENTIC_SYSTEMS_PUBLIC_DOCS_")}

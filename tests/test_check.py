@@ -15,7 +15,7 @@ class CheckTests(unittest.TestCase):
     def test_metadata_and_reference_failures_are_detected(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            skill = root / "adlc/example"
+            skill = root / "evaluation/example"
             skill.mkdir(parents=True)
             path = skill / "SKILL.md"
             (root / "VERSION").write_text("0.1.4\n")
@@ -41,7 +41,7 @@ class CheckTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             (root / "VERSION").write_text("0.1.4\n")
-            folder = root / "adlc/example"
+            folder = root / "evaluation/example"
             folder.mkdir(parents=True)
             path = folder / "SKILL.md"
             for source in (valid, valid.replace('"0.1.4"', '"0.1.3"'),
