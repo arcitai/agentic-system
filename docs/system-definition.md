@@ -95,8 +95,9 @@ page's host and contain its expected name, version and first instruction: a 200
 login page or empty shell is insufficient. Missing public proof leaves a visible
 pending checklist. Retired pages are not publication targets.
 
-Publisher success covers these active released-reference pages, not the entire
-public guide or the Skills catalogue and its filters. The first bounded live
+Publisher success covers only the released-reference pages. It does not read back
+the entire public guide or the Skills catalogue and its filters. The publisher is
+not operational until its bounded live qualification passes. The first bounded live
 publish, a read-only rerun and browser readback of the coherent public set remain
 separate qualification work under #122. The workflow remains inactive until its
 dedicated connection is limited to the guide subtree, its environment is restricted

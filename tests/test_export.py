@@ -50,14 +50,14 @@ class RealRenderingTests(unittest.TestCase):
 
     def test_newer_original_exports_its_change_with_previous_link_texts(self):
         bundled = {"SKILL.md", "references/policy.md", "references/t3.md"}
-        self.check("factory-entry", bundled, fixture("factory-entry", "previous"), "0.1.32", "2026-11-03", list_indent=False)
+        self.check("factory-agent-ops", bundled, fixture("factory-agent-ops", "previous"), "0.1.32", "2026-11-03", list_indent=False)
 
     def test_newer_original_keeps_the_previous_indented_list_style(self):
         self.check("factory-entry", {"SKILL.md"}, fixture("factory-entry", "previous"), "0.1.32", "2026-11-03", list_indent=True)
 
     def test_unknown_link_text_is_reported_not_guessed(self):
-        notion = fixture("factory-entry", "notion")
-        out, unresolved = export.portable_skill(notion, "factory-entry", "0.1.32", "2026-11-03", "Factory Agent Ops",
+        notion = fixture("factory-agent-ops", "notion")
+        out, unresolved = export.portable_skill(notion, "factory-agent-ops", "0.1.32", "2026-11-03", "Factory Agent Ops",
                                                 {"SKILL.md", "references/policy.md", "references/t3.md"}, {})
         self.assertTrue(unresolved)  # reported for editorial confirmation
         # lossless fallback: the prose stays and the target becomes a working bare link inside the parenthesis

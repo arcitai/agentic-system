@@ -342,7 +342,7 @@ def compare(root, keys, snapshot_dir):
             continue
         if item["kind"] == "declaration":
             text = (Path(root) / item["path"]).read_text(encoding="utf-8")
-            header = re.search(r"Canonical YAML SHA-256 [^:]*: ([0-9a-f]{64})", text)
+            header = re.search(r"^# Canonical YAML SHA-256 \S+: ([0-9a-f]{64})$", text, re.M)
             # The export is a comment-only header, one blank line, then the canonical YAML exactly as hashed.
             head, _, body = text.partition("\n\n")
             actual = hashlib.sha256(body.encode("utf-8")).hexdigest()

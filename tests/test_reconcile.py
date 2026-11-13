@@ -211,7 +211,7 @@ class ImpactTests(unittest.TestCase):
     def test_rename_without_manifest_update_fails_and_with_status_passes(self):
         git(self.repo.root, "mv", "defence/agentic-security", "defence/agentic-security-renamed")
         self.repo.commit("rename")
-        self.assertTrue(any("agentic-spec" in e for e in self.repo.impact(self.base)[0]))
+        self.assertTrue(any("agentic-security" in e for e in self.repo.impact(self.base)[0]))
 
         def rename(k, a):
             old = k["skill/factory-security"]
@@ -347,7 +347,7 @@ class CanonicalTests(unittest.TestCase):
             elif item["kind"] == "page" and item.get("status", "active") == "active":
                 artifacts[key] = {"revision": "t", "text": "\n".join(p.get("before", "") for p in item.get("pending", []))}
         decl = (ROOT / "system.yaml").read_text()
-        artifacts["declaration/factory-lab"] = {"revision": "t", "sha256": re.search(r"SHA-256 [^:]*: ([0-9a-f]{64})", decl)[1]}
+        artifacts["declaration/factory-lab"] = {"revision": "t", "sha256": re.search(r": ([0-9a-f]{64})$", decl, re.M)[1]}
         snap = {"format": 1, "artifacts": artifacts, "errors": []}
         mutate(snap)
         with tempfile.TemporaryDirectory() as temporary:
@@ -387,7 +387,7 @@ class CanonicalTests(unittest.TestCase):
             shutil.copytree(ROOT, root, ignore=shutil.ignore_patterns(".git", "__pycache__", ".agentic-system-task"))
             decl = root / "system.yaml"
             text = decl.read_text()
-            canonical = re.search(r"SHA-256 [^:]*: ([0-9a-f]{64})", text)[1]
+            canonical = re.search(r": ([0-9a-f]{64})$", text, re.M)[1]
             _, keys, _ = reconcile.load_manifest(root)
             snap = Path(temporary) / "snap"
             snap.mkdir()
