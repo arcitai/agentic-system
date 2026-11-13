@@ -75,15 +75,16 @@ label and native identity. Do not reuse retired keys for different artifacts.
 `reconcile.py` runs on pull requests and main pushes, reports NO-OP, CHANGES,
 ATTENTION, CONFLICT, or UNVERIFIED when originals were not read, and fails on
 conflicts. It catches unbound edits to exports, unversioned released-reference
-changes, active missing artifacts, unowned/private paths, invalid declaration
-headers and source-ownership changes lacking a decision record. IN-SYNC needs
+changes, active missing artifacts, unowned/private paths and source-ownership
+changes lacking a decision record. With a canonical snapshot it also checks the
+declaration header and the actual body hash. IN-SYNC needs
 canonical, bound and Git versions to agree, including instructions, link targets
 and required resource bytes. A successful source check is not installation proof.
 
 ## Released-reference publication
 
 Publication is serialized from main or the matching `v*` tag. The status
-`agentic system/docs-propagation` becomes pending before any write. Writes use the
+`agentic-system/docs-propagation` becomes pending before any write. Writes use the
 existing page identity. An uncertain result is read back before one same-identity
 retry. A newer Notion edition is not downgraded. A page outside Released reference
 status is never overwritten without an explicit manifest cutover decision.

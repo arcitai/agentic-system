@@ -95,6 +95,12 @@ class ExportCommandTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             export.export(self.root, snap, "skill/factory-security")
 
+    def test_retired_notion_skill_cannot_be_recreated_from_a_stale_snapshot(self):
+        snap = self.snapshot("skill/factory-agent-ops", {"SKILL.md": fixture("factory-agent-ops", "notion")})
+        with self.assertRaisesRegex(ValueError, "retired or renamed"):
+            export.export(self.root, snap, "skill/factory-agent-ops")
+        self.assertFalse((self.root / "agent-ops/agentic-agent-ops").exists())
+
     def test_export_writes_only_its_bundle_records_the_binding_and_removes_stale_files(self):
         stale = self.root / "evaluation/agentic-evaluate/references/old.md"
         stale.parent.mkdir()

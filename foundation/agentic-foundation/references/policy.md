@@ -78,7 +78,7 @@ it. Record an extra grant where the installation keeps them
 authoriser and removal condition.
 
 How much review a result gets is the project's choice, and an existing project
-default stands until that project changes it. The method fixes no reviewer count.
+default stands until that project changes it. The method fixes no reviewer count. Resolve blocking findings required by the project’s acceptance policy before delivery; having completed the required number of reviews alone is insufficient.
 Tools check crisp, repeatable properties. A reviewer inspects what tools cannot:
 weak assumptions, misleading conclusions, a flow or text as its user or reader meets
 it. Independence comes from a separate context and the actual candidate and

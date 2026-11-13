@@ -215,8 +215,9 @@ def run(root, actions, keys, target, status, lock_path):
         status.set("pending", f"propagating {len(actions)} released reference(s)" if actions else "verifying released references")
         for action in actions:  # only Git-owned released references are ever written
             item = keys.get(action["key"], {})
-            if item.get("owner") != "git" or item.get("label") != "released-reference" or action.get("page") != item.get("notion"):
-                raise RuntimeError(f"{action['key']}: refused; only Git-owned released references are propagated")
+            if (item.get("status", "active") != "active" or item.get("owner") != "git"
+                    or item.get("label") != "released-reference" or action.get("page") != item.get("notion")):
+                raise RuntimeError(f"{action['key']}: refused; only active Git-owned released references are propagated")
         for action in actions:
             item = keys[action["key"]]
             name = Path(item["path"]).name

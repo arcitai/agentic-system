@@ -228,6 +228,14 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(result["result"], "PUBLISHED")
         self.assertEqual(self.target.pages[self.review]["Status"], "Released reference")
 
+    def test_stale_manual_plan_cannot_publish_a_retired_reference(self):
+        keys = {k: dict(v) for k, v in KEYS.items()}
+        keys["skill/factory-security"]["status"] = "retired"
+        result = publish.run(ROOT, [action("skill/factory-security")], keys, self.target, self.status, self.lock)
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("only active Git-owned", result["reason"])
+        self.assertEqual(self.target.writes, [])
+
     def test_a_newer_notion_copy_is_never_downgraded(self):
         self.damage()
         self.target.pages[self.review]["Version"] = "9.9.9"

@@ -37,7 +37,7 @@ Adopting applications retain their own documentation/versioning conventions.
 
 The layout follows the [Agent Skills specification](https://agentskills.io/specification):
 small discovery metadata, focused instructions and references loaded only when
-needed. MIT permits reuse of Agentic System' method, code and documentation; the
+needed. MIT permits reuse of Agentic System's method, code and documentation; the
 [branding exception](assets/branding/README.md) still applies. A license grants
 no system or account access.
 

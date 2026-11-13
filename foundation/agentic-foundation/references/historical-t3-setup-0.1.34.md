@@ -1,3 +1,11 @@
+# Historical T3 setup reference
+
+Revision: 0.2.0 · Updated: 2026-11-14
+
+Superseded historical material from the 0.1.34 distribution. Its original text and observation dates follow unchanged; do not apply its AgentOps/ADLC startup defaults to the current method. Use setup.md for current guidance.
+
+---
+
 # Set up the host and operator client
 
 Revision: 0.1.31 · Updated: 2026-10-30

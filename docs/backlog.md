@@ -23,17 +23,17 @@ Three states are kept apart throughout: **source** (text exists in the authoring
 edition or repository), **installed** (the bytes are present and discovered in a
 named tool) and **native acceptance** (observed working in the actual installation).
 
-- Source: the authoring edition of the guide, its subpages and three shared skills
-  carries 0.2.0. Six retired skill pages remain with history banners. The repository
-  is on an in-progress source branch.
-- Not done: no pull request, merge, release or installed skill adoption.
-- Unchanged: the Lab's two-review default, its holds (general intake, environment
-  retirement, #114 delivery), its grants and its network scopes. Schedules are
-  disabled and no new schedule is selected.
-- Lab host, dated observation: after a host restart the existing Lab service was
-  started by the operator on Stable 0.1.6, with no active runs and a verified idle
-  recovery copy. The latest stable release is downloaded but not installed. An OS
-  update check failed and no system upgrade was made. Detail belongs in #34 and #83.
+- Source: the public guide and three shared core skills carry the 0.2.0 authoring
+  edition. Six retired pages remain with history banners. The portable candidate
+  is being reviewed; its PR, release and native method adoption are separate facts.
+- Retained: Lab's two-review default, unresolved-blocking-finding criteria and
+  holds (general intake, retirement, #114 delivery), grants and network scopes.
+  Both schedules remain disabled; no new schedule is selected.
+- Observed 13–14 November: the operator manually updated the idle Lab to Stable
+  0.1.9, with verified database/userdata recovery copies. Native CLI and the sole
+  Beta client opened the same preserved conversation, now Project agent. The old
+  multi-project server was retired with its history kept. Detail and limits are in
+  [qualification](qualification.md), #34 and #83.
 
 ## Priorities
 
@@ -55,9 +55,9 @@ is recommended for closing as completed today, because no 0.2.0 change is releas
 | --- | --- | --- | --- |
 | [#3] | Rescope | Evidence up to 30 October is kept. Its wording assumes an AgentOps lead. | Retitle to the project agent. Four criteria stay open: the project overview stays current without owner rescue; safe continuation after a resume, restart or provider change; a genuinely uncertain launch is reconciled before retry; one real project cycle is assessed independently. Observe them on the next necessary real work, not in staged outages. |
 | [#5] | Park | The staging-boundary investigation was accepted by the owner on 13 October as a no-fix result with stated limits. Remediation and recovery were not exercised. | Remains the optional defence method's open proof. Resume only with an authorized target and a real finding to carry through a fix check. |
-| [#30] | Rescope | A specification was ready on 13 October and not adopted. 0.2.0 places operations and maintenance inside Foundation and keeps defence optional. | The owner confirms that placement; close as completed when the 0.2.0 release states it. The report-only pilot and any schedule are not selected. |
+| [#30] | Rescope | A specification was ready on 13 October and not adopted. 0.2.0 places operations and maintenance inside Foundation and keeps defence optional. | The owner has selected this placement; close the method decision when the reviewed 0.2.0 edition is delivered. The report-only pilot and any schedule are not selected. |
 | [#32] | Finish | Real gap. Bounded trials exist. Unattended operation, approval handling and account-wide isolation are not qualified. Holds stand. | Retitle to helper and environment boundaries. Remaining: request to responder to useful progress on the installed version, with #34; history preserved before any environment is removed; the rootless-container versus VM comparison only once its operator, test area and recovery are agreed. |
-| [#34] | Finish | Real gap. The Lab service runs Stable 0.1.6. The latest stable release is downloaded, not installed. | One qualified cutover to the selected stable release: idle check, verified recovery copy, version and channel read back on the server and each client, clean stop, useful continuation. Start at boot or login and unattended updates remain unqualified. |
+| [#34] | Finish | Real gap. The operator manually updated Lab to Stable 0.1.9 with recovery copies and same-conversation CLI/GUI readback. | Keep the manual update/reconnect proof. Clean-stop behavior, useful post-adoption continuation, start at boot/login and unattended updates remain distinct qualification work. |
 | [#43] | Park | Not admitted (triage of 16 October). Written as an AgentOps feature. | If revived, an optional general method for developing rough ideas. First check whether a selected method package already covers it. |
 | [#44] | Park | Triage of 16 October: specify only for a demonstrated release gap. No leak is established. | Product release checks belong to each product's own project. Here, admit a small fix only if a release candidate shows a missing gate. No recurring defence automation. |
 | [#45] | Park | Not planned (16 October). | 0.2.0 keeps a small project definition. Revisit on a real bootstrap problem or configuration drift that the native setup cannot resolve. |

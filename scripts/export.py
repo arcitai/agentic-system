@@ -106,6 +106,8 @@ def export(root, snapshot_dir, key, title=None):
         errors = [e for e in errors if e not in first]
     if errors or item is None:
         raise ValueError("; ".join(errors) or f"{key}: not in the manifest")
+    if item.get("status", "active") != "active":
+        raise ValueError(f"{key}: retired or renamed artifacts are not export targets")
     if item["owner"] != "notion" or item["kind"] != "skill" or not item.get("path"):
         raise ValueError(f"{key}: only Notion-owned skills with a Git export path are exported")
     snap = json.loads((snapshot_dir / "snapshot.json").read_text(encoding="utf-8"))

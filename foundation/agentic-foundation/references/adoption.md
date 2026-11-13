@@ -39,7 +39,7 @@ it does not admit new product work or migrate every project on the host.
 3. Update only the affected skills, thin bootstrap routes and documentation in
    their owning sources. Preserve product files, work in progress, personal
    context, native history and credentials. Broader connector, host or access
-   changes keep their own authority and recovery requirements.
+   changes keep their own authority and recovery requirements. For retired skills and role-specific bootstraps, verify their replacements, then disable them by the supported project/profile route and retain a recoverable copy outside active discovery.
 4. Use the chosen tool's supported loading/adoption route. Verify the actual
    installed bytes, fresh-session discovery or explicit loading, and a bounded
    task with its relevant checks and independent review. If live adoption is
@@ -48,8 +48,7 @@ it does not admit new product work or migrate every project on the host.
    remaining gaps. Keep the prior working revision and supported recovery route.
    Recheck affected capabilities; do not repeat unrelated host qualification.
 
-A repository's `AGENTS.md` can point to the selected methods and shared rules;
-it does not need to copy them all. A declaration belongs in the project's chosen
+Give the project a thin bootstrap route to its selected methods and the portable shared rules in `references/policy.md`, so ordinary work finds them without a setup-only skill trigger. A repository can use `AGENTS.md`; it does not need to copy those rules. A declaration belongs in the project's chosen
 context home. Notion is our reference, not a dependency for using a released bundle.
 For an optional method package changing identity, use [method migration](method-migration.md).
 
@@ -150,8 +149,9 @@ Reuse the following existing choice families only where they matter:
   Method (OSM): installed generation and version, invocation names, standing calls,
   context home and IDs, and the current recovery route, as in
   [migrating an optional method](method-migration.md).
-- For a stronger worker boundary: the rootless-container or VM comparison, its
-  evidence and the decision, as in the [setup guide](setup.md#1-choose-the-boundary).
+- For a stronger helper boundary: the selected rootless-container or VM comparison,
+  its dated evidence and decision. The [setup guide](setup.md#1-choose-the-boundary)
+  explains the current boundary requirement; older comparison examples are historical.
 - Host continuity, where chosen: the host coordinator's thread and mandate, and
   the projects covered by its mandate. For each startup stage (disk
   unlock, headless service boot, network routes, desktop autostart after login,

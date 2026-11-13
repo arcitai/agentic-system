@@ -261,6 +261,13 @@ def bundle_differences(root, path, canonical_files):
         elif rel == "SKILL.md":
             if normalize_skill(file_bytes(entry).decode("utf-8")) != normalize_skill(local[rel].decode("utf-8")):
                 differ.append(f"{rel}: instructions or link targets differ")
+            # Earlier Skills API renderings omitted H1, so those comparisons
+            # still use the legacy normalization. When the original includes
+            # its title, that authored title is part of the selected edition.
+            canonical_heading = re.search(r"^# (.+)$", file_bytes(entry).decode("utf-8"), re.M)
+            local_heading = re.search(r"^# (.+)$", local[rel].decode("utf-8"), re.M)
+            if canonical_heading and (not local_heading or canonical_heading[1] != local_heading[1]):
+                differ.append(f"{rel}: authored heading differs")
         elif hashlib.sha256(local[rel]).digest() != hashlib.sha256(file_bytes(entry)).digest():
             differ.append(f"{rel}: bytes differ")
     differ += [f"{rel}: only in Git" for rel in sorted(set(local) - set(canonical_files))]

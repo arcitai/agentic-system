@@ -1,5 +1,5 @@
 # Version-marked export of the canonical Notion definition; not applied settings.
-# Canonical YAML SHA-256 2026-11-13T22:47:41.019Z: ad6b70540d45bc6bc04395a9cf5c73c6fe974757f0211939245bfa542ddfb087
+# Canonical YAML SHA-256 2026-11-13T23:19:26.698Z: 6f61a676bfcf2ed142af45738717695920b5207864715d3cdcd67d581aa54f05
 
 # Agentic System Lab definition 0.9; owner-selected intent, not applied configuration.
 # No access grant, runtime engine or override of native holds.
@@ -34,6 +34,8 @@ policy:
     count: 2
     perspectives: [objective-evidence, qualitative-outcome]
     independent_contexts: true
+    blocking: required-reviewers-resolve-blocking-concerns
+    criteria: original-accepted-task
   access: existing-project-scoped-native-grants
   credentials: native-broker-outside-execution-boundary
   helper_access: selected-context-and-task-specific-enforced-boundary
@@ -52,4 +54,4 @@ qualification:
   boundaries: https://github.com/arcitai/agentic-system/issues/32
   maintenance: https://github.com/arcitai/agentic-system/issues/34
   startup: https://github.com/arcitai/agentic-system/issues/83
-  holds: [general-intake, automatic-worker-retirement, issue-114-delivery]
+  holds: [general-intake, retirement, issue-114-delivery]

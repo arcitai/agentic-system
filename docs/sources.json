@@ -85,7 +85,7 @@
       "notion": "4056d2e1-7f56-81ed-b778-c29cc5faa9a0",
       "public": true,
       "binding": {
-        "revision": "a0f650f35d2e99aa6dc0ef8cc88d2f8eedbf6c1a4d0e44973e0c2163a2edbe56",
+        "revision": "edc656ca0fa1cc3803464ad409c64c73595838188184917af0ffa17ab1a14078",
         "version": "0.2.0"
       }
     },
@@ -102,7 +102,7 @@
         "version": "0.1.34"
       },
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-entry",
@@ -116,7 +116,7 @@
         "revision": "19693770cd85cc28c511dc316ffb0dfb59e7c9095f2288dec1da8c5e59500012",
         "version": "0.2.0"
       },
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-evaluate",
@@ -130,7 +130,7 @@
         "revision": "592b9fc7a4ae2ef19e2d68c30733ee5f10df9ef17c0e7e974e6ee31eac8f7ed7",
         "version": "0.2.0"
       },
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-brief",
@@ -145,7 +145,7 @@
         "version": "0.1.34"
       },
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-triage",
@@ -156,7 +156,7 @@
       "notion": "4056d2e1-7f56-8166-8e80-d9aa3cccdf61",
       "public": true,
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-spec",
@@ -167,7 +167,7 @@
       "notion": "4056d2e1-7f56-8177-aee7-f7fc46918863",
       "public": true,
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-implement",
@@ -178,7 +178,7 @@
       "notion": "4056d2e1-7f56-81a4-bee6-c4d5bc4da0ac",
       "public": true,
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-review",
@@ -189,7 +189,7 @@
       "notion": "4056d2e1-7f56-81c1-857b-e250346718f8",
       "public": true,
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "skill/factory-security",
@@ -280,7 +280,7 @@
       "path": "adlc/README.md",
       "public": true,
       "status": "retired",
-      "cutover": "https://github.com/arcitai/agentic-system/issues/91"
+      "decision": "https://github.com/arcitai/agentic-system/issues/91"
     },
     {
       "key": "doc/branding",

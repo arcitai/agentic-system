@@ -23,7 +23,7 @@ Material skill changes need representative behavioral evidence; metadata checks
 alone cannot prove decisions. Review the final candidate independently before
 authorized delivery. Record live proof separately from fixtures and source review.
 
-Keep technical changes, tasks and proof in the selected native tracker/repository; update shared method/context in its owning source. Avoid a second editable copy. Update affected guides, README roadmap and the
+Keep technical changes, tasks and proof in the selected native tracker/repository; update shared method/context in its owning source. Avoid a second editable copy. Update affected guides, README and the
 qualification record when the accepted work changes their claims. Preserve dates of actual observations. Readback published artifacts and preserve a recovery path;
 do not turn a passing package check into an installation claim.
 

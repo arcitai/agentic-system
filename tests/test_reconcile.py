@@ -267,7 +267,6 @@ class ImpactTests(unittest.TestCase):
         def flip(k, a):
             k["skill/factory-evaluate"].update(owner="git", label="released-reference")
             k["skill/factory-evaluate"].pop("binding")
-            k["skill/factory-evaluate"].pop("cutover", None)
         self.repo.manifest(flip)
         self.repo.commit("flip")
         items = self.repo.impact(self.base)[1]
@@ -285,7 +284,6 @@ class ImpactTests(unittest.TestCase):
 
                 def move(k, a):
                     old = k["skill/factory-evaluate"]
-                    old.pop("cutover", None)
                     a.append({**{x: y for x, y in old.items() if x != "binding"}, "key": "skill/factory-evaluate-ref",
                               "owner": "git", "label": "released-reference"})
                     if mode == "retire":
@@ -363,6 +361,12 @@ class CanonicalTests(unittest.TestCase):
         def change(s):
             f = s["artifacts"]["skill/factory-foundation"]["files"]
             f["SKILL.md"] = f["SKILL.md"].replace("Assessment is read-only.", "Assessment may write.", 1)
+        self.assertEqual(self.snapshot(change)[0]["skill/factory-foundation"]["level"], "CONFLICT")
+
+    def test_an_authored_canonical_heading_change_is_detected(self):
+        def change(s):
+            f = s["artifacts"]["skill/factory-foundation"]["files"]
+            f["SKILL.md"] = f["SKILL.md"].replace("Notion authoring edition · " + current_metadata("foundation/agentic-foundation/SKILL.md", "version"), "# A different authored title", 1)
         self.assertEqual(self.snapshot(change)[0]["skill/factory-foundation"]["level"], "CONFLICT")
 
     def test_a_changed_link_target_is_detected(self):

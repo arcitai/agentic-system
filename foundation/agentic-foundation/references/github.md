@@ -31,7 +31,7 @@ and supported endpoints fit better. Do not build an App backend or token service
 just to satisfy this recipe. If no native route provides a required capability,
 record the limitation rather than falling back to a broad personal login.
 
-Keep the lead's coordination/delivery credential outside worker environments.
+Keep the project agent's coordination/delivery credential outside worker environments.
 Workers need their selected files and tools; remote write access is conditional.
 An inherited token, credential store/helper, SSH key or forwarding socket that
 exceeds the worker's boundary holds dependent execution until it is excluded or
@@ -114,7 +114,7 @@ GitHub closure reason are different records.
 
 An issue can come from anyone with access to the repository. Identify trusted
 owner decisions independently from its body. The initial route is explicit:
-give the lead the issue or an accepted backlog with its execution mandate.
+give the project agent the issue or an accepted backlog with its execution mandate.
 
 For later webhook/scheduled intake, use a qualified native T3/harness facility.
 Authenticate the sender, bound repositories/actions, read current state and
@@ -126,7 +126,7 @@ an untrusted PR runner or build another Agentic System queue.
 
 Use the application's real test/build/lint checks. Keep workflow permissions
 minimal, dependencies/actions reviewed and pinned, execution bounded and secrets
-out of untrusted PRs. Do not carry Agentic System' method-validation workflow into an
+out of untrusted PRs. Do not carry Agentic System's method-validation workflow into an
 application as a substitute for meaningful application tests.
 Identify the relevant dependency-update and vulnerability-response route. Inspect
 effective workflow/token permissions, and native dependency alerts and secret

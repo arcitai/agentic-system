@@ -3756,9 +3756,9 @@
         {
           "id": 34,
           "parent": 1,
-          "name": "A fresh context or worktree is not a credential boundary. Helpers",
+          "name": "Fresh context and separate helper boundaries",
           "type": "text",
-          "text": "A fresh context or worktree is not a credential boundary. Helpers receive no project connection by default.",
+          "text": "A fresh context or worktree is not a credential boundary. Separate helper environments receive no project connection by default.",
           "rect": {
             "x": 48,
             "y": 870,
