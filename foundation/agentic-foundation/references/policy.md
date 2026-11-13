@@ -139,7 +139,7 @@ cost included. Never weaken a check or alter a verifier's evidence to pass.
 Evidence must concern the current candidate and the artifact actually consumed or
 served, and it must have been able to reveal a realistic failure. A test that
 substitutes its own resource list does not show what the built package contains.
-Source inspection, a rehearsal, installed behavior and the delivered outcome are
+A check must actually exercise the promised behavior on this candidate. Report skipped checks, zero executed tests and tool failures; a successful command or a test name alone is not proof. Source inspection, a rehearsal, installed behavior and the delivered outcome are
 different claims.
 
 Write the handoff for its reader: the change and its proof first, a real

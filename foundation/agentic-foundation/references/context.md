@@ -88,7 +88,13 @@ When work produces knowledge worth keeping, put it in the most specific existing
 Keep an existing wiki that works. A wiki-style docs section is optional and
 needs a retrieval or maintenance benefit; do not reorganize content to fill one.
 Keep one canonical explanation and link to it instead of duplicating it in docs
-and skills. Do not put an application's facts into Agentic System' shared references.
+and skills. Do not put an application's facts into Agentic System's shared references.
+
+Classify material before keeping it: **durable** (an accepted decision, fact or method with an owner), **provisional** (a working hypothesis or pending decision, with the trigger that confirms or drops it) or **source-only** (evidence kept as a link or excerpt pointing to its original). Keep conclusions and their sources, not raw chats or transcripts; the native tool retains full history.
+
+Give each current topic one stable identity, such as a key, page or issue, and rewrite its current statement concisely in place. Preserve originals and meaningful history through the home's native versions or links instead of copies. Record a relation only with a concrete meaning, such as supersedes, depends on, implements or contradicts, and its evidence.
+
+Retrieve by the task, its controls and authority, and evidence from a comparable time and version, not by the latest import or edit. Report specific needs-attention outcomes: a failed or partial intake, an unknown write, conflicting sources, a due review or a coverage gap. A global truth or health score hides them. A save is complete only after the saved or public result is read back; retry with the same identity rather than creating a second copy.
 
 ## External dependencies
 
