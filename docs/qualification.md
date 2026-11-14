@@ -103,6 +103,18 @@ editions. The response remains inactive. The same native conversation then
 completed the read-only lifecycle diagnosis on the installed 0.2.1 sources.
 Evaluate was discovered but was not loaded or used.
 
+A read-only audit at 09:49 UTC compared the retained pre-method SQLite copy
+(hash and integrity verified) with current native data. All 2,239 original
+messages retained their identity/content fields including payload; all 531
+original terminal runs retained identity, status, binding and times; all eight
+original thread/project identities remained. None of those selected pre-existing
+fields differed or was missing. Current totals were 2,252 messages, 536 terminal
+runs and eight threads. Both installed method directories also matched the
+released files exactly: Foundation 12 files, Evaluate two. The live service unit
+differed from the retained pre-update unit only in its T3 executable version
+path. This is not equality of every mutable native metadata table, active-run
+capture or a new live allow/deny or whole-account isolation test.
+
 Native Git history was completed from the verified local release bundle using
 Git's supported unshallow fetch; both existing worktrees stayed on 418b6a5 with
 unchanged bindings and no working-file delta. The earlier shallow-history
