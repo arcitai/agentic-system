@@ -9,8 +9,8 @@ Agentic System is an open framework for the foundation, boundaries and ongoing c
 Use it for software, research, BI, defence and other work. Each project keeps its own purpose, context, selected methods and native tools.
 
 The Lab adopted released **0.2.0** on T3 Stable **0.1.9**, retaining the same
-conversation and access boundaries. Its installed methods were discovered and used;
-a repaired instruction route was followed after a manual server reload. This is
+conversation and access boundaries. Both installed methods were discovered; Foundation was loaded and used.
+A repaired instruction route was followed after a manual server reload. This is
 bounded assisted proof, not unattended operation. See [qualification](docs/qualification.md)
 and [remaining work](docs/backlog.md).
 

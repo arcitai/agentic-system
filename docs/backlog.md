@@ -28,10 +28,10 @@ bytes are present), **discovery/loading/use** in a named native invocation, and
   merge tree is identical. Six retired skill pages retain their history. This patch
   deliberately exports Foundation 0.2.1's optional response template and loading
   guidance; the other selected methods remain at their unchanged revisions.
-- Installed and used: the same Lab adopted 0.2.0 Foundation/Evaluate; native discovery,
+- Installed and discovered; Foundation used: the same Lab adopted 0.2.0 Foundation/Evaluate; native discovery,
   exact bytes and one useful assessment were verified. The owner's shared assistant
-  has Entry/Foundation/Evaluate 0.2.0 installed and explicitly read; its current
-  cached skill catalogue was not refreshed or claimed as new discovery.
+  has Entry/Foundation/Evaluate 0.2.0 installed. Entry was explicitly read and used;
+  its current cached catalogue was not refreshed or claimed as new discovery.
 - Instruction route: an unexpanded import and mid-session instruction caching were
   observed. After an operator server reload, the repaired injected bootstrap led
   the same conversation to read AGENTS and the selected policy before useful work.

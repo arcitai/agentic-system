@@ -54,6 +54,7 @@ expanded. A plain instruction route replaced it. The next turn retained the old
 provider context, so that turn was not counted as repair proof. After a necessary
 operator reload, native instructions were re-read; the repaired bootstrap then led
 the same resumed conversation to read AGENTS and policy by path before drafting.
+The harness no longer injected AGENTS, so the route explicitly loaded it too.
 That proves this observed route-following, not automatic policy-content injection,
 a fresh conversation, future compaction or universal compliance.
 
@@ -72,8 +73,7 @@ The owner assistant’s three shared capabilities were updated to 0.2.0 after co
 installed bytes with the released 0.1.34 originals and retaining recovery copies.
 Entry was explicitly read and used; the running Codex catalogue remains cached,
 so new automatic discovery is not claimed. Product repositories/plugins were not changed.
- General
-intake, retirement and #114 delivery remain held, with both Lab review perspectives
+General intake, retirement and #114 delivery remain held, with both Lab review perspectives
 and blocking-finding criteria retained. No new network grant or credential was
 introduced.
 
