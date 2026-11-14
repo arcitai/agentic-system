@@ -1,6 +1,6 @@
 # Qualification
 
-Revision: 0.2.0 · Updated: 2026-11-14
+Revision: 0.2.1 · Updated: 2026-11-14
 
 This record distinguishes source review, disposable exercises and observed native
 operation. A package release does not qualify another host, every future update
@@ -33,9 +33,46 @@ shows Lab alone. Alpha and Nightly application bundles were moved reversibly to
 Trash; their profiles and history were not removed. OSM, Bridge and OpenPaperDesign
 product development stays in Codex.
 
-Source checks, final independent Fable 5.2 High reviews and portable staging are
-recorded on the delivery PR. Native skill adoption and a useful post-adoption
-model task are separate checks; source tests do not establish those. General
+[PR #131](https://github.com/arcitai/agentic-system/pull/131) merged at
+`6b2e335b938beaa9a9740a89075ecd3d40c95589` and was tagged/released as 0.2.0.
+Two independently commissioned Fable 5.2 High contexts accepted the final repaired
+candidate in continued confirmations; the merge tree is identical. Source checks
+and all 97 tests have their exact revision/CI bindings in that PR. They are not
+native adoption proof.
+
+On 14 November the idle Lab’s two clean checkouts fast-forwarded to that release,
+without reset or a new chat. Exact old skill directories and Git heads were retained
+for recovery. Foundation/Evaluate 0.2.0 were installed with their complete references;
+all 19 staged files and the installed packages matched their manifests. The same
+Opus 5.5 High/Fast-off conversation discovered both methods, invoked Foundation
+and completed a useful readiness/#30 assessment. It distinguished native discovery,
+explicit loading and actual use, and detected an omitted older owner requirement.
+The optional Entry/Defence methods were not installed in Lab.
+
+The first bootstrap was injected but its external `@` policy import was not
+expanded. A plain instruction route replaced it. The next turn retained the old
+provider context, so that turn was not counted as repair proof. After a necessary
+operator reload, native instructions were re-read; the repaired bootstrap then led
+the same resumed conversation to read AGENTS and policy by path before drafting.
+That proves this observed route-following, not automatic policy-content injection,
+a fresh conversation, future compaction or universal compliance.
+
+Before that reload, an idle consistent SQLite backup and all 138 non-DB userdata
+files were transferred and hash-verified on the operator host. An exact guest TERM
+under a temporary Restart=no override did not stop the outer service within ten
+seconds. The failed assertion is retained: it is not clean-service-stop proof.
+The guest server changed PID; all 8 threads, 534 pre-existing terminal runs and
+2,247 pre-existing messages remained, integrity was ok, and the same conversation
+completed further useful work after reconnect. The temporary override was removed;
+the original unit bytes and Restart=on-failure were restored. No host/gateway restart
+or worker retirement occurred. Ordinary clean stop, rollback and unattended
+boot/update qualification remain open under #34/#83.
+
+The owner assistant’s three shared capabilities were updated to 0.2.0 after comparing
+installed bytes with the released 0.1.34 originals and retaining recovery copies.
+Entry was explicitly read and used; the running Codex catalogue remains cached,
+so new automatic discovery is not claimed. Product repositories/plugins were not changed.
+ General
 intake, retirement and #114 delivery remain held, with both Lab review perspectives
 and blocking-finding criteria retained. No new network grant or credential was
 introduced.
@@ -47,7 +84,12 @@ The root filesystem remains about 96% used. A fresh Omarchy/Arch update check
 failed because the Warp repository signing key is unknown and its keyring is not
 writable in the unprivileged check. No OS upgrade or host reboot was performed by
 the operator. Repair of that native keyring requires an authorized admin window;
-PGP verification was not disabled.
+PGP verification was not disabled. Warp’s [official4Novemberkey-rotation advisory](https://www.warp.dev/blog/updated-gpg-signing-key-for-warp-linux-releases)
+identifies the exact missing subkey. The downloaded vendor key matched its stated
+primary and new signing fingerprints and contained the old signing-key revocation.
+The production keyring was not changed; a native administrator approval is still
+required for that repair. A read-only check excluding Warp found 133 pending updates,
+including Omarchy4.0.6→4.5.0. This does not qualify a complete signed update.
 
 ## Earlier qualification (unchanged observations)
 

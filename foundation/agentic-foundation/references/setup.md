@@ -1,6 +1,6 @@
 # Native setup and continuity
 
-Revision: 0.2.0 · Updated: 2026-11-13
+Revision: 0.2.1 · Updated: 2026-11-14
 
 Use only the section needed for the requested host or project. This is preparation
 and operating guidance, not a mandatory startup routine or a Foundation agent.
@@ -39,7 +39,12 @@ Available groups are foundation, entry, evaluation and defence. Select only usef
 methods. Inspect the resulting manifest and install through the harness’s supported
 project/profile route; never overwrite local adaptations or existing files blindly.
 Keep required resources with each skill. A name in instructions does not establish
-discovery, loading or use. Reuse the [adoption record](adoption.md).
+discovery, loading or use. Reuse the [adoption record](adoption.md). A supported
+plain instruction to read the selected policy by path can be the thin bootstrap;
+an `@` line alone does not show that the harness expanded an import. An instruction
+file changed during a running provider session may need an explicit reread or a
+supported context/process reload. Verify the route the actual invocation received
+and followed, preserving its existing native conversation and history.
 
 ## A persistent project conversation
 

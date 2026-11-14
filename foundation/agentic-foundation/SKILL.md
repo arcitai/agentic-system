@@ -3,8 +3,8 @@ name: agentic-foundation
 description: Prepare, adapt, assess or maintain the working ground of an agentic project (its agent environment, project foundation, and operations and maintenance) across software, BI, research, defence and other work. Use for setup, adopting a method revision, a readiness assessment, proving access boundaries, or host upkeep. It does not do the project's own product work.
 license: MIT
 metadata:
-  version: "0.2.0"
-  updated: "2026-11-13"
+  version: "0.2.1"
+  updated: "2026-11-14"
 ---
 
 # Agentic System Foundation
