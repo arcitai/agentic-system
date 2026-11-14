@@ -71,8 +71,8 @@ All 8 threads, 534 pre-existing terminal runs and
 2,247 pre-existing messages remained, integrity was ok, and the same conversation
 completed further useful work after reconnect. The temporary override was removed;
 the original unit bytes and Restart=on-failure were restored. No host/gateway restart
-or worker retirement occurred. Ordinary clean stop, rollback and unattended
-boot/update qualification remain open under #34/#83. The earlier process-only
+or worker retirement occurred. At that checkpoint, ordinary clean stop, rollback
+and unattended boot/update qualification were still open under #34/#83. The earlier process-only
 summary is superseded by this diagnosis; its failed assertion remains evidence.
 
 At 09:14–09:16 UTC, a reviewed target-only trial removed just T3 from Upholds,
@@ -84,13 +84,66 @@ terminal runs and 2,252 messages remained. Existing VM-local API/HTTP/DNS
 forwarders could bounce or warm the VM, so the trial does not show that the VM
 remained stopped. The parent and other controllers retained their identities.
 
-A subsequent bounded private ExecStop adapter and service/target correction is
-staged, not installed or qualified. Its read-only check validated the selected
-T3 process on Z13 without signalling. Both requested Fable High review attempts
-hit the provider's session limit without a verdict; the provider reported reset
-at 13:20 Europe/Copenhagen. There is no fallback or repeated quota probe. #34
-tracks the next independent review and native stop/recovery test. No new Agentic
-System runtime, daemon, privilege, network grant or scheduling layer was added.
+A subsequent bounded private ExecStop adapter was initially staged only. Its
+read-only check validated the selected T3 process without signalling. Both Fable
+High review attempts hit the provider's session limit without a verdict (reported
+reset 13:20 Europe/Copenhagen). Those refusals are retained. The owner then allowed
+work to continue on an alternative where Claude was not required; GPT 6.1 Sol High
+was selected for two independent operator review contexts, without changing the
+Lab's declared default. These are shared-operator-account source contexts, not
+separate credential boundaries.
+
+Both GPT contexts accepted source candidate 808c008. They required the guest
+pidfd to be opened before identity validation; one also required synchronous
+foreground SBX exit before ExecStop returned. Both defects were repaired. Two
+fresh repair reviews accepted the exact new manifest before execution. No native
+helper is distributed in this repository: it is private glue for this existing
+systemd/SBX deployment, with no new framework runtime, daemon, privilege, network
+grant or scheduling layer.
+
+At 10:54–10:55 UTC, with no active/unknown run or pending request and both schedules
+disabled, the operator installed that reviewed private correction. A fresh idle
+SQLite snapshot and all 138 captured non-DB files had been transferred and verified
+before effects. Only T3 was removed from the target's Upholds; startup Wants/After
+and all other members remained. The service gained a synchronous guest-first
+ExecStop with pinned guest/host identity, recognized the observed controlled exit
+130, and used native Restart=always. Credential/environment bytes were retained.
+
+The ordinary manual stop now returned client 0, main 130, helper 0 and stop-post 0,
+with Result=success. Its helper journal confirms the foreground main had exited
+before the helper returned (0.641 seconds). T3 stayed inactive for 60 seconds and
+a new successful native shutdown span was present. A start returned the same
+0.1.9 server. A separate idle exact-TERM trial returned client 0, produced another
+new successful shutdown span and one native automatic restart; the new invocation
+served 0.1.9 again. Both paths passed integrity checks and preserved all selected
+pre-existing fields for 2,252 messages, 536 terminal runs and eight thread/project
+identities. The declared model selection was unchanged during these lifecycle
+trials. The target, parent and unrelated controllers retained their invocations;
+the three predeclared VM-local API/HTTP/DNS forwarders changed invocation after
+each lifecycle path and could warm the VM.
+No physical-host or gateway restart occurred. The accepted correction remains
+installed; the earlier failed routes remain failed.
+
+This qualifies those two idle stop/recovery observations, not an executed full
+rollback, active-task recovery, whole-host boot/login, unattended updates or every
+provider/model continuation. Those remaining capabilities stay open in #32/#34/#83.
+
+At 11:01–11:02 UTC, one useful post-maintenance task completed in that same pinned
+conversation on the existing Lab OpenAI API-credit route: GPT 6.1 Sol, High,
+standard tier. This was an owner-authorized one-task model choice. Native command
+outputs show explicit reads of AGENTS, policy and installed Foundation 0.2.1;
+native Codex skill discovery is not claimed. The task wrote a 295-word readiness
+handoff and one ledger link, with no tests, restart or delegation. A preflight read
+that returned 2 because the new output did not exist is retained. All 2,252 prior
+messages, 536 terminal runs and eight identities retained their selected fields;
+the new totals were 2,256 messages, 537 terminal runs and eight threads, with
+integrity ok and no pending request. This adds one bounded useful GPT continuation,
+not all provider or approval behavior.
+
+The GUI selector was returned to Opus 5.5 High, Fast off, for its next turn. The
+server still records the last-used GPT selection; the reverse handoff has not
+executed, so a later CLI caller must reconcile the intended selection before
+sending. The declared project default, access and intake holds were not changed.
 
 [PR #132](https://github.com/arcitai/agentic-system/pull/132) merged
 at `418b6a5084d089a1b0adc977617b6a95e4fa86ec`, with the same tree as its final

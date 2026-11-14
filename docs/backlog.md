@@ -40,11 +40,20 @@ bytes are present), **discovery/loading/use** in a named native invocation, and
   observed. After an operator-controlled Lab VM restart, the repaired injected bootstrap led
   the same conversation to read AGENTS and the selected policy before useful work.
   This is one resumed-context observation, not every task or fresh session.
-- Maintenance: later boot/journal evidence corrected the process-only reload
-  interpretation. The target-only manual-stop trial stayed stopped but exited125
-  without a new shutdown span, so it was rolled back. A private native correction
-  is staged pending two Fable High reviews; both attempts hit the session limit.
-  It is not installed or qualification proof. The same Lab is available again.
+- Maintenance: boot/journal evidence corrected the process-only reload
+  interpretation. The target-only trial exited125 without a new shutdown span
+  and was rolled back. After the owner allowed an alternative to the quota-limited
+  Fable route, independent GPT High reviews found two real defects in the private
+  correction; repair reviews accepted it. The installed correction then passed
+  one idle clean stop/start and one idle unexpected-exit recovery, with the
+  selected pre-existing history retained. This does not qualify all recovery,
+  boot/login or unattended maintenance.
+- Useful post-maintenance continuation: the owner-authorized one-task GPT 6.1 Sol
+  High call completed through the existing Lab API-credit route in the same chat,
+  explicitly read the portable Foundation/policy and wrote the readiness handoff.
+  The next GUI selection is Opus High again; the server records last-used GPT until
+  a later handoff. Reconcile model choice before a CLI continuation. No native
+  Codex discovery, reverse handoff or general intake is claimed.
 - Retained: Lab's two-review default, unresolved-blocking-finding criteria and
   holds (general intake, retirement, #114 delivery), grants and network scopes.
   Both schedules remain disabled; no new schedule is selected.
@@ -80,7 +89,7 @@ and native qualification stay separate.
 | [#5] | Park | The staging-boundary investigation was accepted by the owner on 13 October as a no-fix result with stated limits. Remediation and recovery were not exercised. | Remains the optional defence method's open proof. Resume only with an authorized target and a real finding to carry through a fix check. |
 | [#30] | Completed | Responsibility placement is in 0.2.0; the reusable optional response template is delivered in Foundation 0.2.1. Issue closed on 14 November. | The template activates no integration, monitor or automatic corrective-code deployment. A project's live response still needs its selected authority, recovery and proof. |
 | [#32] | Finish | Real gap. Bounded trials exist. Unattended operation, approval handling and account-wide isolation are not qualified. Holds stand. | Retitle to helper and environment boundaries. Remaining: request to responder to useful progress on the installed version, with #34; history preserved before any environment is removed; the rootless-container versus VM comparison only once its operator, test area and recovery are agreed. |
-| [#34] | Finish | Manual Stable 0.1.9 update, same-chat useful continuation and preserved history are observed. A later target-only stop trial still exited125 and was rolled back. | Review the staged bounded native stop correction, then qualify actual clean stop and unexpected-exit recovery. Executed complete rollback, boot/login renewal and unattended updates remain distinct work. |
+| [#34] | Finish | Manual Stable 0.1.9 update and preserved history are observed. After the failed target-only trial, the repaired private native route passed one idle clean manual stop/start and one unexpected-exit recovery. | Preserve these scoped results. Executed complete rollback, active-task recovery, boot/login renewal and unattended updates remain distinct work; a successful idle trial does not clear them. |
 | [#43] | Park | Not admitted (triage of 16 October). Written as an AgentOps feature. | If revived, an optional general method for developing rough ideas. First check whether a selected method package already covers it. |
 | [#44] | Park | Triage of 16 October: specify only for a demonstrated release gap. No leak is established. | Product release checks belong to each product's own project. Here, admit a small fix only if a release candidate shows a missing gate. No recurring defence automation. |
 | [#45] | Park | Not planned (16 October). | 0.2.0 keeps a small project definition. Revisit on a real bootstrap problem or configuration drift that the native setup cannot resolve. |
