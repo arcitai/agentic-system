@@ -1,6 +1,6 @@
 # Qualification
 
-Revision: 0.2.1 · Updated: 2026-11-14
+Revision: 0.2.2 · Updated: 2026-11-14
 
 This record distinguishes source review, disposable exercises and observed native
 operation. A package release does not qualify another host, every future update
@@ -52,7 +52,7 @@ The optional Entry/Defence methods were not installed in Lab.
 The first bootstrap was injected but its external `@` policy import was not
 expanded. A plain instruction route replaced it. The next turn retained the old
 provider context, so that turn was not counted as repair proof. After a necessary
-operator reload, native instructions were re-read; the repaired bootstrap then led
+operator-controlled Lab VM restart, native instructions were re-read; the repaired bootstrap then led
 the same resumed conversation to read AGENTS and policy by path before drafting.
 The harness no longer injected AGENTS, so the route explicitly loaded it too.
 That proves this observed route-following, not automatic policy-content injection,
@@ -62,12 +62,54 @@ Before that reload, an idle consistent SQLite backup and all 138 non-DB userdata
 files were transferred and hash-verified on the operator host. An exact guest TERM
 under a temporary Restart=no override did not stop the outer service within ten
 seconds. The failed assertion is retained: it is not clean-service-stop proof.
-The guest server changed PID; all 8 threads, 534 pre-existing terminal runs and
+Later native boot and host journal evidence corrected the initial process-reload
+interpretation: T3's shutdown span succeeded and its main process exited 130;
+ExecStopPost stopped the Lab VM, then the active control target's Upholds relation
+started a new service invocation despite Restart=no and NRestarts=0. The guest
+kernel rebooted. The physical host and parent controller did not reboot.
+All 8 threads, 534 pre-existing terminal runs and
 2,247 pre-existing messages remained, integrity was ok, and the same conversation
 completed further useful work after reconnect. The temporary override was removed;
 the original unit bytes and Restart=on-failure were restored. No host/gateway restart
 or worker retirement occurred. Ordinary clean stop, rollback and unattended
-boot/update qualification remain open under #34/#83.
+boot/update qualification remain open under #34/#83. The earlier process-only
+summary is superseded by this diagnosis; its failed assertion remains evidence.
+
+At 09:14–09:16 UTC, a reviewed target-only trial removed just T3 from Upholds,
+preserving startup edges and other members. Manual stop then remained respected
+for 60 seconds, but the main exit was 125 and there was no new successful native
+shutdown span. It failed clean-stop qualification. The exact original target was
+restored and T3 availability recovered. Integrity passed; eight threads, all 536
+terminal runs and 2,252 messages remained. Existing VM-local API/HTTP/DNS
+forwarders could bounce or warm the VM, so the trial does not show that the VM
+remained stopped. The parent and other controllers retained their identities.
+
+A subsequent bounded private ExecStop adapter and service/target correction is
+staged, not installed or qualified. Its read-only check validated the selected
+T3 process on Z13 without signalling. Both requested Fable High review attempts
+hit the provider's session limit without a verdict; the provider reported reset
+at 13:20 Europe/Copenhagen. There is no fallback or repeated quota probe. #34
+tracks the next independent review and native stop/recovery test. No new Agentic
+System runtime, daemon, privilege, network grant or scheduling layer was added.
+
+[PR #132](https://github.com/arcitai/agentic-system/pull/132) merged
+at `418b6a5084d089a1b0adc977617b6a95e4fa86ec`, with the same tree as its final
+independently accepted candidate, and was tagged/released as 0.2.1. Exact-head
+and merge CI passed all 97 tests and the package checks. Foundation 0.2.1's
+optional response template was first authored/uploaded/read back in Notion, then
+deliberately exported; its complete staged package was installed and verified
+in Lab and the owner assistant. Entry/Evaluate/Defence retained their 0.2.0
+editions. The response remains inactive. The same native conversation then
+completed the read-only lifecycle diagnosis on the installed 0.2.1 sources.
+Evaluate was discovered but was not loaded or used.
+
+Native Git history was completed from the verified local release bundle using
+Git's supported unshallow fetch; both existing worktrees stayed on 418b6a5 with
+unchanged bindings and no working-file delta. The earlier shallow-history
+comparison error is retained. The corrected reconciliation reports expected
+changes from 0.2.0 and in-sync declaration/four skill distributions, not an atomic
+Notion workspace freeze or a live CI publication. The dedicated limited publisher
+connection and its live qualification remain open under #122.
 
 The owner assistant’s three shared capabilities were updated to 0.2.0 after comparing
 installed bytes with the released 0.1.34 originals and retaining recovery copies.
