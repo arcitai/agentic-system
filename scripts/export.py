@@ -47,6 +47,9 @@ def portable_skill(text, name, version, updated, title, bundled, hints=None, lis
         kept.append(line)
     while kept and not kept[0].strip():
         kept.pop(0)
+    # Newer Skills API downloads keep the authored H1. Older renderings omit
+    # it, so only those need the previous export's title restored.
+    has_heading = bool(kept and re.fullmatch(r"# .+", kept[0]))
     restored = []
     for line in kept:
         first, *rest = line.split("<br />")
@@ -87,7 +90,9 @@ def portable_skill(text, name, version, updated, title, bundled, hints=None, lis
     text = re.sub(r"(?<![\w`\]])([^\n()`\[\]]*?[^\s()`\[\]]) \(`([^`\s]+\.md(?:#[^`\s]*)?)`\)", labelled, text)
     text = re.sub(r"`([^`\s]+\.md(?:#[^`\s]*)?)`", bare, text)
     header = (f"---\nname: {name}\ndescription: {meta['description']}\nlicense: MIT\nmetadata:\n"
-              f'  version: "{version}"\n  updated: "{updated}"\n---\n\n# {title or derived or name}\n\n')
+              f'  version: "{version}"\n  updated: "{updated}"\n---\n\n')
+    if not has_heading:
+        header += f"# {title or derived or name}\n\n"
     return header + text.rstrip("\n") + "\n", unresolved
 
 
@@ -101,6 +106,8 @@ def export(root, snapshot_dir, key, title=None):
         errors = [e for e in errors if e not in first]
     if errors or item is None:
         raise ValueError("; ".join(errors) or f"{key}: not in the manifest")
+    if item.get("status", "active") != "active":
+        raise ValueError(f"{key}: retired or renamed artifacts are not export targets")
     if item["owner"] != "notion" or item["kind"] != "skill" or not item.get("path"):
         raise ValueError(f"{key}: only Notion-owned skills with a Git export path are exported")
     snap = json.loads((snapshot_dir / "snapshot.json").read_text(encoding="utf-8"))
@@ -154,7 +161,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--snapshot", type=Path, required=True)
     parser.add_argument("--key", action="append", required=True)
-    parser.add_argument("--title", help="H1 title for a first export (default: the existing export's title)")
+    parser.add_argument("--title", help="Fallback H1 when Notion omits it (default: the existing export's title)")
     args = parser.parse_args(argv)
     results = []
     for key in args.key:

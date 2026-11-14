@@ -1,11 +1,55 @@
 # Qualification
 
-Revision: 0.1.34 · Updated: 2026-11-06
+Revision: 0.2.0 · Updated: 2026-11-14
 
 This record distinguishes source review, disposable exercises and observed native
 operation. A package release does not qualify another host, every future update
 or an application deployment. Detailed private transcripts, identities and state
 remain with the installation; public issues track the remaining acceptance work.
+
+## Agent-led transition: current observations (13–14 November 2026)
+
+The owner selected the agent-led framework revision. The public Notion authoring
+edition, source exports and diagrams now describe one continuous project agent,
+with optional helpers and project-selected domain methods. Earlier rows below
+retain their original dates and outcomes; they are not current default instructions.
+
+The operator manually updated the idle Lab server from official T3 Stable 0.1.6
+to 0.1.9, matching the sole retained Mac Beta client. The release archive digest
+was checked. A consistent idle SQLite backup and an archive of the remaining
+userdata were verified before the service change. Only the binary version path
+changed; broker bindings and service settings were retained. Native CLI readback
+and the Mac GUI opened the same project conversation and its earlier messages.
+The chat is now named Project agent and remains pinned. All eight Lab thread
+records and all 531 terminal run outcomes remain present; the two schedules stay
+disabled. This is manual update/reconnect proof, not unattended boot, clean-stop
+or rollback qualification.
+
+The legacy T3 service had no active runs or enabled schedules. It was stopped and
+disabled. A cold SQLite reflink passed integrity checking and retained its 693
+thread records; its original profile, provider history and source worktrees remain.
+Its connection was removed only from this Mac's T3 client. The active GUI now
+shows Lab alone. Alpha and Nightly application bundles were moved reversibly to
+Trash; their profiles and history were not removed. OSM, Bridge and OpenPaperDesign
+product development stays in Codex.
+
+Source checks, final independent Fable 5.2 High reviews and portable staging are
+recorded on the delivery PR. Native skill adoption and a useful post-adoption
+model task are separate checks; source tests do not establish those. General
+intake, retirement and #114 delivery remain held, with both Lab review perspectives
+and blocking-finding criteria retained. No new network grant or credential was
+introduced.
+
+Host upkeep: removal of a pip download cache and standard generated Rust build
+subdirectories from two retired T3 worktrees increased actual free space from
+about 8 GiB to about 29 GiB. Evidence, captured targets and source were preserved.
+The root filesystem remains about 96% used. A fresh Omarchy/Arch update check
+failed because the Warp repository signing key is unknown and its keyring is not
+writable in the unprivileged check. No OS upgrade or host reboot was performed by
+the operator. Repair of that native keyring requires an authorized admin window;
+PGP verification was not disabled.
+
+## Earlier qualification (unchanged observations)
 
 | Boundary | Observed evidence | Limit / next check |
 | --- | --- | --- |

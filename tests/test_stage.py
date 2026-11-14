@@ -17,7 +17,7 @@ spec.loader.exec_module(module)
 class StageTests(unittest.TestCase):
     def source_fixture(self, root):
         source = root / "source"
-        shutil.copytree(ROOT / "agent-ops", source / "agent-ops")
+        shutil.copytree(ROOT / "entry", source / "entry")
         shutil.copy2(ROOT / "LICENSE", source / "LICENSE")
         shutil.copy2(ROOT / "VERSION", source / "VERSION")
         return source
@@ -77,8 +77,8 @@ class StageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             source = self.full_source_fixture(root)
-            shutil.copytree(source / "agent-ops/agentic-agent-ops",
-                            source / "adlc/agentic-agent-ops")
+            shutil.copytree(source / "entry/agentic-entry",
+                            source / "defence/agentic-entry")
             with self.assertRaises(ValueError):
                 module.stage(module.ALL, root / "output", source)
             self.assertFalse((root / "output").exists())
@@ -89,7 +89,7 @@ class StageTests(unittest.TestCase):
             source = self.full_source_fixture(root)
             secret = root / "private"
             secret.write_text("never stage")
-            (source / "adlc/agentic-review/leak").symlink_to(secret)
+            (source / "defence/agentic-security/leak").symlink_to(secret)
             with self.assertRaises(ValueError):
                 module.stage(module.ALL, root / "output", source)
             self.assertFalse((root / "output").exists())
@@ -121,7 +121,7 @@ class StageTests(unittest.TestCase):
                             "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
                             "commit", "-qm", "Unrelated"], cwd=root, check=True)
             source = self.source_fixture(root)
-            manifest = module.stage("agent-ops", root / "output", source)
+            manifest = module.stage("entry", root / "output", source)
             self.assertIsNone(manifest["sourceRevision"])
             self.assertIsNone(manifest["sourceModified"])
 
@@ -136,15 +136,15 @@ class StageTests(unittest.TestCase):
             subprocess.run(["git", "-c", "user.name=Fixture", "-c",
                             "user.email=fixture@example.invalid", "-c", "commit.gpgsign=false",
                             "commit", "-qm", "Fixture"], cwd=source, check=True)
-            secret = source / "agent-ops/agentic-agent-ops/.env"
+            secret = source / "entry/agentic-entry/.env"
             secret.write_text("PRIVATE=must-not-stage\n")
-            manifest = module.stage("agent-ops", root / "output", source)
+            manifest = module.stage("entry", root / "output", source)
             self.assertIsNotNone(manifest["sourceRevision"])
             self.assertFalse(manifest["sourceModified"])
             self.assertFalse(any(name.endswith(".env") for name in manifest["files"]))
-            self.assertFalse((root / "output/skills/agentic-agent-ops/.env").exists())
+            self.assertFalse((root / "output/skills/agentic-entry/.env").exists())
             (secret.parent / "untracked.txt").write_text("not reviewed")
-            second = module.stage("agent-ops", root / "second", source)
+            second = module.stage("entry", root / "second", source)
             self.assertTrue(second["sourceModified"])
             self.assertFalse(any(name.endswith("untracked.txt") for name in second["files"]))
 
@@ -172,7 +172,7 @@ class StageTests(unittest.TestCase):
             marker = target / "local-change"
             marker.write_text("keep")
             with self.assertRaises(FileExistsError):
-                module.stage("adlc", target)
+                module.stage("defence", target)
             self.assertEqual(list(target.iterdir()), [marker])
             self.assertEqual(marker.read_text(), "keep")
 
@@ -180,14 +180,14 @@ class StageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             source = root / "source"
-            shutil.copytree(ROOT / "agent-ops", source / "agent-ops")
+            shutil.copytree(ROOT / "entry", source / "entry")
             shutil.copy2(ROOT / "LICENSE", source / "LICENSE")
             shutil.copy2(ROOT / "VERSION", source / "VERSION")
             secret = root / "private"
             secret.write_text("never stage")
-            (source / "agent-ops/agentic-agent-ops/leak").symlink_to(secret)
+            (source / "entry/agentic-entry/leak").symlink_to(secret)
             with self.assertRaises(ValueError):
-                module.stage("agent-ops", root / "output", source)
+                module.stage("entry", root / "output", source)
             self.assertFalse((root / "output").exists())
 
     def test_dangling_destination_symlink_is_refused(self):

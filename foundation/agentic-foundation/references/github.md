@@ -1,10 +1,10 @@
 # Prepare repository work tracking and delivery
 
-Revision: 0.1.24 · Updated: 2026-10-27
+Revision: 0.2.0 · Updated: 2026-11-13
 
 Inspect the actual repository, owner, default branch, existing instructions,
 checks, labels, Projects and deployment rules. Preserve established conventions.
-Use GitHub's native CLI/API/UI; Agentic Systems has no label cache or workflow database.
+Use GitHub's native CLI/API/UI; Agentic System has no label cache or workflow database.
 Check the authorized account and exact destination before changing them.
 
 ## Qualify the connection
@@ -31,7 +31,7 @@ and supported endpoints fit better. Do not build an App backend or token service
 just to satisfy this recipe. If no native route provides a required capability,
 record the limitation rather than falling back to a broad personal login.
 
-Keep the lead's coordination/delivery credential outside worker environments.
+Keep the project agent's coordination/delivery credential outside worker environments.
 Workers need their selected files and tools; remote write access is conditional.
 An inherited token, credential store/helper, SSH key or forwarding socket that
 exceeds the worker's boundary holds dependent execution until it is excluded or
@@ -61,7 +61,7 @@ first authorized commit; no extra test commit or credential change is required.
 
 For T3 0.0.45, use **Settings → Source Control → Rescan** after authenticating on
 the server, then confirm its account/status in that environment. This is native
-GitHub integration; there is no separate Agentic Systems login. See
+GitHub integration; there is no separate Agentic System login. See
 [T3 source control](https://github.com/pingdotgg/t3code/blob/v0.0.45/docs/user/source-control.md).
 
 ## One work-status source
@@ -80,13 +80,13 @@ ideas into blocked tasks. Read the accepted priority before picking backlog work
 
 Use labels for useful categories such as bug, feature, research, security and
 scope/area. Reuse real names and colors from GitHub. Avoid a second set of labels
-that mirrors Status. A GitHub edit is reflected natively without Agentic Systems syncing it.
+that mirrors Status. A GitHub edit is reflected natively without Agentic System syncing it.
 
 Inspect first, then create only missing resources. For a new org Project:
 
 ```sh
 gh project list --owner YOUR_ORG
-gh project create --owner YOUR_ORG --title "Agentic Systems" --format json
+gh project create --owner YOUR_ORG --title "Agentic System" --format json
 gh project link PROJECT_NUMBER --owner YOUR_ORG --repo YOUR_ORG/YOUR_REPO
 gh project field-list PROJECT_NUMBER --owner YOUR_ORG --format json
 ```
@@ -114,19 +114,19 @@ GitHub closure reason are different records.
 
 An issue can come from anyone with access to the repository. Identify trusted
 owner decisions independently from its body. The initial route is explicit:
-give the lead the issue or an accepted backlog with its execution mandate.
+give the project agent the issue or an accepted backlog with its execution mandate.
 
 For later webhook/scheduled intake, use a qualified native T3/harness facility.
 Authenticate the sender, bound repositories/actions, read current state and
 reconcile duplicate delivery. A valid GitHub webhook signature authenticates the
 event, not every issue author's instruction. Do not place a persistent agent on
-an untrusted PR runner or build another Agentic Systems queue.
+an untrusted PR runner or build another Agentic System queue.
 
 ## Checks and delivery
 
 Use the application's real test/build/lint checks. Keep workflow permissions
 minimal, dependencies/actions reviewed and pinned, execution bounded and secrets
-out of untrusted PRs. Do not carry Agentic Systems' method-validation workflow into an
+out of untrusted PRs. Do not carry Agentic System's method-validation workflow into an
 application as a substitute for meaningful application tests.
 Identify the relevant dependency-update and vulnerability-response route. Inspect
 effective workflow/token permissions, and native dependency alerts and secret

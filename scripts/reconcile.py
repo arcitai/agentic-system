@@ -23,13 +23,13 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = "docs/sources.json"
-GROUPS = ("foundation", "agent-ops", "adlc")
+GROUPS = ("foundation", "entry", "evaluation", "defence")
 KEY = re.compile(r"^[a-z]+/[a-z0-9]+(?:-[a-z0-9]+)*$")
 LABELS = {"notion": {"authoring-edition", "export"}, "git": {"released-reference", "main-working"}}
 STATUSES = {"active", "renamed", "retired"}
 KINDS = {"page", "database", "declaration", "skill", "doc", "code", "asset"}
 PRIVATE = (".agentic-system-task", ".factory-task", ".claude", ".git", "dist", ".venv")
-REPO_URL = "https://github.com/arcitai/agentic-systems"
+REPO_URL = "https://github.com/arcitai/agentic-system"
 RELEASED_STATUS = "Released reference"
 # What binds an artifact to its source. A Notion-owned skill export is bound by its docs/sources.json binding
 # (written by scripts/export.py); a declaration export by its recorded canonical hash; a released reference by
@@ -261,6 +261,13 @@ def bundle_differences(root, path, canonical_files):
         elif rel == "SKILL.md":
             if normalize_skill(file_bytes(entry).decode("utf-8")) != normalize_skill(local[rel].decode("utf-8")):
                 differ.append(f"{rel}: instructions or link targets differ")
+            # Earlier Skills API renderings omitted H1, so those comparisons
+            # still use the legacy normalization. When the original includes
+            # its title, that authored title is part of the selected edition.
+            canonical_heading = re.search(r"^# (.+)$", file_bytes(entry).decode("utf-8"), re.M)
+            local_heading = re.search(r"^# (.+)$", local[rel].decode("utf-8"), re.M)
+            if canonical_heading and (not local_heading or canonical_heading[1] != local_heading[1]):
+                differ.append(f"{rel}: authored heading differs")
         elif hashlib.sha256(local[rel]).digest() != hashlib.sha256(file_bytes(entry)).digest():
             differ.append(f"{rel}: bytes differ")
     differ += [f"{rel}: only in Git" for rel in sorted(set(local) - set(canonical_files))]
@@ -342,7 +349,7 @@ def compare(root, keys, snapshot_dir):
             continue
         if item["kind"] == "declaration":
             text = (Path(root) / item["path"]).read_text(encoding="utf-8")
-            header = re.search(r"Canonical YAML SHA-256 [^:]*: ([0-9a-f]{64})", text)
+            header = re.search(r"^# Canonical YAML SHA-256 \S+: ([0-9a-f]{64})$", text, re.M)
             # The export is a comment-only header, one blank line, then the canonical YAML exactly as hashed.
             head, _, body = text.partition("\n\n")
             actual = hashlib.sha256(body.encode("utf-8")).hexdigest()

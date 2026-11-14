@@ -9,7 +9,7 @@ from pathlib import Path
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
-BUNDLES = ("foundation", "agent-ops", "adlc")
+BUNDLES = ("foundation", "entry", "evaluation", "defence")
 ALL = "all"
 
 
@@ -37,7 +37,7 @@ def source_info(source):
 
 def stage(bundle, destination, source=ROOT):
     if bundle != ALL and bundle not in BUNDLES:
-        raise ValueError("Select foundation, agent-ops, adlc or all")
+        raise ValueError("Select foundation, entry, evaluation, defence or all")
     destination = Path(destination)
     source = Path(source)
     tracked, revision, modified = source_info(source)

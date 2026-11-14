@@ -1,6 +1,6 @@
 # Establish useful project context
 
-Revision: 0.1.23 · Updated: 2026-10-26
+Revision: 0.2.0 · Updated: 2026-11-13
 
 Use during setup or a scoped readiness assessment. Start with the actual repo,
 accepted work and existing documentation. The outcome is enough reliable context
@@ -29,8 +29,8 @@ Leave a short result in the existing adoption record, issue or task: capability,
 owning source, **verified**, **required gap**, or **conditional/not needed**,
 with dated evidence or a next action and responsible role. Explain why a control
 is conditional or unnecessary for this task; do not require a new document to
-hold this result. AgentOps uses it to start ready work and route necessary setup
-repairs. During ADLC, a relevant change reopens that capability's proof, not every
+hold this result. the project agent uses it to start ready work and route necessary setup
+repairs. During accepted work, a relevant change reopens that capability's proof, not every
 previously completed setup step.
 
 ## Find the source before writing
@@ -83,12 +83,18 @@ When work produces knowledge worth keeping, put it in the most specific existing
 | Durable application facts, architecture, dependencies or runbooks | The application's existing README, docs or source, linked from its instructions when discovery needs it |
 | A standing instruction for the whole project | A short addition to the existing AGENTS/CLAUDE or equivalent convention |
 | A repeatable, non-obvious procedure with concrete future use | An amended existing skill first; a focused project skill only for a real gap |
-| Transferable Agentic Systems method | Its owning shared authoring source (Notion in our reference recipe), deliberately exported to a reviewed portable distribution |
+| Transferable Agentic System method | Its owning shared authoring source (Notion in our reference recipe), deliberately exported to a reviewed portable distribution |
 
 Keep an existing wiki that works. A wiki-style docs section is optional and
 needs a retrieval or maintenance benefit; do not reorganize content to fill one.
 Keep one canonical explanation and link to it instead of duplicating it in docs
-and skills. Do not put an application's facts into Agentic Systems' shared references.
+and skills. Do not put an application's facts into Agentic System's shared references.
+
+Classify material before keeping it: **durable** (an accepted decision, fact or method with an owner), **provisional** (a working hypothesis or pending decision, with the trigger that confirms or drops it) or **source-only** (evidence kept as a link or excerpt pointing to its original). Keep conclusions and their sources, not raw chats or transcripts; the native tool retains full history.
+
+Give each current topic one stable identity, such as a key, page or issue, and rewrite its current statement concisely in place. Preserve originals and meaningful history through the home's native versions or links instead of copies. Record a relation only with a concrete meaning, such as supersedes, depends on, implements or contradicts, and its evidence.
+
+Retrieve by the task, its controls and authority, and evidence from a comparable time and version, not by the latest import or edit. Report specific needs-attention outcomes: a failed or partial intake, an unknown write, conflicting sources, a due review or a coverage gap. A global truth or health score hides them. A save is complete only after the saved or public result is read back; retry with the same identity rather than creating a second copy.
 
 ## External dependencies
 
@@ -168,7 +174,7 @@ Use a small verification note near a claim about changing external/runtime state
 `Verified: <claim>; <revision/version/environment>; <date>; <check or evidence>.`
 Use a compact version table when an independently versioned combination matters.
 Use the project's revision convention for edited documents and skills. In this
-Agentic Systems package, source revision/date appears at the top; Git and PRs hold the
+Agentic System package, source revision/date appears at the top; Git and PRs hold the
 change history. Do not impose a new metadata system on an adopting application
 that already has a useful convention. A new date alone is not verification: preserve the last
 observed baseline and mark a changed, untested claim as unverified. Narrow a note
@@ -185,10 +191,10 @@ claim within scope or route it to the project's actual owner, preserving dated
 historical entries. This needs no watcher or new log.
 
 Foundation establishes the relevant sources and initial checks. During accepted
-work, specification identifies affected context, implementation updates it with
-the change, and independent review checks it against the candidate and evidence.
+work, the same working agent identifies and updates affected context with the
+change; the project's selected review checks it against the candidate and evidence.
 Authorized delivery reads back the actual result before updating operational
-claims. AgentOps follows up when a task, dependency update or incident reveals
+claims. the project agent follows up when a task, dependency update or incident reveals
 concrete drift. Repair within the mandate or record the specific gap and trigger;
 do not invent periodic sweeps, a new scheduler or a separate approval for each file.
 

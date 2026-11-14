@@ -1,155 +1,116 @@
-# System definition and source ownership
+# Definition and source ownership
 
-Revision: 0.1.34 · Updated: 2026-11-06
+Revision: 0.2.0 · Updated: 2026-11-14
 
-The [Notion YAML code block](https://gustavanderson.notion.site/4056d2e17f56811b96fec7b970741916) is Agentic Systems Lab's only editable declaration. [system.yaml](../system.yaml) is a version-marked export: one small description of its purpose, context, roles, selected methods, review
-settings, automation and routine ideas and evaluation proposals. An adopting project chooses its own declaration and context home. A repository is optional for non-software work.
+The [Notion YAML block](https://www.notion.so/4056d2e17f56811b96fec7b970741916)
+owns Lab's declared composition. [system.yaml](../system.yaml) is its version-marked
+export. The project agent interprets it; it grants no access and applies no settings.
+An adopting project chooses its own small definition and context home. A repository
+is optional outside software work.
 
-## Declaration, configuration and evidence
+## What the declaration describes
 
-AgentOps reads the declaration and resolves its linked methods. It does not start
-an Agentic Systems service. Listing a role does not launch an agent; listing a recipe does
-not schedule it. `status: candidate` and the unqualified recipe status are deliberate.
-Current owner instructions, project rules and holds retain their authority.
+`work` selects one continuous project agent and conditional help. `model` records
+Lab's existing owner-selected model and reasoning setting. `methods` links to the
+selected shared capabilities. `policy` routes to Foundation's portable rules and
+records Lab's retained two-review default. That count is a project choice, not a
+framework minimum. `workspace` states the selected client/channel and target
+version; its `installed_state` routes to private native proof. `operations` and
+`qualification` keep scheduling, maintenance ownership, evidence and holds visible.
 
-The fields are our small project convention, inspired by Warp, not an Agent Skills
-standard or a compatible Warp configuration. Native tools enforce only their
-actually configured controls. CI, access permissions and selected runtimes can
-enforce parts of the method after setup; prose and YAML do not apply those controls.
-Future mapping to a native consumer requires its own accepted work and live proof.
-No parser, reconciler, workflow engine or synchronization service is added here.
+These are a small project convention, inspired by Warp, not an Agent Skills
+standard or a compatible Warp configuration. A listed method, recipe or model is
+not installed by being named. Native tools enforce their configured controls.
+Requested, approved, applied and observed settings remain separate facts.
 
-`context` identifies the entry, library and native records. `agents` names the
-lead and optional bounded setup/evaluation roles; `work_modules` selects domain
-methods without requiring a separate agent for every skill. `policy` selects
-review settings and references the AgentOps skill's `references/policy.md` in its
-native Files folder. Limits must be made concrete for an actual run. `evaluation`
-lists proposals separately from qualified benchmarks. `operations` links to ideas and records
-open and selected Lab choices; it is not an observed inventory of enabled native automations.
-`qualification` routes to evidence, which must describe the actual installation.
+## One original per artifact
 
-## One editable original
-
-| Artifact | Owning source in this recipe |
+| Artifact | Editable original |
 | --- | --- |
-| This project's declared composition and source routes | The Notion YAML code block; `system.yaml` is a labelled export |
-| Shared architecture, authored skills and common policies | [Public Notion guide and Agentic Systems Skills](https://gustavanderson.notion.site/Agentic-Systems-4046d2e17f568159a603de2dd6b91c2a) |
-| Code, tests, CI/CD, applied native configuration, technical tasks and PR evidence | Their native repository/tool/tracker |
-| Detailed history, logs and usage | The native agent tools |
-| Credentials and private installation facts | Native secret stores and existing private project records |
+| Lab's declared composition | The Notion YAML block; the Git file is an export |
+| General method, three shared core skills and their references | The public Notion guide and Skills library |
+| Optional defence skill | Its Git directory; Notion holds a released reference |
+| Code, tests, delivery and qualification records | Their native repository, tool or tracker |
+| Diagram artwork for a reviewed edition | The versioned Paper document and its derived SVGs in `docs/diagrams`; Notion embeds their rendering |
+| Detailed conversations, runs and usage | The native agent tools |
+| Credentials and private installation facts | Native secret stores and private installation records |
 
-Notion owns and explains the declaration. AgentOps reads it there, or uses an explicitly selected reviewed export at its recorded version. A requested composition or shared skill/policy change ends in its owning Notion source. Produce a versioned Git export only for a reviewed release, reproducible experiment or migration. Exports record the canonical code block's UTF-8 SHA-256 (LF, trailing newline) and the canonical code block's last-edited timestamp as well as the declaration version. Preserve that source/version and content snapshot; do not silently refresh it mid-run. No agent maintains parallel originals or automatic two-way synchronization.
-Notion is replaceable; Databricks remains a parked enterprise recipe, not a dependency.
+A method, composition or policy edit ends in its owning source. A deliberate export
+pins the selected edition for review, release, a reproducible experiment or migration;
+never refresh a running task silently. Notion is replaceable and is not a runtime
+dependency. An exported declaration records the canonical block's UTF-8 SHA-256
+(LF, trailing newline), edit timestamp and definition version.
 
-The existing Git skill bundles remain the released reference for their own
-versions. Notion's core authoring edition is labelled separately from those
-released references. Before a source cutover, review and verify the full portable
-export, required references and intended native loading. A saved page, native
-skill designation or valid YAML is not installation/discovery proof. Benchmarks
-must fix the declaration and skill revisions as well as task/environment inputs.
+For 0.2.0 the portable groups are `foundation/`, `entry/`, `evaluation/` and
+`defence/`. Entry is optional outside assistance; Foundation prepares and maintains
+the garden; Evaluate compares alternatives when evidence can change a decision.
+The internal AgentOps role, Brief and software stage skills leave the active
+distribution. Their stable manifest keys, Notion pages, supporting files, releases
+and dated evidence remain as history. Responsibilities from Brief now live in
+Entry's status guidance and Foundation's continuity rules. A software project
+selects sufficient native, project or specialist methods for its own work.
 
-## Portable skill exports
+The [method history](https://www.notion.so/4176d2e17f56813b891fe3d3db612c52)
+and the `v0.1.34` tag retain the earlier arrangement. Historical references inside
+Foundation identify their observed versions; they are not current installation
+proof or compulsory onboarding instructions.
 
-The shared core is authored in the public Agentic Systems Skills library. The `0.1.23`
-distribution introduced exports of `agentic-foundation`, `agentic-agent-ops`, `agentic-entry`
-and `agentic-evaluate`, with their complete supporting resources. Foundation's
-references retain the accepted host, recovery, owner-entry and optional method
-migration work from #85, #92 and #94. Updating this source does not install it in
-an existing project.
+## Deliberate export and reconciliation
 
-Software and defence skill files keep their reviewed source versions; their
-Notion entries identify them as released references. The `adlc/` directory is a
-retained distribution path, not a requirement that the shared evaluator or every
-Agentic Systems project is software work. Native loading and one real Lab task remain
-separate acceptance work.
+[`docs/sources.json`](sources.json) identifies each artifact by stable Key, owner,
+label and native identity. Do not reuse retired keys for different artifacts.
 
-For 0.1.33, `scripts/export.py` exports `agentic-agent-ops` and `agentic-entry` 0.1.32 and
-the first portable `agentic-brief` 0.1.32, which both reference, from the canonical revisions
-recorded in `docs/sources.json`. Foundation and Evaluate re-export byte-identically and gain
-their bindings. Existing software/defence versions remain unchanged.
+- Notion-owned originals reach Git through a frozen read-only Skills API snapshot
+  and `scripts/export.py`. The export restores portable frontmatter, headings and
+  relative links, copies supporting bytes, and binds the revision and version.
+  Unresolved links are reported rather than guessed. A changed original is export
+  pending; Git never overwrites it.
+- Git-owned released references reach the existing Notion page through
+  `scripts/publish.py`: complete files and Version, Status and release-pinned Source.
+- A pending editorial handoff stays visible until its actual canonical readback
+  contains the intended change.
+- Git-owned explanations, checks, diagram editions and technical records are
+  published by this repository.
 
-For 0.1.26, the native Skills API snapshot supplies AgentOps/Foundation and all
-their supporting files. The portable export normalizes native frontmatter,
-Notion-only preambles, line breaks and inline-code markup, restoring portable relative reference links; supporting files retain
-exact source bytes. Existing software/defence versions remain unchanged. The PR
-records the selected native snapshot and file hashes separately from installation proof.
+`reconcile.py` runs on pull requests and main pushes, reports NO-OP, CHANGES,
+ATTENTION, CONFLICT, or UNVERIFIED when originals were not read, and fails on
+conflicts. It catches unbound edits to exports, unversioned released-reference
+changes, active missing artifacts, unowned/private paths and source-ownership
+changes lacking a decision record. With a canonical snapshot it also checks the
+declaration header and the actual body hash. IN-SYNC needs
+canonical, bound and Git versions to agree, including instructions, link targets
+and required resource bytes. A successful source check is not installation proof.
 
-A maintainer changes an owning Notion source and explicitly exports the selected
-revision and resources. Review and record the actual readback, then freeze the
-portable candidate for checks and release. Do not infer that merely fetching a
-page exercised Notion's Skills API or installed its directory in a harness.
+## Released-reference publication
 
-## Documentation reconciliation and propagation
+Publication is serialized from main or the matching `v*` tag. The status
+`agentic-system/docs-propagation` becomes pending before any write. Writes use the
+existing page identity. An uncertain result is read back before one same-identity
+retry. A newer Notion edition is not downgraded. A page outside Released reference
+status is never overwritten without an explicit manifest cutover decision.
 
-[`docs/sources.json`](sources.json) gives each public artifact a stable Key, its owner and its
-label. The owner is the Notion page that is the original, or the Git path that is the original
-or a deliberate export. Propagation follows that ownership; there is no two-way sync:
+After writes, read back every active released reference's files, body and
+Version/Status/Source, retaining revision and file hashes. A change without its
+matching release tag stays release pending. Anonymous readback must stay on the
+page's host and contain its expected name, version and first instruction: a 200
+login page or empty shell is insufficient. Missing public proof leaves a visible
+pending checklist. Retired pages are not publication targets.
 
-- **Notion-owned originals** (core skills, the Lab declaration, guide pages) reach Git only
-  through a deliberate export. `scripts/notion_snapshot.py` freezes the originals read-only;
-  `scripts/export.py` restores the portable form from Notion's rendering, copies supporting
-  files byte for byte and records the canonical revision as the export's binding. A newer
-  original is "export pending"; Git never overwrites it.
-- **Git-owned released references** (the software and defence skills) reach their existing
-  Notion Skills pages through `scripts/publish.py`: the whole skill directory plus the Version,
-  Status and Source properties, with Source pinned to the release commit.
-- **Editorial changes to a Notion page** are recorded as a `pending` handoff with its exact
-  before/after text and holder, until the canonical readback shows them applied.
-- **Git-owned explanations** (README, docs, code) are published natively by this public
-  repository.
+Publisher success covers only the released-reference pages. It does not read back
+the entire public guide or the Skills catalogue and its filters. The publisher is
+not operational until its bounded live qualification passes. The first bounded live
+publish, a read-only rerun and browser readback of the coherent public set remain
+separate qualification work under #122. The workflow remains inactive until its
+dedicated connection is limited to the guide subtree, its environment is restricted
+to main and `v*` tags with a required reviewer, and tag creation is restricted.
+No broad personal token is added to CI. An ordinary source revision is not a
+release, and a saved page, valid package or positive review is not native discovery
+or use.
 
-`scripts/reconcile.py` runs on every pull request and every main push (each push in its own CI
-concurrency group) and always reports a result:
-NO-OP, CHANGES, ATTENTION, CONFLICT, or UNVERIFIED when the originals were not read. These are
-reported, and a conflict fails the check:
+## Credit
 
-- a Git edit of an export without a new binding (`docs/sources.json` for skills, the recorded
-  hash for the declaration), even if its version metadata is bumped;
-- an edited released reference without a new version line;
-- an ownership change (moving a Notion original to Git, by key, path or page id, is a conflict
-  unless the entry carries a `cutover` record naming the owner decision);
-- a declaration export whose header block holds anything but comments;
-- a removed artifact still marked active;
-- an unowned path or a private path.
-
-IN-SYNC also requires the canonical, binding and Git versions to agree. With a snapshot it compares every distribution with its original, including link
-targets and supporting bytes, and lists the pending exports and handoffs.
-
-Publication runs one at a time from main or a `v*` release tag. The commit status
-`agentic system/docs-propagation` is set pending before any write. Each write is by page identity, and
-an uncertain write is read back before one same-identity retry. A Notion copy newer than Git is
-never downgraded, and the publisher never writes a page whose Status is not "Released reference"
-unless the manifest records a `cutover`. After all writes, every released reference is read
-back: its files, body and Version/Status/Source, with each page's revision and file hashes kept
-as the receipt. A released-reference change without its release tag stays "release pending".
-For each affected page, an anonymous request must stay on the page's host and return its
-expected content: name, version and first instruction. HTTP 200 alone is not enough, since a
-login page or an empty app shell also returns 200. Anything less leaves a visible pending public
-browser readback that lists the exact pages and expected content.
-
-A `success` status therefore covers only the released-reference pages: the API readback of the
-whole set, plus anonymous page content for the affected pages. The publisher does not read back
-the guide overview, the skills catalogue and its filters, or anonymous file downloads. These, and
-the first live run itself, wait for the bounded live proof: one authorized live change from a
-release tag, a read-only rerun, and a browser readback of those public views. Until that proof
-the publisher is not operational, and "complete only after the coherent public set is read
-back" (#122) is only partly met. Content templates and other pages outside `docs/sources.json`
-are never planned, and the status rule refuses them.
-
-The workflow stays inactive until a dedicated connection, limited to the public guide subtree
-and the released-reference pages, is provisioned for an environment restricted to main and `v*`
-tags, with a required reviewer and a tag ruleset limiting who may create `v*` tags. The release
-or dispatch workflow runs from the tag's own commit, so those settings, not a workflow step, are
-the boundary. A newer queued propagation run replaces a pending one; a dispatch reruns it. A
-main working revision is never labelled a release: a release is the tag that matches `VERSION`.
-These checks verify sources and their propagation, not installation or adoption.
-
-## Inspiration and credit
-
-The architecture is substantially inspired by Zach Lloyd and Warp's
-[The Factory Stack](https://www.warp.dev/blog/the-factory-stack) and
-[Warp Factories examples](https://github.com/warpdotdev/warp-factory-examples),
-including the principle of versioned agentic system definitions. Their product uses
-its own native configuration tree and runtime. This is an independent adaptation
-to a portable method across domains and native tools, with no compatibility or
-affiliation claim. Arc' It AI branding retains its [separate terms](../assets/branding/README.md).
+Inspired by Warp's [Factory Stack](https://www.warp.dev/blog/the-factory-stack),
+[Factory examples](https://github.com/warpdotdev/warp-factory-examples) and the
+selected sources in the [Reference library](https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8).
+This independent framework makes no compatibility or affiliation claim.
+Arc’ It AI branding retains its [separate terms](../assets/branding/README.md).

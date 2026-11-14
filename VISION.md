@@ -1,38 +1,17 @@
-# Vision
+# Vision and scope
 
-Revision: 0.1.34 · Updated: 2026-11-06
+Revision: 0.2.0 · Updated: 2026-11-13
 
-Help an owner turn ideas, tasks and accepted backlogs into useful decisions and
-verified results across software, BI, defence, research and other work, with less
-coordination and platform maintenance.
+Agentic System is the foundation, framework and operating care around capable agents. It should make a project understandable and workable for a person or agent arriving without the previous conversation.
 
-Agentic Systems is a portable method assembled from native tools. Foundation prepares the
-agent environment, project foundation and operating conditions. AgentOps leads one
-project; domain methods supply the work and checks. Evaluation compares outcomes
-across domains. The optional owner entry routes work to existing project leads.
-Dedicated BI and research bundles are future work; their mention is not a shipped
-capability.
+One continuous project agent normally owns an accepted outcome end to end. The owner chooses the model, optionally with outside planning help. Focused pairs, reviewers, fan-out and other helpers are available when useful. Their topology is a project choice, not a permanent internal AgentOps hierarchy or a compulsory spec-to-specialists pipeline.
 
-Use a small declaration to make the setup concrete. Our reference original is a
-YAML code block in Notion, with versioned Git exports for reviewed distributions
-and experiments. AgentOps interprets it. Native tools enforce actual settings and
-access; Agentic Systems adds no parser, reconciler or execution engine.
+The framework maintains useful context, source ownership, clear authority, enforced access boundaries, proportionate feedback, continuity and recovery. Its skills contain non-obvious procedures and knowledge and load only where relevant. Native harnesses and sufficient project methods own the ordinary work. OSM and particular software methods are optional.
 
-Notion is the current replaceable context home. Code, models, data, applied
-configuration and work records keep their native sources. Keep one editable
-original and deliberate, versioned exports. Choose products to fit the customer
-and task; T3 Code and Notion are reference choices, not architectural requirements.
+The three Foundation areas are Agent Environment, Project Foundation and Operations & Maintenance. Work modules are selected domain methods and checks, not a plugin engine or a requirement for a new repository. A reference library offers useful sources without automatically installing them.
 
-Build on maintained agent tools, trackers, forges and infrastructure. Add no agent
-runtime, provider adapters, usage collector, task database, dashboard, chat relay
-or scheduler. OSM and other personal-method packages remain optional. A later
-hosted product is separate from this method.
+Keep one editable original per artifact and deliberate versioned distributions. Separate intended choices, applied native configuration and observed results. A prompt, diagram, model verdict or YAML declaration is not a security boundary or authority grant.
 
-Start small and preserve each project's useful conventions and local adaptations.
-The owner controls goals and boundaries; admission and delivery can be delegated
-for an explicit scope. Instructions and green checks do not grant authority.
+Do not build an Agentic System daemon, central dispatcher, model router, provider registry, dashboard, session relay, execution store, sync service or scheduler. Native tools should carry those capabilities when actually needed. An external owner-side assistant is optional and must not become the only way to start a project or a private cross-project queue.
 
-Success is useful outcomes with observable defects, rework, human effort, time
-and usage. The next proof is one real Agentic Systems Lab task with qualified source
-access, skill loading, independent review and bounded worker access. Extend the
-recipe from that evidence, rather than making every product example mandatory.
+Lab qualifies concrete questions and learns from useful work. It is not a mandatory stack for adopting projects. Software, research, BI and defence select the methods they need; this repository no longer distributes a general software stage workflow. Existing history and actual access controls survive the simplification.

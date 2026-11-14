@@ -64,6 +64,14 @@ class RealRenderingTests(unittest.TestCase):
         self.assertIn("the upkeep policy ([references/policy.md#persistent-choices](references/policy.md#persistent-choices))", out)
         self.assertEqual(reconcile.normalize_skill(out), reconcile.normalize_skill(notion))
 
+    def test_authored_heading_replaces_the_legacy_export_title(self):
+        notion = "---\nname: agentic-entry\ndescription: Explain the framework.\n---\n\n# Agentic System Entry\n\nUse the current framework.\n"
+        out, unresolved = export.portable_skill(notion, "agentic-entry", "0.2.0", "2026-11-13",
+                                                "Agentic Systems Entry", {"SKILL.md"})
+        self.assertEqual(unresolved, [])
+        self.assertEqual(re.findall(r"^# .+$", out, re.M), ["# Agentic System Entry"])
+        self.assertEqual(reconcile.normalize_skill(out), reconcile.normalize_skill(notion))
+
 
 class ExportCommandTests(unittest.TestCase):
     def setUp(self):
@@ -83,21 +91,27 @@ class ExportCommandTests(unittest.TestCase):
         return folder
 
     def test_git_owned_released_reference_is_refused(self):
-        snap = self.snapshot("skill/factory-review", {"SKILL.md": fixture("factory-review", "notion")})
+        snap = self.snapshot("skill/factory-security", {"SKILL.md": fixture("factory-review", "notion")})
         with self.assertRaises(ValueError):
-            export.export(self.root, snap, "skill/factory-review")
+            export.export(self.root, snap, "skill/factory-security")
+
+    def test_retired_notion_skill_cannot_be_recreated_from_a_stale_snapshot(self):
+        snap = self.snapshot("skill/factory-agent-ops", {"SKILL.md": fixture("factory-agent-ops", "notion")})
+        with self.assertRaisesRegex(ValueError, "retired or renamed"):
+            export.export(self.root, snap, "skill/factory-agent-ops")
+        self.assertFalse((self.root / "agent-ops/agentic-agent-ops").exists())
 
     def test_export_writes_only_its_bundle_records_the_binding_and_removes_stale_files(self):
-        stale = self.root / "adlc/agentic-evaluate/references/old.md"
+        stale = self.root / "evaluation/agentic-evaluate/references/old.md"
         stale.parent.mkdir()
         stale.write_text("x")
         notion = "---\nname: |-\n  agentic-evaluate\ndescription: |-\n  Compare.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nBody line one<br />line two.\n"
         snap = self.snapshot("skill/factory-evaluate", {"SKILL.md": notion, "references/new.bin": {"base64": "AAEC"}})
-        before = {p: p.read_bytes() for p in self.root.rglob("*") if p.is_file() and "adlc/agentic-evaluate" not in p.as_posix() and p.name != "sources.json"}
+        before = {p: p.read_bytes() for p in self.root.rglob("*") if p.is_file() and "evaluation/agentic-evaluate" not in p.as_posix() and p.name != "sources.json"}
         result = export.export(self.root, snap, "skill/factory-evaluate")
         self.assertEqual(result["removed"], ["references/old.md"])
-        self.assertEqual((self.root / "adlc/agentic-evaluate/references/new.bin").read_bytes(), b"\x00\x01\x02")
-        skill = (self.root / "adlc/agentic-evaluate/SKILL.md").read_text()
+        self.assertEqual((self.root / "evaluation/agentic-evaluate/references/new.bin").read_bytes(), b"\x00\x01\x02")
+        skill = (self.root / "evaluation/agentic-evaluate/SKILL.md").read_text()
         self.assertIn('version: "0.1.40"', skill)
         self.assertIn('updated: "2026-11-05"', skill)
         self.assertIn("Body line one\nline two.", skill)
@@ -121,13 +135,13 @@ class ExportCommandTests(unittest.TestCase):
         manifest = self.root / "docs/sources.json"
         data = json.loads(manifest.read_text())
         data["artifacts"].append({"key": "skill/factory-new", "kind": "skill", "owner": "notion", "label": "export",
-                                  "path": "agent-ops/agentic-system-new", "notion": "00000000-0000-0000-0000-000000000000", "public": True})
+                                  "path": "entry/agentic-system-new", "notion": "00000000-0000-0000-0000-000000000000", "public": True})
         manifest.write_text(json.dumps(data))
         notion = "---\nname: |-\n  agentic-system-new\ndescription: |-\n  New.\nnotion_page_id: x\n---\n\nNotion authoring edition · 0.1.40\n\nText.\n"
         result = export.export(self.root, self.snapshot("skill/factory-new", {"SKILL.md": notion}), "skill/factory-new", "Agentic Systems New")
         self.assertEqual(result["files"], ["SKILL.md"])
         self.assertEqual(reconcile.load_manifest(self.root)[2], [])
-        self.assertIn("# Agentic Systems New", (self.root / "agent-ops/agentic-system-new/SKILL.md").read_text())
+        self.assertIn("# Agentic Systems New", (self.root / "entry/agentic-system-new/SKILL.md").read_text())
 
 
 if __name__ == "__main__":
