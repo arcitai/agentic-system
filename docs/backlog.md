@@ -32,8 +32,10 @@ bytes are present), **discovery/loading/use** in a named native invocation, and
   the same Lab and owner assistant adopted Foundation 0.2.1 with exact package
   readback. Lab discovered both selected methods, used Foundation, and completed
   useful assessment, drafting and diagnosis. Evaluate was not loaded or used.
-  The owner's Entry/Evaluate remain 0.2.0. Entry was explicitly read and used;
-  its current cached catalogue was not refreshed or claimed as new discovery.
+  The owner's Entry/Evaluate remain 0.2.0. Entry was explicitly read and used.
+  The caller catalogue was cached at installation; its later native metadata
+  update exposed all three selected descriptions. Their installed files match
+  the release. Fresh-launch/new-context use and all routing cases are not claimed.
 - Instruction route: an unexpanded import and mid-session instruction caching were
   observed. After an operator-controlled Lab VM restart, the repaired injected bootstrap led
   the same conversation to read AGENTS and the selected policy before useful work.
@@ -92,7 +94,7 @@ and native qualification stay separate.
 | [#83] | Finish | Real gap. Guidance is in source. On 13 November the Lab service was started by the operator after a host restart, so its return at boot is not shown. | Retitle: an owner-side assistant is optional and no host coordinator role is required. Observe boot, login and reconnect separately. Include disk headroom in the readiness check. A maintenance schedule is not selected, so that criterion waits for an owner choice. |
 | [#86] | Park | Link-only capture, written for an AgentOps role. | Decide once whether a skill health check adds anything beyond the existing source checks and reconciliation. No standing role. Close as not planned if it adds nothing. |
 | [#90] | Rescope | Co-author attribution is in source. Commits and pull requests still use the owner's account. | Owner decision: is a separate delivery identity wanted? That is an access change with its own grant. Nothing changes without it. |
-| [#91] | Finish | Optional Entry is released; installed in the owner’s assistant, explicitly read and used for this Lab continuation. The current catalogue is still cached. | Confirm future native catalogue discovery and the remaining representative caller cases; do not manufacture another coordinator. |
+| [#91] | Finish | Optional Entry is released; installed in the owner's assistant, explicitly read and used for this Lab continuation. The same caller now exposes the updated discovery metadata. | Confirm remaining representative caller cases and relevant fresh-context behavior; do not manufacture another coordinator. |
 | [#93] | Not planned in Lab | Closed on 14 November with the original 23 October owner-Codex receipt retained and linked from the OSM parent. | Other hosts and consumers are not claimed migrated. Their rollout belongs to the selected method project and each host's holder; Agentic System depends on no method package. |
 | [#96] | Park | Link-only capture. | Triage the source once against the CI and delivery reference and #114. Close as not planned if it adds nothing. |
 | [#97] | Park | A protocol is drafted. No runs. | Optional experiment through `agentic-evaluate` when a model or review-loop decision depends on it. Not part of the core method. |
