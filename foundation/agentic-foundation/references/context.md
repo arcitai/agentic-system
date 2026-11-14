@@ -1,6 +1,6 @@
 # Establish useful project context
 
-Revision: 0.2.0 · Updated: 2026-11-13
+Revision: 0.2.1 · Updated: 2026-11-14
 
 Use during setup or a scoped readiness assessment. Start with the actual repo,
 accepted work and existing documentation. The outcome is enough reliable context
@@ -167,6 +167,46 @@ diagnosable authorization, resource-access and upstream failures. A service with
 customer data may also need service objectives, actionable alerts, migrations and
 tested restore. Metrics, traces, a monitoring platform, `observability.md` and a
 formal incident process each need a concrete purpose; no full stack is the default.
+
+## Optional operational response
+
+A project that operates a service may select this response template. It stays
+inactive until its owner or explicit delegate records its selection in the
+project's existing persistent choices. It adds no role, schedule or monitoring
+stack. The project agent or named responder acts within that recorded authority.
+
+Record the applicable incident classes, trigger and duplicate handling; automatic
+or notification-only pickup; restore authority and human checkpoints; notification
+destination and the human alerted when the responder or model is unavailable; and
+budget and stop limits. A trigger wakes work; it grants nothing. An omitted action
+is not delegated. Choose the inference model through the project's existing model
+selection, not this response template.
+
+Before automatic recovery, retain an immutable known-good release, rehearse its
+restore route in the actual environment, check data compatibility and identify the
+check that will verify service recovery. Verify the relevant scoped/revocable
+access, out-of-scope refusal, notification and disable path. Without safe, verified
+recovery prerequisites, use only an authorized notification route; its own signal,
+recipient and authority must still be established.
+
+Default sequence for a delegated release-induced failure:
+
+1. Confirm a covered class, the triggering release and the native state of any
+   earlier attempt; otherwise use the project's notification/escalation route.
+2. Restore the previously tested, working version through the rehearsed native
+   route. Never replay blindly.
+3. Verify actual recovery with the check that failed. A finished deploy command
+   is not recovery.
+4. Notify in the selected incident destination: restored, verified or unverified,
+   and what remains.
+5. Continue investigation and a correction as ordinary project work, using its
+   selected methods and review default.
+
+Escalate the concrete blocker and stop the affected action if recovery is unsafe,
+access is refused, recovery cannot be verified or limits are reached. Delivering
+new corrective code follows the project's separate delivery authority. A shared
+default for automatically deploying that code remains unselected; this template
+delegates none. Adapt the template per project without widening its mandate.
 
 ## Keep claims current
 

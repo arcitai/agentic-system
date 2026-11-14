@@ -1,12 +1,18 @@
 # Agentic System
 
-Revision: 0.2.0 · Updated: 2026-11-13
+Revision: 0.2.1 · Updated: 2026-11-14
 
 Build a good environment for capable agents to do useful work.
 
 Agentic System is an open framework for the foundation, boundaries and ongoing care around agent work. Choose a model and an outcome. One project agent normally researches, plans, acts, checks and follows the work through. It can call a pair, a fresh reviewer or parallel helpers when useful. A separate internal manager or a fixed chain of specialist agents is not required.
 
 Use it for software, research, BI, defence and other work. Each project keeps its own purpose, context, selected methods and native tools.
+
+The Lab adopted released **0.2.0** on T3 Stable **0.1.9**, retaining the same
+conversation and access boundaries. Both installed methods were discovered; Foundation was loaded and used.
+A repaired instruction route was followed after a manual server reload. This is
+bounded assisted proof, not unattended operation. See [qualification](docs/qualification.md)
+and [remaining work](docs/backlog.md).
 
 ## The garden
 
