@@ -1,6 +1,6 @@
 # Qualification
 
-Revision: 0.2.1 · Updated: 2026-11-14
+Revision: 0.2.2 · Updated: 2026-11-14
 
 This record distinguishes source review, disposable exercises and observed native
 operation. A package release does not qualify another host, every future update
@@ -52,7 +52,7 @@ The optional Entry/Defence methods were not installed in Lab.
 The first bootstrap was injected but its external `@` policy import was not
 expanded. A plain instruction route replaced it. The next turn retained the old
 provider context, so that turn was not counted as repair proof. After a necessary
-operator reload, native instructions were re-read; the repaired bootstrap then led
+operator-controlled Lab VM restart, native instructions were re-read; the repaired bootstrap then led
 the same resumed conversation to read AGENTS and policy by path before drafting.
 The harness no longer injected AGENTS, so the route explicitly loaded it too.
 That proves this observed route-following, not automatic policy-content injection,
@@ -62,17 +62,129 @@ Before that reload, an idle consistent SQLite backup and all 138 non-DB userdata
 files were transferred and hash-verified on the operator host. An exact guest TERM
 under a temporary Restart=no override did not stop the outer service within ten
 seconds. The failed assertion is retained: it is not clean-service-stop proof.
-The guest server changed PID; all 8 threads, 534 pre-existing terminal runs and
+Later native boot and host journal evidence corrected the initial process-reload
+interpretation: T3's shutdown span succeeded and its main process exited 130;
+ExecStopPost stopped the Lab VM, then the active control target's Upholds relation
+started a new service invocation despite Restart=no and NRestarts=0. The guest
+kernel rebooted. The physical host and parent controller did not reboot.
+All 8 threads, 534 pre-existing terminal runs and
 2,247 pre-existing messages remained, integrity was ok, and the same conversation
 completed further useful work after reconnect. The temporary override was removed;
 the original unit bytes and Restart=on-failure were restored. No host/gateway restart
-or worker retirement occurred. Ordinary clean stop, rollback and unattended
-boot/update qualification remain open under #34/#83.
+or worker retirement occurred. At that checkpoint, ordinary clean stop, rollback
+and unattended boot/update qualification were still open under #34/#83. The earlier process-only
+summary is superseded by this diagnosis; its failed assertion remains evidence.
+
+At 09:14–09:16 UTC, a reviewed target-only trial removed just T3 from Upholds,
+preserving startup edges and other members. Manual stop then remained respected
+for 60 seconds, but the main exit was 125 and there was no new successful native
+shutdown span. It failed clean-stop qualification. The exact original target was
+restored and T3 availability recovered. Integrity passed; eight threads, all 536
+terminal runs and 2,252 messages remained. Existing VM-local API/HTTP/DNS
+forwarders could bounce or warm the VM, so the trial does not show that the VM
+remained stopped. The parent and other controllers retained their identities.
+
+A subsequent bounded private ExecStop adapter was initially staged only. Its
+read-only check validated the selected T3 process without signalling. Both Fable
+High review attempts hit the provider's session limit without a verdict (reported
+reset 13:20 Europe/Copenhagen). Those refusals are retained. The owner then allowed
+work to continue on an alternative where Claude was not required; GPT 6.1 Sol High
+was selected for two independent operator review contexts, without changing the
+Lab's declared default. These are shared-operator-account source contexts, not
+separate credential boundaries.
+
+Both GPT contexts accepted source candidate 808c008. They required the guest
+pidfd to be opened before identity validation; one also required synchronous
+foreground SBX exit before ExecStop returned. Both defects were repaired. Two
+fresh repair reviews accepted the exact new manifest before execution. No native
+helper is distributed in this repository: it is private glue for this existing
+systemd/SBX deployment, with no new framework runtime, daemon, privilege, network
+grant or scheduling layer.
+
+At 10:54–10:55 UTC, with no active/unknown run or pending request and both schedules
+disabled, the operator installed that reviewed private correction. A fresh idle
+SQLite snapshot and all 138 captured non-DB files had been transferred and verified
+before effects. Only T3 was removed from the target's Upholds; startup Wants/After
+and all other members remained. The service gained a synchronous guest-first
+ExecStop with pinned guest/host identity, recognized the observed controlled exit
+130, and used native Restart=always. Credential/environment bytes were retained.
+
+The ordinary manual stop now returned client 0, main 130, helper 0 and stop-post 0,
+with Result=success. Its helper journal confirms the foreground main had exited
+before the helper returned (0.641 seconds). T3 stayed inactive for 60 seconds and
+a new successful native shutdown span was present. A start returned the same
+0.1.9 server. A separate idle exact-TERM trial returned client 0, produced another
+new successful shutdown span and one native automatic restart; the new invocation
+served 0.1.9 again. Both paths passed integrity checks and preserved all selected
+pre-existing fields for 2,252 messages, 536 terminal runs and eight thread/project
+identities. The declared model selection was unchanged during these lifecycle
+trials. The target, parent and unrelated controllers retained their invocations;
+the three predeclared VM-local API/HTTP/DNS forwarders changed invocation after
+each lifecycle path and could warm the VM.
+No physical-host or gateway restart occurred. The accepted correction remains
+installed; the earlier failed routes remain failed.
+
+This qualifies those two idle stop/recovery observations, not an executed full
+rollback, active-task recovery, whole-host boot/login, unattended updates or every
+provider/model continuation. Those remaining capabilities stay open in #32/#34/#83.
+
+At 11:01–11:02 UTC, one useful post-maintenance task completed in that same pinned
+conversation on the existing Lab OpenAI API-credit route: GPT 6.1 Sol, High,
+standard tier. This was an owner-authorized one-task model choice. Native command
+outputs show explicit reads of AGENTS, policy and installed Foundation 0.2.1;
+native Codex skill discovery is not claimed. The task wrote a 295-word readiness
+handoff and one ledger link, with no tests, restart or delegation. A preflight read
+that returned 2 because the new output did not exist is retained. All 2,252 prior
+messages, 536 terminal runs and eight identities retained their selected fields;
+the new totals were 2,256 messages, 537 terminal runs and eight threads, with
+integrity ok and no pending request. This adds one bounded useful GPT continuation,
+not all provider or approval behavior.
+
+The GUI selector was returned to Opus 5.5 High, Fast off, for its next turn. The
+server still records the last-used GPT selection; the reverse handoff has not
+executed, so a later CLI caller must reconcile the intended selection before
+sending. The declared project default, access and intake holds were not changed.
+
+[PR #132](https://github.com/arcitai/agentic-system/pull/132) merged
+at `418b6a5084d089a1b0adc977617b6a95e4fa86ec`, with the same tree as its final
+independently accepted candidate, and was tagged/released as 0.2.1. Exact-head
+and merge CI passed all 97 tests and the package checks. Foundation 0.2.1's
+optional response template was first authored/uploaded/read back in Notion, then
+deliberately exported; its complete staged package was installed and verified
+in Lab and the owner assistant. Entry/Evaluate/Defence retained their 0.2.0
+editions. The response remains inactive. The same native conversation then
+completed the read-only lifecycle diagnosis on the installed 0.2.1 sources.
+Evaluate was discovered but was not loaded or used.
+
+A read-only audit at 09:49 UTC compared the retained pre-method SQLite copy
+(hash and integrity verified) with current native data. All 2,239 original
+messages retained their identity/content fields including payload; all 531
+original terminal runs retained identity, status, binding and times; all eight
+original thread/project identities remained. None of those selected pre-existing
+fields differed or was missing. Current totals were 2,252 messages, 536 terminal
+runs and eight threads. Both installed method directories also matched the
+released files exactly: Foundation 12 files, Evaluate two. The live service unit
+differed from the retained pre-update unit only in its T3 executable version
+path. This is not equality of every mutable native metadata table, active-run
+capture or a new live allow/deny or whole-account isolation test.
+
+Native Git history was completed from the verified local release bundle using
+Git's supported unshallow fetch; both existing worktrees stayed on 418b6a5 with
+unchanged bindings and no working-file delta. The earlier shallow-history
+comparison error is retained. The corrected reconciliation reports expected
+changes from 0.2.0 and in-sync declaration/four skill distributions, not an atomic
+Notion workspace freeze or a live CI publication. The dedicated limited publisher
+connection and its live qualification remain open under #122.
 
 The owner assistant’s three shared capabilities were updated to 0.2.0 after comparing
 installed bytes with the released 0.1.34 originals and retaining recovery copies.
-Entry was explicitly read and used; the running Codex catalogue remains cached,
-so new automatic discovery is not claimed. Product repositories/plugins were not changed.
+Entry was explicitly read and used; the Codex catalogue was still cached at that
+installation observation. At 09:56 UTC the active owner's caller catalogue exposed
+the updated Entry/Foundation/Evaluate descriptions. A file comparison confirmed
+that all three installed packages matched the selected release: Entry/Evaluate
+0.2.0 and Foundation 0.2.1. This is discovery metadata in the same ongoing caller,
+not a fresh application launch, new-context loading/use or all representative
+routing cases. Those remain under #91. Product repositories/plugins were not changed.
 General intake, retirement and #114 delivery remain held, with both Lab review perspectives
 and blocking-finding criteria retained. No new network grant or credential was
 introduced.

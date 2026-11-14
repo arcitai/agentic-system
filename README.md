@@ -1,6 +1,6 @@
 # Agentic System
 
-Revision: 0.2.1 · Updated: 2026-11-14
+Revision: 0.2.2 · Updated: 2026-11-14
 
 Build a good environment for capable agents to do useful work.
 
@@ -8,10 +8,13 @@ Agentic System is an open framework for the foundation, boundaries and ongoing c
 
 Use it for software, research, BI, defence and other work. Each project keeps its own purpose, context, selected methods and native tools.
 
-The Lab adopted released **0.2.0** on T3 Stable **0.1.9**, retaining the same
-conversation and access boundaries. Both installed methods were discovered; Foundation was loaded and used.
-A repaired instruction route was followed after a manual server reload. This is
-bounded assisted proof, not unattended operation. See [qualification](docs/qualification.md)
+The Lab uses Foundation **0.2.1** and Evaluate **0.2.0** on T3 Stable **0.1.9**,
+retaining the same conversation and access boundaries.
+The earlier 0.2.0 assessment discovered both methods and loaded/used Foundation.
+A repaired instruction route was followed after an operator-controlled Lab VM
+restart. A later native correction passed one idle clean stop/start and one
+unexpected-exit recovery, with the selected pre-existing history unchanged.
+This is bounded assisted proof, not unattended operation. See [qualification](docs/qualification.md)
 and [remaining work](docs/backlog.md).
 
 ## The garden
