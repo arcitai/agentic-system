@@ -84,12 +84,12 @@ The root filesystem remains about 96% used. A fresh Omarchy/Arch update check
 failed because the Warp repository signing key is unknown and its keyring is not
 writable in the unprivileged check. No OS upgrade or host reboot was performed by
 the operator. Repair of that native keyring requires an authorized admin window;
-PGP verification was not disabled. Warp’s [official4Novemberkey-rotation advisory](https://www.warp.dev/blog/updated-gpg-signing-key-for-warp-linux-releases)
+PGP verification was not disabled. Warp’s [official 4 November key-rotation advisory](https://www.warp.dev/blog/updated-gpg-signing-key-for-warp-linux-releases)
 identifies the exact missing subkey. The downloaded vendor key matched its stated
 primary and new signing fingerprints and contained the old signing-key revocation.
 The production keyring was not changed; a native administrator approval is still
 required for that repair. A read-only check excluding Warp found 133 pending updates,
-including Omarchy4.0.6→4.5.0. This does not qualify a complete signed update.
+including Omarchy 4.0.6 → 4.5.0. This does not qualify a complete signed update.
 
 ## Earlier qualification (unchanged observations)
 
