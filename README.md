@@ -1,6 +1,8 @@
 # Agentic System
 
-Revision: 0.2.2 · Updated: 2026-11-14
+<img src="assets/branding/agentic-system-icon.svg" alt="Agentic System: three connected modules" width="56" height="56">
+
+Revision: 0.2.2 · Updated: 2026-11-20
 
 Build a good environment for capable agents to do useful work.
 
