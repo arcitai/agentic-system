@@ -3,15 +3,19 @@
 for scripts/reconcile.py --canonical and scripts/export.py (#122). Read-only: page, block and
 data-source GETs and the Notion Skills API download; nothing is written to Notion. The
 connection comes from the environment variable named by --token-env and is never printed or
-stored. Every list is paginated; a skill archive must hold exactly one top-level folder named
-after the skill, with unique, relative, regular files; anything else makes that artifact
-unreadable rather than silently incomplete.
+stored. Only the API request carries it, and never across a redirect; the signed archive URL is
+fetched without it and is not repeated in an error. Every list is paginated; a skill archive
+must hold exactly one top-level folder named after the skill, with unique, relative, regular
+files within a size limit; anything else (including a retained earlier folder) makes that
+artifact unreadable rather than silently incomplete.
 """
 
 import argparse
 import base64
 import datetime
+import gzip
 import hashlib
+import http.client
 import io
 import json
 import os
@@ -19,27 +23,51 @@ from pathlib import Path, PurePosixPath
 import sys
 import tarfile
 import urllib.error
+import urllib.parse
 import urllib.request
+import zlib
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import reconcile  # noqa: E402
 
 API = "https://api.notion.com/v1"
 NOTION_VERSION = "2026-03-11"
+ARCHIVE_LIMIT = 64 * 1024 * 1024  # download and unpacked bytes; a skill packet is far smaller
 
 
 class AccessError(Exception):
     pass
 
 
+class ArchiveError(ValueError):
+    """Not one safe, complete skill folder: a conflict to report, not a transient read failure."""
+
+
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
+
+
+# urllib copies the Authorization header to a redirect's new host, so a request that carries a
+# bearer token never follows one; the 3xx surfaces as an HTTPError instead.
+API_OPEN = urllib.request.build_opener(_NoRedirect).open
+
+
+def clean_token(value):
+    token = value.strip() if isinstance(value, str) else ""
+    if any(c.isspace() or ord(c) < 32 for c in token):
+        raise ValueError("Invalid credential format")
+    return token
+
+
 class Reader:
-    def __init__(self, token, opener=urllib.request.urlopen):
-        self.token, self.opener = token, opener
+    def __init__(self, token, opener=None):
+        self.token, self.api_open, self.anonymous_open = clean_token(token), opener or API_OPEN, opener or API_OPEN
 
     def get(self, path):
         request = urllib.request.Request(API + path, headers={"Authorization": "Bearer " + self.token, "Notion-Version": NOTION_VERSION})
         try:
-            with self.opener(request, timeout=60) as response:
+            with self.api_open(request, timeout=60) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:
             if error.code in (401, 403, 404):
@@ -47,8 +75,24 @@ class Reader:
             raise
 
     def download(self, url):
-        with self.opener(urllib.request.Request(url), timeout=60) as response:
-            return response.read()
+        """The signed URL is its own credential: no bearer header, https only, and never echoed in an error."""
+        try:
+            https = urllib.parse.urlsplit(url).scheme == "https"
+        except (ValueError, TypeError, AttributeError):
+            https = False
+        if not https:
+            raise ValueError("skill archive URL is not an https URL")
+        try:
+            with self.anonymous_open(urllib.request.Request(url), timeout=60) as response:
+                data = response.read(ARCHIVE_LIMIT + 1)
+        except urllib.error.HTTPError as error:
+            error.close()
+            raise urllib.error.URLError(f"skill archive download: HTTP {error.code}") from None
+        except (OSError, http.client.HTTPException, ValueError) as error:
+            raise urllib.error.URLError(f"skill archive download: {type(error).__name__}") from None
+        if len(data) > ARCHIVE_LIMIT:
+            raise ArchiveError(f"skill archive exceeds {ARCHIVE_LIMIT} bytes")
+        return data
 
     def children(self, block_id):
         out, cursor = [], None
@@ -94,23 +138,33 @@ def page_text(reader, block_id, depth=0, limit=3):
 
 def skill_files(archive, name):
     files = {}
-    with tarfile.open(fileobj=io.BytesIO(archive), mode="r:gz") as tar:
+    try:  # unpack at most the limit before parsing, so a small download cannot expand without bound
+        with gzip.GzipFile(fileobj=io.BytesIO(archive)) as packed:
+            unpacked = packed.read(ARCHIVE_LIMIT + 1)
+    except (OSError, EOFError, zlib.error) as error:
+        raise tarfile.ReadError(f"not a complete gzip archive ({type(error).__name__})") from None
+    if len(unpacked) > ARCHIVE_LIMIT:
+        raise ArchiveError(f"archive unpacks to more than {ARCHIVE_LIMIT} bytes")
+    with tarfile.open(fileobj=io.BytesIO(unpacked), mode="r:") as tar:
         for member in tar.getmembers():
             if member.isdir():
                 continue
             path = PurePosixPath(member.name)
-            if not member.isfile() or path.is_absolute() or ".." in path.parts or len(path.parts) < 2 or path.parts[0] != name:
-                raise ValueError(f"unsafe or unexpected archive member {member.name!r}")
+            if not member.isfile() or member.issparse() or path.is_absolute() or ".." in path.parts or len(path.parts) < 2:
+                raise ArchiveError(f"unsafe or unexpected archive member {member.name!r}")
+            if path.parts[0] != name:
+                raise ArchiveError(f"unexpected archive member {member.name!r}: a folder other than {name}/ "
+                                   "(such as one retained from an earlier import) is neither merged nor dropped")
             rel = PurePosixPath(*path.parts[1:]).as_posix()
             if rel in files:
-                raise ValueError(f"duplicate archive member {member.name!r}")
+                raise ArchiveError(f"duplicate archive member {member.name!r}")
             data = tar.extractfile(member).read()
             try:
                 files[rel] = data.decode("utf-8")
             except UnicodeDecodeError:
                 files[rel] = {"base64": base64.b64encode(data).decode("ascii")}
     if "SKILL.md" not in files:
-        raise ValueError("archive has no SKILL.md")
+        raise ArchiveError("archive has no SKILL.md")
     return files
 
 
@@ -143,7 +197,7 @@ def freeze(keys, reader, read_at=None):
                 page = reader.get(f"/pages/{item['notion']}")
                 artifacts[key] = {"revision": page.get("last_edited_time"), "readAt": read_at, "public_url": page.get("public_url"),
                                   "text": "\n".join(page_text(reader, item["notion"]))}
-        except (AccessError, ValueError, KeyError, IndexError, tarfile.TarError, urllib.error.URLError) as error:
+        except (AccessError, ValueError, KeyError, IndexError, tarfile.TarError, OSError, http.client.HTTPException) as error:
             errors.append(f"{key}: {error}")
     return {"format": 1, "readAt": read_at, "artifacts": artifacts, "errors": errors}
 

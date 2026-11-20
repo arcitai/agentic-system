@@ -5,6 +5,8 @@ from pathlib import Path
 import sys
 import tarfile
 import unittest
+from unittest.mock import patch
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -51,6 +53,23 @@ class FakeNotion:
 
 
 class ArchiveTests(unittest.TestCase):
+    def test_sparse_members_are_refused_before_their_logical_size_is_expanded(self):
+        raw = io.BytesIO()
+        with tarfile.open(fileobj=raw, mode='w', format=tarfile.GNU_FORMAT) as tar:
+            info = tarfile.TarInfo('factory-x/SKILL.md'); info.size = 1
+            tar.addfile(info, io.BytesIO(b'a'))
+            sparse = tarfile.TarInfo('factory-x/sparse'); sparse.type = tarfile.GNUTYPE_SPARSE
+            tar.addfile(sparse)
+        import gzip
+        with self.assertRaises(snapshot.ArchiveError):
+            snapshot.skill_files(gzip.compress(raw.getvalue()), 'factory-x')
+
+    def test_credential_copy_whitespace_is_safe_and_invalid_headers_never_echo_it(self):
+        self.assertEqual(snapshot.Reader('  fixture-token\n').token, 'fixture-token')
+        with self.assertRaises(ValueError) as raised:
+            snapshot.Reader('PRIVATE-VALUE\nInjected: bad')
+        self.assertNotIn('PRIVATE-VALUE', str(raised.exception))
+
     def test_complete_archive_with_binary_file(self):
         files = snapshot.skill_files(archive([("factory-x/SKILL.md", b"---\n", "file"), ("factory-x/references/a.png", b"\x89PNG\xff", "file")]), "factory-x")
         self.assertEqual(files["SKILL.md"], "---\n")
@@ -68,6 +87,67 @@ class ArchiveTests(unittest.TestCase):
         for name, members in cases.items():
             with self.subTest(name), self.assertRaises(ValueError):
                 snapshot.skill_files(archive(members), "factory-x")
+
+    def test_a_folder_retained_from_an_earlier_import_is_reported_not_merged_or_dropped(self):
+        members = [("agentic-x/SKILL.md", b"new", "file"), ("factory-x/SKILL.md", b"old", "file"), ("factory-x/references/kept.md", b"k", "file")]
+        with self.assertRaises(snapshot.ArchiveError) as raised:
+            snapshot.skill_files(archive(members), "agentic-x")
+        self.assertIn("factory-x/SKILL.md", str(raised.exception))
+        self.assertIn("neither merged nor dropped", str(raised.exception))
+
+    def test_an_archive_that_unpacks_beyond_the_limit_is_refused_before_parsing(self):
+        bomb = archive([("factory-x/SKILL.md", b"a", "file"), ("factory-x/references/big.bin", bytes(200_000), "file")])
+        self.assertLess(len(bomb), 2_000)  # compresses far below what it expands to
+        with patch.object(snapshot, "ARCHIVE_LIMIT", 100_000), self.assertRaises(snapshot.ArchiveError):
+            snapshot.skill_files(bomb, "factory-x")
+
+    def test_a_cut_off_archive_is_a_read_failure_not_a_partial_skill(self):
+        whole = archive([("factory-x/SKILL.md", b"a" * 5000, "file")])
+        with self.assertRaises(tarfile.TarError):
+            snapshot.skill_files(whole[:len(whole) // 2], "factory-x")
+
+
+class DownloadTests(unittest.TestCase):
+    SIGNED = "https://download/x?X-Amz-Signature=SIGNED-SECRET"
+
+    def test_only_the_api_request_carries_the_connection(self):
+        seen = []
+
+        def opener(request, timeout=None):
+            seen.append((request.full_url, request.get_header("Authorization")))
+            return Response(b"archive" if request.full_url == self.SIGNED else b"{}")
+        reader = snapshot.Reader("token", opener)
+        reader.get("/ai/skills/p")
+        self.assertEqual(reader.download(self.SIGNED), b"archive")
+        self.assertEqual(seen, [("https://api.notion.com/v1/ai/skills/p", "Bearer token"), (self.SIGNED, None)])
+
+    def test_a_signed_archive_url_is_never_repeated_in_an_error(self):
+        def refused(request, timeout=None):
+            raise urllib.error.HTTPError(request.full_url, 403, "Forbidden", {}, io.BytesIO())
+
+        def reset(request, timeout=None):
+            raise ConnectionResetError(f"reset while fetching {request.full_url}")
+        skill = {"skill/factory-x": {"key": "skill/factory-x", "kind": "skill", "owner": "notion", "notion": "p"}}
+        for name, url, opener in (("not https", "signed.example/x?X-Amz-Signature=SIGNED-SECRET", None),
+                                  ("plain http", self.SIGNED.replace("https:", "http:"), None),
+                                  ("expired", self.SIGNED, refused), ("reset", self.SIGNED, reset)):
+            with self.subTest(name):
+                pages = {"/pages/p": {"properties": {}}, "/ai/skills/p": {"version_id": "v", "url": url}}
+
+                def notion(request, timeout=None, opener=opener, pages=pages):
+                    if request.full_url.startswith(snapshot.API):
+                        return Response(json.dumps(pages[request.full_url.split("/v1", 1)[1]]).encode())
+                    return (opener or reset)(request, timeout)
+                result = snapshot.freeze(skill, snapshot.Reader("token", notion))
+                self.assertEqual(result["artifacts"], {})
+                self.assertEqual(len(result["errors"]), 1)
+                self.assertNotIn("SIGNED-SECRET", json.dumps(result))
+                self.assertNotIn("signed.example", json.dumps(result))
+
+    def test_an_oversized_download_is_refused(self):
+        reader = snapshot.Reader("token", lambda request, timeout=None: Response(bytes(5_000)))
+        with patch.object(snapshot, "ARCHIVE_LIMIT", 1_000), self.assertRaises(snapshot.ArchiveError):
+            reader.download(self.SIGNED)
 
 
 class PaginationTests(unittest.TestCase):

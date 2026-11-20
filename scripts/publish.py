@@ -7,18 +7,23 @@ It never writes a Notion-owned original (those reach Git through scripts/export.
 Source pin moves only to a release-tag commit. One run at a time (CI concurrency plus a local
 lock) sets the commit status pending, writes serially by page identity, reads an uncertain write
 back before one same-identity retry, reads every affected page back, then checks anonymous
-content. Only a complete readback is success: every released reference's body, files and Version/Status/Source,
+content. The retry happens only while the page still equals the state read before the write; a page
+that changed to anything else is reported, not overwritten. A whole-packet upload replaces the
+page's files, so a file on the Notion copy that Git never released there stops the run instead.
+Only a complete readback is success: every released reference's body, files and Version/Status/Source,
 and for the affected pages an anonymous response that stays on the page's host and contains its expected content.
 Anything less stays visibly pending (public browser readback, or release pending). Without --live it prints the plan and writes nothing.
 """
 
 import argparse
 import hashlib
+import http.client
 import io
 import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 import tarfile
 import urllib.error
@@ -73,34 +78,38 @@ def tarball(name, files):
 class NotionSkills:
     API = "https://api.notion.com/v1"
 
-    def __init__(self, token):
-        self.token = token
-        self.reader = notion_snapshot.Reader(token)
+    def __init__(self, token, opener=None):
+        self.token = notion_snapshot.clean_token(token)
+        self.open = opener or notion_snapshot.API_OPEN  # bearer requests never follow a redirect
+        self.reader = notion_snapshot.Reader(token, opener)
 
     def _call(self, method, path, body=None, raw=None, content_type="application/json"):
         request = urllib.request.Request(self.API + path, method=method, data=raw if raw is not None else (None if body is None else json.dumps(body).encode()),
                                          headers={"Authorization": "Bearer " + self.token, "Notion-Version": notion_snapshot.NOTION_VERSION,
                                                   "Content-Type": content_type})
         try:
-            with urllib.request.urlopen(request, timeout=120) as response:
+            with self.open(request, timeout=120) as response:
                 return json.load(response)
         except urllib.error.HTTPError as error:
             if error.code in (401, 403, 404):
                 raise AccessError(f"HTTP {error.code} on {method} {path}") from None
             raise UncertainWrite(f"HTTP {error.code} on {method} {path}") from None
-        except (urllib.error.URLError, TimeoutError) as error:
-            raise UncertainWrite(f"{method} {path}: {error}") from None
+        except (OSError, http.client.HTTPException, ValueError) as error:
+            # a reset or cut-off connection, or an unreadable reply, after the request was sent: applied or not is unknown
+            raise UncertainWrite(f"{method} {path}: {type(error).__name__}: {error}") from None
 
     def read(self, page, name):
         try:
             props = self.reader.get(f"/pages/{page}")
             skill = self.reader.get(f"/ai/skills/{page}")
             files = notion_snapshot.skill_files(self.reader.download(skill["url"]), name)
+            p = props["properties"]
         except notion_snapshot.AccessError as error:
             raise AccessError(str(error)) from None
-        except (urllib.error.URLError, TimeoutError, ValueError, tarfile.TarError) as error:
-            raise UncertainWrite(f"readback {name}: {error}") from None
-        p = props["properties"]
+        except notion_snapshot.ArchiveError as error:
+            raise RuntimeError(f"{name}: the Notion archive is not one complete {name}/ folder ({error}); nothing is overwritten") from None
+        except (OSError, http.client.HTTPException, ValueError, KeyError, tarfile.TarError) as error:
+            raise UncertainWrite(f"readback {name}: {type(error).__name__}: {error}") from None
         return {"files": files, "public_url": props.get("public_url"), "types": {k: v.get("type") for k, v in p.items()},
                 "revision": skill.get("version_id"),
                 "Version": notion_snapshot.prop_text(p.get("Version")), "Status": notion_snapshot.prop_text(p.get("Status")),
@@ -140,12 +149,15 @@ class NotionSkills:
                 result.update(status=response.status, final_url=response.geturl())
         except urllib.error.HTTPError as error:
             return {**result, "status": error.code, "reason": f"HTTP {error.code}"}
-        except urllib.error.URLError as error:
-            return {**result, "reason": str(error.reason)}
+        except (OSError, http.client.HTTPException) as error:  # unreachable or cut off: unverified, never a crash after the writes
+            return {**result, "reason": str(getattr(error, "reason", None) or type(error).__name__)}
         return verify_receipt(result, body)
 
 
 def verify_receipt(result, body):
+    if (urllib.parse.urlsplit(result.get('url') or '').scheme != 'https' or
+            urllib.parse.urlsplit(result.get('final_url') or '').scheme != 'https'):
+        return {**result, 'reason': 'the public response is not HTTPS'}
     if urllib.parse.urlsplit(result.get("final_url") or "").netloc != urllib.parse.urlsplit(result["url"]).netloc:
         return {**result, "reason": f"redirected to {result.get('final_url')}"}
     missing = [m for m in result["markers"] if m not in body]
@@ -166,7 +178,7 @@ class CommitStatus:
     """The native, visible receipt: one GitHub commit status per propagated commit."""
 
     def __init__(self, token, repository, sha):
-        self.token, self.repository, self.sha = token, repository, sha
+        self.token, self.repository, self.sha = notion_snapshot.clean_token(token), repository, sha
 
     def set(self, state, description):
         if not self.token:
@@ -174,7 +186,12 @@ class CommitStatus:
         request = urllib.request.Request(f"https://api.github.com/repos/{self.repository}/statuses/{self.sha}", method="POST",
                                          data=json.dumps({"state": state, "context": CONTEXT, "description": description[:140]}).encode(),
                                          headers={"Authorization": "Bearer " + self.token, "Accept": "application/vnd.github+json"})
-        urllib.request.urlopen(request, timeout=30).close()
+        try:
+            notion_snapshot.API_OPEN(request, timeout=30).close()
+        except urllib.error.HTTPError as error:
+            raise RuntimeError(f"GitHub publication status could not be recorded (HTTP {error.code})") from None
+        except (OSError, http.client.HTTPException, ValueError):
+            raise RuntimeError("GitHub publication status could not be recorded") from None
 
 
 def matches(root, item, action, current):
@@ -183,23 +200,41 @@ def matches(root, item, action, current):
     return not differ and all(current.get(k) == v for k, v in props.items()), differ
 
 
-def write_with_readback(write, check, log, key, what):
-    """One write; on an uncertain result read back first, then retry once with the same identity."""
+def unreleased_files(root, item, current):
+    """Files on the Notion copy that a whole-packet upload would delete although Git holds no copy of them: absent
+    from this release and not byte-equal at the commit the copy's own Source pins (where a later release retired them)."""
+    extra = sorted(set(current["files"]) - set(reconcile.bundle_files(root, item["path"])))
+    pin = re.fullmatch(re.escape(reconcile.REPO_URL) + r"/blob/([0-9a-f]{40})/" + re.escape(item["path"]) + r"/SKILL\.md", current.get("Source") or "")
+    kept = []
+    for rel in extra:
+        released = None
+        if pin:
+            shown = subprocess.run(["git", "show", f"{pin[1]}:{item['path']}/{rel}"], cwd=root, capture_output=True)
+            released = shown.stdout if shown.returncode == 0 else None
+        if released != reconcile.file_bytes(current["files"][rel]):
+            kept.append(rel)
+    return kept
+
+
+def write_with_readback(write, read, confirmed, untouched, log, key, what):
+    """One write, then a readback. Retry once with the same identity only while the page still equals the state read
+    before the write. A page that is neither that nor the intended result changed concurrently: it is reported, not
+    overwritten. A readback that itself fails ends the run rather than permitting a blind retry."""
     for attempt in (1, 2):
+        outcome = what
         try:
             write()
-            if check():
-                log.append({"key": key, "action": what})
-                return
-            log.append({"key": key, "action": f"{what}-readback-differs", "attempt": attempt})
         except UncertainWrite as error:
             log.append({"key": key, "action": "uncertain", "what": what, "attempt": attempt, "error": str(error)})
-            try:
-                if check():
-                    log.append({"key": key, "action": f"{what}-confirmed-after-uncertain-write"})
-                    return
-            except UncertainWrite:
-                pass
+            outcome = f"{what}-confirmed-after-uncertain-write"
+        state = read()
+        if confirmed(state):
+            log.append({"key": key, "action": outcome})
+            return state
+        if not untouched(state):
+            raise RuntimeError(f"{key}: {what} readback is neither the intended result nor the state read before the write "
+                               "(a concurrent edit or an unexpected rendering); not written again")
+        log.append({"key": key, "action": f"{what}-not-applied", "attempt": attempt})
     raise RuntimeError(f"{key}: {what} not confirmed after readback and one retry")
 
 
@@ -227,20 +262,45 @@ def run(root, actions, keys, target, status, lock_path):
                                    "refusing to write a page that is not a released-reference copy without a cutover record")
             if reconcile.version_tuple(current.get("Version")) > reconcile.version_tuple(action["version"]):
                 raise RuntimeError(f"{action['key']}: Notion copy {current.get('Version')} is newer than {action['version']}; refusing a downgrade")
+            # An older tag can carry the same skill version. It must not move a
+            # source pin back merely because the instruction bytes are unchanged.
+            source_prefix = re.escape(reconcile.REPO_URL) + r"/blob/([0-9a-f]{40})/"
+            before_pin = re.match(source_prefix, current.get("Source") or "")
+            after_pin = re.match(source_prefix, action.get("source") or "")
+            if before_pin and after_pin and before_pin[1] != after_pin[1]:
+                ancestry = subprocess.run(["git", "merge-base", "--is-ancestor", after_pin[1], before_pin[1]],
+                                          cwd=root, capture_output=True).returncode
+                if ancestry == 0:
+                    raise RuntimeError(f"{action['key']}: the Notion source pin is newer than this checkout; refusing to move it back")
+                if ancestry != 1:
+                    raise RuntimeError(f"{action['key']}: the source pin's commit is unavailable; fetch full history before moving it")
             same, differ = matches(root, item, action, current)
             if same:
                 log.append({"key": action["key"], "action": "unchanged"})
                 continue
             if differ:
+                extra = unreleased_files(root, item, current)
+                if extra:
+                    raise RuntimeError(f"{action['key']}: the Notion copy holds {', '.join(extra)}, which Git did not release there; a whole-packet "
+                                       "upload would delete it. Preserve it in the owning source or remove it deliberately, then rerun")
                 files = desired_files(root, item, action["version"])
-                write_with_readback(lambda: target.upload(action["page"], name, files),
-                                    lambda: not reconcile.bundle_differences(root, item["path"], target.read(action["page"], name)["files"]),
-                                    log, action["key"], "upload")
-            values = {k: action[k.lower()] for k in ("Version", "Status", "Source")}
+                after = write_with_readback(lambda: target.upload(action["page"], name, files),
+                                           lambda: target.read(action["page"], name),
+                                           lambda state: not reconcile.bundle_differences(root, item["path"], state["files"]),
+                                           lambda state: (state.get("revision"), state["files"]) == (current.get("revision"), current["files"]),
+                                           log, action["key"], "upload")
+                if any(after.get(k) not in (current.get(k), action[k.lower()]) for k in ("Version", "Status", "Source")):
+                    raise RuntimeError(f"{action['key']}: properties changed during the import; preserving the concurrent edit")
+                current = after
+            # only the properties that differ: a matching row is not rewritten
+            values = {k: action[k.lower()] for k in ("Version", "Status", "Source") if current.get(k) != action[k.lower()]}
             types = current["types"]
-            write_with_readback(lambda: target.set_properties(action["page"], values, types),
-                                lambda: all(target.read(action["page"], name).get(k) == v for k, v in values.items()),
-                                log, action["key"], "properties")
+            if values:
+                write_with_readback(lambda: target.set_properties(action["page"], values, types),
+                                    lambda: target.read(action["page"], name),
+                                    lambda state: all(state.get(k) == v for k, v in values.items()),
+                                    lambda state: all(state.get(k) == current.get(k) for k in values),
+                                    log, action["key"], "properties")
         receipts, pending_release, drift = {}, [], []
         for key, item in sorted(keys.items()):  # the whole coherent set, after all writes, actions or not
             if item.get("label") != "released-reference" or item.get("status", "active") != "active":
@@ -271,10 +331,16 @@ def run(root, actions, keys, target, status, lock_path):
         status.set("success", f"released references only: {len(actions)} propagated; set read back; public content verified for {len(checks)} page(s)")
         return {"result": "PUBLISHED" if actions else "NO-OP", "public": checks, "receipts": receipts, "log": log}
     except AccessError as error:
-        status.set("failure", f"access missing or expired: {error}")
+        try:
+            status.set("failure", f"access missing or expired: {error}")
+        except (RuntimeError, OSError, ValueError):
+            log.append({'action': 'status-unavailable'})
         return {"result": "FAILED-ACCESS", "reason": str(error), "log": log}
     except (RuntimeError, UncertainWrite) as error:
-        status.set("failure", str(error))
+        try:
+            status.set("failure", str(error))
+        except (RuntimeError, OSError, ValueError):
+            log.append({'action': 'status-unavailable'})
         return {"result": "FAILED", "reason": str(error), "log": log}
     finally:
         lock.unlink()

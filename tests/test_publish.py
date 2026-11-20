@@ -1,13 +1,19 @@
+import http.client
+import http.server
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
+import threading
 import unittest
 from unittest.mock import patch
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -34,8 +40,14 @@ skill = ROOT / second["path"] / "SKILL.md"
 skill.write_text(skill.read_text().replace("name: agentic-security", "name: publisher-second"))
 data["artifacts"].append(second)
 manifest.write_text(json.dumps(data))
-for args in (["init", "-q"], ["add", "-A"], ["commit", "-qm", "publisher fixture"], ["tag", "v" + (ROOT / "VERSION").read_text().strip()]):
+# An earlier release of the second reference carried a file that the tagged release retires.
+RETIRED, RETIRED_TEXT = "references/retired.md", "Guidance the next release retires.\n"
+(ROOT / second["path"] / "references").mkdir()
+(ROOT / second["path"] / RETIRED).write_text(RETIRED_TEXT)
+for args in (["init", "-q"], ["add", "-A"], ["commit", "-qm", "earlier release"], ["rm", "-q", f"{second['path']}/{RETIRED}"],
+             ["commit", "-qm", "publisher fixture"], ["tag", "v" + (ROOT / "VERSION").read_text().strip()]):
     subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", *args], cwd=ROOT, check=True, capture_output=True)
+EARLIER = subprocess.run(["git", "rev-parse", "HEAD~1"], cwd=ROOT, check=True, capture_output=True, text=True).stdout.strip()
 
 _, KEYS, _ = reconcile.load_manifest(ROOT)
 RELEASED = {k: i for k, i in KEYS.items() if i["label"] == "released-reference" and i.get("status", "active") == "active"}
@@ -112,6 +124,20 @@ def action(key, **change):
 
 
 class PublishTests(unittest.TestCase):
+    def test_a_missing_status_service_refuses_writes_and_still_returns_a_result(self):
+        def unavailable(*args):
+            raise RuntimeError('status unavailable')
+        self.status.set = unavailable
+        result = self.run_actions([action('skill/factory-security')])
+        self.assertEqual(result['result'], 'FAILED')
+        self.assertEqual(self.target.writes, [])
+        self.assertIn({'action': 'status-unavailable'}, result['log'])
+
+    def test_a_public_https_to_http_downgrade_is_not_verification(self):
+        result = publish.verify_receipt({'url':'https://example.invalid/page',
+            'final_url':'http://example.invalid/page','status':200,'verified':False,'markers':['visible']}, 'visible')
+        self.assertFalse(result['verified'])
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.lock = Path(self.temporary.name) / "lock"
@@ -244,6 +270,44 @@ class PublishTests(unittest.TestCase):
         self.assertIn("refusing a downgrade", result["reason"])
         self.assertEqual(self.target.writes, [])
 
+    def test_an_older_checkout_never_moves_a_newer_source_pin_back(self):
+        head = reconcile.git(ROOT, "rev-parse", "HEAD").strip()
+        tree = reconcile.git(ROOT, "rev-parse", "HEAD^{tree}").strip()
+        future = subprocess.run(["git", "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid",
+                                 "commit-tree", tree, "-p", head], cwd=ROOT, input=b"Later identical skill\n",
+                                capture_output=True, check=True).stdout.decode().strip()
+        item = KEYS["skill/factory-security"]
+        newer_source = f"{reconcile.REPO_URL}/blob/{future}/{item['path']}/SKILL.md"
+        self.target.pages[self.review]["Source"] = newer_source
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("refusing to move it back", result["reason"])
+        self.assertEqual(self.target.pages[self.review]["Source"], newer_source)
+        self.assertEqual(self.target.writes, [])
+
+    def test_an_import_does_not_overwrite_a_concurrent_property_edit(self):
+        self.damage()
+        upload = self.target.upload
+        def edited_after_import(page, name, files):
+            upload(page, name, files)
+            self.target.pages[page]["Source"] = "https://example.invalid/owner-correction"
+        self.target.upload = edited_after_import
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("preserving the concurrent edit", result["reason"])
+        self.assertEqual(self.target.pages[self.review]["Source"], "https://example.invalid/owner-correction")
+        self.assertFalse(any(operation == "properties" for operation, _ in self.target.writes))
+
+    def test_an_unavailable_source_commit_is_not_silently_repinned(self):
+        item = KEYS['skill/factory-security']
+        source = f"{reconcile.REPO_URL}/blob/{'f' * 40}/{item['path']}/SKILL.md"
+        self.target.pages[self.review]['Source'] = source
+        result = self.run_actions([action('skill/factory-security')])
+        self.assertEqual(result['result'], 'FAILED')
+        self.assertIn('fetch full history', result['reason'])
+        self.assertEqual(self.target.pages[self.review]['Source'], source)
+        self.assertEqual(self.target.writes, [])
+
     def test_damaged_copy_is_restored_body_and_properties(self):
         self.damage()
         result = self.run_actions([action("skill/factory-security")])
@@ -350,6 +414,89 @@ class PublishTests(unittest.TestCase):
             plan = reconcile.plan(repo, keys, temporary)
         self.assertEqual([a["key"] for a in plan], ["skill/factory-security"])
 
+    def test_matching_properties_are_not_rewritten_with_a_restored_body(self):
+        page = self.target.pages[self.review]
+        page["files"]["SKILL.md"] = page["files"]["SKILL.md"].replace("Identify the authorized target", "Ignore the authorized target", 1)
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "PUBLISHED")
+        self.assertEqual(self.target.writes, [("upload", self.review)])
+
+    def test_only_the_differing_property_is_written(self):
+        self.target.pages[self.review]["Source"] = "edited by hand"
+        sent = []
+        original = self.target.set_properties
+        self.target.set_properties = lambda page, values, types: (sent.append(dict(values)), original(page, values, types))
+        self.assertEqual(self.run_actions([action("skill/factory-security")])["result"], "PUBLISHED")
+        self.assertEqual([sorted(v) for v in sent], [["Source"]])
+
+    def concurrent_edit_during(self, operation, edit, mode):
+        """The write's outcome is unknown and, before the readback, somebody else edits the same page."""
+        original = getattr(self.target, operation)
+        calls = []
+
+        def racing(page, *args):
+            calls.append(page)
+            if len(calls) == 1:
+                edit(self.target.pages[page])
+                raise publish.UncertainWrite(f"timeout {mode} apply")
+            original(page, *args)
+        setattr(self.target, operation, racing)
+        return calls
+
+    def test_an_uncertain_upload_does_not_overwrite_a_concurrent_edit(self):
+        self.damage()
+
+        def edit(page):
+            page["files"]["SKILL.md"] += "\nA correction someone saved while the upload was in flight.\n"
+        calls = self.concurrent_edit_during("upload", edit, "before")
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("neither the intended result nor the state read before the write", result["reason"])
+        self.assertEqual(len(calls), 1)  # no retry over the other edit
+        self.assertEqual(self.target.writes, [])
+        self.assertIn("A correction someone saved", self.target.pages[self.review]["files"]["SKILL.md"])
+        self.assertEqual(self.status.states[-1][0], "failure")
+
+    def test_an_uncertain_property_write_does_not_overwrite_a_concurrent_takeover(self):
+        self.target.pages[self.review]["Source"] = "edited by hand"
+        calls = self.concurrent_edit_during("set_properties", lambda page: page.update(Source="pinned by the owner meanwhile"), "before")
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(self.target.pages[self.review]["Source"], "pinned by the owner meanwhile")
+
+    def test_an_unreadable_page_after_an_uncertain_upload_is_not_retried_blindly(self):
+        self.damage()
+        calls = self.concurrent_edit_during("upload", lambda page: None, "before")
+        self.target.failures[("read", self.review)] = [None, "lost"]
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(self.target.writes, [])
+
+    def test_an_attachment_git_never_released_is_not_deleted_by_the_packet_upload(self):
+        self.damage()
+        self.target.pages[self.review]["files"]["references/field-notes.md"] = "Attached on the Notion page.\n"
+        result = self.run_actions([action("skill/factory-security")])
+        self.assertEqual(result["result"], "FAILED")
+        self.assertIn("references/field-notes.md", result["reason"])
+        self.assertIn("would delete it", result["reason"])
+        self.assertEqual(self.target.writes, [])
+        self.assertIn("references/field-notes.md", self.target.pages[self.review]["files"])
+
+    def test_a_file_retired_by_the_release_is_removed_only_if_the_pinned_release_holds_it(self):
+        item = RELEASED["skill/publisher-second"]
+        for text, expected in ((RETIRED_TEXT, "PUBLISHED"), (RETIRED_TEXT + "Edited on the Notion page.\n", "FAILED")):
+            with self.subTest(expected):
+                self.target, self.status = FakeSkills(), FakeStatus()
+                page = self.target.pages[item["notion"]]
+                page["files"][RETIRED] = text
+                page["Source"] = f"{reconcile.REPO_URL}/blob/{EARLIER}/{item['path']}/SKILL.md"
+                result = self.run_actions([action("skill/publisher-second")])
+                self.assertEqual(result["result"], expected)
+                self.assertEqual(RETIRED in page["files"], expected == "FAILED")
+                self.assertEqual(self.target.writes, [("upload", item["notion"]), ("properties", item["notion"])] if expected == "PUBLISHED" else [])
+
     def test_live_mode_without_dedicated_connection_reports_missing_setup(self):
         env = {k: v for k, v in os.environ.items() if not k.startswith("AGENTIC_SYSTEMS_PUBLIC_DOCS_")}
         env["AGENTIC_SYSTEMS_NOTION_TOKEN"] = "must-not-be-used"
@@ -360,6 +507,105 @@ class PublishTests(unittest.TestCase):
         self.assertEqual(result.returncode, 3)
         self.assertIn("not configured: AGENTIC_SYSTEMS_PUBLIC_DOCS_TOKEN", result.stdout)
         self.assertNotIn("must-not-be-used", result.stdout + result.stderr)
+
+
+class Redirecting(http.server.BaseHTTPRequestHandler):
+    """A loopback API that answers every request with a redirect to another host, which records what reaches it."""
+    elsewhere, reached = None, []
+
+    def answer(self):
+        self.rfile.read(int(self.headers.get("Content-Length") or 0))
+        if self.server.server_port == self.elsewhere:
+            self.reached.append((self.command, self.headers.get("Authorization")))
+            self.send_response(200)
+            self.send_header("Content-Length", "2")
+            self.end_headers()
+            self.wfile.write(b"{}")
+        else:
+            self.send_response(302)
+            self.send_header("Location", f"http://127.0.0.1:{self.elsewhere}/collected")
+            self.send_header("Content-Length", "0")
+            self.end_headers()
+    do_GET = do_POST = do_PATCH = answer
+
+    def log_message(self, *args):
+        pass
+
+
+class TransportTests(unittest.TestCase):
+    """The real client classes against injected or loopback transports; no Notion or GitHub request is made."""
+
+    def test_a_redirected_api_request_does_not_carry_the_connection_to_the_new_host(self):
+        servers = [http.server.HTTPServer(("127.0.0.1", 0), Redirecting) for _ in range(2)]
+        Redirecting.elsewhere, Redirecting.reached = servers[1].server_port, []
+        for server in servers:
+            threading.Thread(target=server.serve_forever, daemon=True).start()
+            self.addCleanup(server.server_close)
+            self.addCleanup(server.shutdown)
+        api = f"http://127.0.0.1:{servers[0].server_port}/v1"
+        with patch.object(publish.notion_snapshot, "API", api), patch.object(publish.NotionSkills, "API", api):
+            with self.assertRaises(urllib.error.HTTPError) as raised:
+                publish.notion_snapshot.Reader("connection-secret").get("/ai/skills/p")
+            self.assertEqual(raised.exception.code, 302)
+            raised.exception.close()
+            with self.assertRaises(publish.UncertainWrite) as uncertain:
+                publish.NotionSkills("connection-secret").upload("p", "agentic-x", {"SKILL.md": b"x"})
+            self.assertIn("HTTP 302", str(uncertain.exception))
+        self.assertEqual(Redirecting.reached, [])
+
+    def test_a_connection_lost_after_the_request_was_sent_is_an_uncertain_write(self):
+        def reset(request, timeout=None):
+            raise ConnectionResetError("Connection reset by peer")
+
+        def cut(request, timeout=None):
+            raise http.client.RemoteDisconnected("Remote end closed connection without response")
+
+        def empty(request, timeout=None):
+            return io.BytesIO(b"")
+        for opener in (reset, cut, empty):
+            with self.subTest(opener.__name__), self.assertRaises(publish.UncertainWrite):
+                publish.NotionSkills("token", opener).upload("p", "agentic-x", {"SKILL.md": b"x"})
+
+    def page(self, members):
+        buffer = io.BytesIO()
+        with tarfile.open(fileobj=buffer, mode="w:gz") as tar:
+            for name, data in members:
+                info = tarfile.TarInfo(name)
+                info.size = len(data)
+                tar.addfile(info, io.BytesIO(data))
+        signed = "https://files.example/skill.tar.gz?X-Amz-Signature=SIGNED-SECRET"
+        replies = {"/pages/p": {"properties": {"Version": {"type": "rich_text", "rich_text": [{"plain_text": "1.0.0"}]}}, "public_url": None},
+                   "/ai/skills/p": {"version_id": "opaque/version+id==", "url": signed}}
+        seen = []
+
+        def opener(request, timeout=None):
+            seen.append((request.full_url, request.get_header("Authorization")))
+            if request.full_url == signed:
+                return io.BytesIO(buffer.getvalue())
+            return io.BytesIO(json.dumps(replies[request.full_url.split("/v1", 1)[1]]).encode())
+        return publish.NotionSkills("token", opener), seen, signed
+
+    def test_readback_keeps_the_opaque_revision_and_sends_the_connection_only_to_the_api(self):
+        target, seen, signed = self.page([("agentic-x/SKILL.md", b"body")])
+        state = target.read("p", "agentic-x")
+        self.assertEqual((state["revision"], state["files"], state["Version"]), ("opaque/version+id==", {"SKILL.md": "body"}, "1.0.0"))
+        self.assertEqual([auth for url, auth in seen if url != signed], ["Bearer token", "Bearer token"])
+        self.assertEqual([auth for url, auth in seen if url == signed], [None])
+
+    def test_a_retained_earlier_folder_stops_the_run_as_a_conflict_not_an_uncertain_write(self):
+        target, _, _ = self.page([("agentic-x/SKILL.md", b"new"), ("factory-x/references/earlier.md", b"kept")])
+        with self.assertRaises(RuntimeError) as raised:
+            target.read("p", "agentic-x")
+        self.assertIn("factory-x/references/earlier.md", str(raised.exception))
+        self.assertNotIn("SIGNED-SECRET", str(raised.exception))
+
+    def test_an_unreachable_public_page_is_unverified_not_a_crash(self):
+        def reset(request, timeout=None):
+            raise ConnectionResetError("Connection reset by peer")
+        with patch.object(publish.urllib.request, "urlopen", reset):
+            receipt = publish.NotionSkills("token").public_receipt("https://example.invalid/page", ["agentic-x"])
+        self.assertFalse(receipt["verified"])
+        self.assertTrue(receipt["reason"])
 
 
 if __name__ == "__main__":
