@@ -1,6 +1,6 @@
 # Definition and source ownership
 
-Revision: 0.2.0 · Updated: 2026-11-14
+Revision: 0.2.2 · Updated: 2026-11-20
 
 The [Notion YAML block](https://www.notion.so/4056d2e17f56811b96fec7b970741916)
 owns Lab's declared composition. [system.yaml](../system.yaml) is its version-marked
@@ -88,6 +88,11 @@ Publication is serialized from main or the matching `v*` tag. The status
 existing page identity. An uncertain result is read back before one same-identity
 retry. A newer Notion edition is not downgraded. A page outside Released reference
 status is never overwritten without an explicit manifest cutover decision.
+
+A retry proceeds only if readback confirms the state from before the write.
+A concurrent edit or unreadable result stops the run. Files not represented in
+the released Git source are preserved for an explicit decision, and an older
+checkout cannot move an existing source pin backwards even at the same skill version.
 
 After writes, read back every active released reference's files, body and
 Version/Status/Source, retaining revision and file hashes. A change without its
