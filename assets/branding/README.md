@@ -5,9 +5,14 @@ Revision: 0.2.2 · Updated: 2026-11-20
 `agentic-system-icon.svg` is the editable mark: three connected cream modules
 on a rounded blue square. It is adopted from the Agentic System card under
 Current work on [Gustav Online](https://gustavonline.com/), originally at
-`/assets/project-marks/agentic-systems.svg`. The PNG is a 1024 × 1024 export
+`/assets/project-marks/agentic-systems.svg` (source SHA-256
+`f3a82c4ffcc0c5bb6d6316382e07a1df721bb8684af53da8d9284a5d715c85af`). Only the accessibility label and source comment differ from that SVG.
+The PNG is a 1024 × 1024 export
 of that vector. Use the same mark for the Notion guide and repository presentation.
 These files are presentation assets and are not included in staged skills.
+
+The Agentic System name and logo remain branding assets outside the repository’s
+MIT grant, following the previous edition’s treatment of its presentation mark.
 
 `banner.html` is the editable source for `agentic-system-banner.png` (1536 × 384).
 Serve this directory locally, wait for `document.fonts.ready`, and capture the
