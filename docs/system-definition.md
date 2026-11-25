@@ -46,11 +46,11 @@ Requested, approved, applied and observed settings remain separate facts.
 
 ## One original per artifact
 
-| Artifact | Editable original |
+| Artifact | Source and ownership |
 | --- | --- |
 | Current general method and six-method Core | The public Notion guide and Skills library |
-| Selected 0.2 Notion skill exports | Their frozen files and recorded original bindings; a later export is deliberate |
-| Lab 0.9 declaration | The dated `system.yaml` export and its recorded hash; the current guide has no matching live block |
+| Selected 0.2 Notion skill exports | Their Notion originals at the recorded revisions; Git preserves the frozen exports |
+| Lab 0.9 declaration | Its recorded 13 November Notion source and frozen Git export; the current guide has no matching live block |
 | Optional project brief | `templates/project-brief.md` in this repository; Notion links to this original |
 | Optional defence skill | Its Git directory; Notion holds a released reference |
 | Code, tests, delivery and qualification records | Their native repository, tool or tracker |
