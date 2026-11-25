@@ -1,14 +1,35 @@
 # Definition and source ownership
 
-Revision: 0.2.2 · Updated: 2026-11-20
+Revision: 0.2.3 · Updated: 2026-11-25
 
-The [Notion YAML block](https://www.notion.so/4056d2e17f56811b96fec7b970741916)
-owns Lab's declared composition. [system.yaml](../system.yaml) is its version-marked
-export. The project agent interprets it; it grants no access and applies no settings.
-An adopting project chooses its own small definition and context home. A repository
-is optional outside software work.
+The [Notion guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a)
+owns current shared method authoring. A project chooses its own small definition
+and context home. The optional Git-owned [project brief](../templates/project-brief.md)
+helps put useful context in an existing project record. Its statements record
+intent and authority; native systems enforce access and configuration.
 
-## What the declaration describes
+## Current authoring and selected exports
+
+On 25 November the live Notion catalog contains six Core methods (Foundation,
+Brief, Council, Takeover, Full Stop and Output) and the optional Software method
+New Feature. Their pages and Files own current instructions and version metadata.
+
+This repository's 0.2 portable line retains Foundation 0.2.1, Entry 0.2.0 and
+Evaluate 0.2.0 as earlier Notion exports, plus the Git-owned optional Defence
+method. Those selected files and bindings are preserved; they are not a mirror
+of the later six-method Core. Entry, Evaluate and the Defence snapshot are not
+rows in the current seven-row live catalog.
+
+[system.yaml](../system.yaml) retains the exact 13 November Lab 0.9 export and
+its recorded canonical hash. On 25 November the public
+[System definition](https://www.notion.so/4056d2e17f56811b96fec7b970741916)
+page contains general project guidance and no Lab YAML block. This is an
+observation of the current source, not a claim about when or why it changed.
+The unavailable live block cannot be called IN-SYNC with the frozen export.
+Keep the selected snapshot until a separate reviewed source/adoption decision
+resolves its next export. This documentation release changes no Lab configuration.
+
+## What the dated Lab declaration describes
 
 `work` selects one continuous project agent and conditional help. `model` records
 Lab's existing owner-selected model and reasoning setting. `methods` links to the
@@ -27,8 +48,10 @@ Requested, approved, applied and observed settings remain separate facts.
 
 | Artifact | Editable original |
 | --- | --- |
-| Lab's declared composition | The Notion YAML block; the Git file is an export |
-| General method, three shared core skills and their references | The public Notion guide and Skills library |
+| Current general method and six-method Core | The public Notion guide and Skills library |
+| Selected 0.2 Notion skill exports | Their frozen files and recorded original bindings; a later export is deliberate |
+| Lab 0.9 declaration | The dated `system.yaml` export and its recorded hash; the current guide has no matching live block |
+| Optional project brief | `templates/project-brief.md` in this repository; Notion links to this original |
 | Optional defence skill | Its Git directory; Notion holds a released reference |
 | Code, tests, delivery and qualification records | Their native repository, tool or tracker |
 | Diagram artwork for a reviewed edition | The versioned Paper document and its derived SVGs in `docs/diagrams`; Notion embeds their rendering |
@@ -41,14 +64,15 @@ never refresh a running task silently. Notion is replaceable and is not a runtim
 dependency. An exported declaration records the canonical block's UTF-8 SHA-256
 (LF, trailing newline), edit timestamp and definition version.
 
-For 0.2.0 the portable groups are `foundation/`, `entry/`, `evaluation/` and
+For this 0.2 portable line the groups are `foundation/`, `entry/`, `evaluation/` and
 `defence/`. Entry is optional outside assistance; Foundation prepares and maintains
 the garden; Evaluate compares alternatives when evidence can change a decision.
-The internal AgentOps role, Brief and software stage skills leave the active
-distribution. Their stable manifest keys, Notion pages, supporting files, releases
-and dated evidence remain as history. Responsibilities from Brief now live in
-Entry's status guidance and Foundation's continuity rules. A software project
-selects sufficient native, project or specialist methods for its own work.
+In this selected export line, the earlier internal AgentOps, Brief and software
+stage packages are retired. Their stable manifest keys and dated evidence remain
+as history. The same Brief page is active as 0.3.0 in the later Notion Core;
+its retired 0.1.34 export entry does not describe that current authoring state.
+Entry's status guidance and Foundation's continuity rules remain in the 0.2
+exports. A project selects sufficient methods for its own work.
 
 The [method history](https://www.notion.so/4176d2e17f56813b891fe3d3db612c52)
 and the `v0.1.34` tag retain the earlier arrangement. Historical references inside
@@ -57,8 +81,10 @@ proof or compulsory onboarding instructions.
 
 ## Deliberate export and reconciliation
 
-[`docs/sources.json`](sources.json) identifies each artifact by stable Key, owner,
-label and native identity. Do not reuse retired keys for different artifacts.
+[`docs/sources.json`](sources.json) identifies this distribution's artifacts by
+stable Key, owner, label and native identity. Its existing export bindings and
+retirement entries record the selected 0.2 line; it is not an exhaustive inventory
+of the current 0.3 Notion catalog. Do not reuse retired keys for different artifacts.
 
 - Notion-owned originals reach Git through a frozen read-only Skills API snapshot
   and `scripts/export.py`. The export restores portable frontmatter, headings and
