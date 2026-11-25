@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "about": "Per-artifact source ownership for Agentic System's public documentation and skill distributions (#122). owner=notion: the public Notion page is the editable original; a Git path, if any, is a deliberate export. owner=git: this repository is the original; a Notion copy, if any, is a released reference or a projection. Keys are stable identities: never reuse a key for another artifact; a renamed or retired artifact keeps its key with status renamed/retired. Applied by scripts/reconcile.py and scripts/publish.py; grants no access and does not publish.",
+  "about": "Per-artifact source ownership for Agentic System's public documentation and skill distributions (#122). owner=notion: the public Notion page is the editable original; a Git path, if any, is a deliberate export. owner=git: this repository is the original; a Notion copy, if any, is a released reference or a projection. Keys are stable identities: never reuse a key for another artifact; a renamed or retired artifact keeps its key with status renamed/retired. Applied by scripts/reconcile.py and scripts/publish.py; grants no access and does not publish. Existing export bindings and retirement entries describe the selected 0.2 portable line, not the entire later live Notion catalog. New Git-owned documentation is registered separately without changing those frozen bindings.",
   "public_site": "https://gustavanderson.notion.site/Agentic-System-4046d2e17f568159a603de2dd6b91c2a",
   "artifacts": [
     {
@@ -372,6 +372,15 @@
       "label": "main-working",
       "status": "active",
       "path": "docs/backlog.md",
+      "public": true
+    },
+    {
+      "key": "doc/project-brief",
+      "kind": "doc",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": "templates/project-brief.md",
       "public": true
     }
   ]

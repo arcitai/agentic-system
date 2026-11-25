@@ -2,78 +2,79 @@
 
 <img src="assets/branding/agentic-system-icon.svg" alt="Agentic System: three connected modules" width="56" height="56">
 
-Revision: 0.2.2 · Updated: 2026-11-20
+Revision: 0.2.3 · Updated: 2026-11-25
 
-Build a good environment for capable agents to do useful work.
+Prepare useful working ground for AI: a clear outcome, reliable context, suitable tools and a way to judge the result.
 
-Agentic System is an open framework for the foundation, boundaries and ongoing care around agent work. Choose a model and an outcome. One project agent normally researches, plans, acts, checks and follows the work through. It can call a pair, a fresh reviewer or parallel helpers when useful. A separate internal manager or a fixed chain of specialist agents is not required.
+Agentic System is an open framework with guidance, reusable methods and project templates. Use it for research, BI, content, software and other work. Start in the tools you already use and prepare what the next task needs.
 
-Use it for software, research, BI, defence and other work. Each project keeps its own purpose, context, selected methods and native tools.
+## Why the foundation matters
 
-The Lab uses Foundation **0.2.1** and Evaluate **0.2.0** on T3 Stable **0.1.9**,
-retaining the same conversation and access boundaries.
-The earlier 0.2.0 assessment discovered both methods and loaded/used Foundation.
-A repaired instruction route was followed after an operator-controlled Lab VM
-restart. A later native correction passed one idle clean stop/start and one
-unexpected-exit recovery, with the selected pre-existing history unchanged.
-This is bounded assisted proof, not unattended operation. See [qualification](docs/qualification.md)
-and [remaining work](docs/backlog.md).
-
-## The garden
+A person or agent arriving at a project needs to find the relevant sources, understand what it may change and recognize a useful result. Keeping that ground clear reduces repeated explanation and makes it easier to continue after a break.
 
 | Area | What it prepares and maintains |
 | --- | --- |
-| **Agent Environment** | Harness, models, tools, workspace, identities, credentials and enforced access |
-| **Project Foundation** | Goal, authoritative sources, relevant knowledge, conventions, mandate and useful checks |
-| **Operations & Maintenance** | Continuity, updates, failure signals, recovery and the care the work needs |
+| **Agent Environment** | Where the agent works: its model, tools, files and permitted access |
+| **Project Foundation** | The outcome, trusted sources, working context, mandate and meaningful checks |
+| **Operations & Maintenance** | Continuity, updates, recovery and the ongoing care the work needs |
 
-These are responsibilities, not three compulsory machines or onboarding phases. Prepare what the intended work needs and reuse unchanged proof.
+A small project can cover these in one existing brief or workspace. Add detail when the work needs it.
 
-## Use it
+## Start with one useful task
 
-1. Give your normal assistant a clear outcome and choose the model. The optional `agentic-entry` skill can explain this framework or find the relevant project routes.
-2. Use `agentic-foundation` directly when setup, adoption or operating conditions need attention. Keep a thin project bootstrap and load relevant references only.
-3. Let the project agent complete the accepted work with the project's selected methods. Use additional agents when their contribution justifies the handoff. Existing project review and delivery requirements still apply.
+1. Choose an outcome and model, or explicitly delegate that choice.
+2. Put the relevant context, sources, authority and checks where the project agent can find them. Adapt the optional [project brief](templates/project-brief.md), or use the project record you already have.
+3. Ask the agent to carry the task through to a checked result. It can bring in a fresh reviewer, a pair or temporary helpers when useful. Existing project review and delivery rules still apply.
 
-A clear owner request can already admit work and delegate delivery; no separate acceptance form is required. A skill, issue or model verdict cannot grant missing access. Human decisions are requested where the mandate requires them, not at every phase boundary.
-
-## Methods, sources and library
-
-The [Notion guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a) authors the general method. This repository provides reviewed, portable distributions and Lab technical records. Follow the selected version; do not silently refresh a running task from another edition. See [source ownership](docs/system-definition.md).
-
-| Skill | Use |
-| --- | --- |
-| `agentic-entry` | Optional outside entry: understand the framework, locate a project, help with authorized native starts or status |
-| `agentic-foundation` | Prepare, assess or repair the environment, project foundation and operations |
-| `agentic-evaluate` | Compare models, methods or setups when evidence can change a decision |
-| `agentic-security` | Optional defence method for a bounded, authorized security question |
-
-The [Reference library](https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8) holds selectable sources, including Google Chrome's Modern Web Guidance for web project foundations. A library entry is not an installation or an automatic dependency. Select the relevant guidance in the project's own context.
-
-A **work module** is the methods, checks and domain knowledge selected for the work. Software projects use their own sufficient native or specialist methods; OSM is optional. The former ADLC stage skills and AgentOps role are retained in [0.1.34 history](https://github.com/arcitai/agentic-system/tree/v0.1.34), outside the active distribution.
-
-## Architecture
+For example, a research task might compare three selected sources and produce a one-page recommendation. The brief identifies the question, source routes, intended reader and what evidence should support the recommendation. The same approach can support a content draft, a KPI check or a small software change.
 
 ![One continuous project agent on the garden](docs/diagrams/agent-led-work.svg)
 
-The [architecture guide](docs/architecture.md) separates workflow, responsibilities and actual deployment. Fresh context and worktrees are not credential boundaries. Preserve the native broker, OS, service and environment controls that enforce a project's allowed access.
+A clear owner request can already admit work and delegate delivery. Native tools enforce access; the project's instructions record how that access may be used.
 
-## Portable distribution
+## Explore
 
-Clone a reviewed release, then stage the selected methods into a new directory:
+The [Notion guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a) is the human entry to the current shared method. It explains setup, context, useful work and ongoing care, and links to the current Skills library.
+
+| Find | Start here |
+| --- | --- |
+| A small definition for your project | [Project brief](templates/project-brief.md) |
+| Workflow, responsibilities and execution boundaries | [Architecture](docs/architecture.md) |
+| Current authoring and versioned export choices | [Definition and source ownership](docs/system-definition.md) |
+| Domain guidance and further reading | [Reference library](https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8) |
+| Changes to this framework | [Contributing](CONTRIBUTING.md) |
+
+OSM can provide shared business Data and Context when that helps a project. Agentic System prepares the project's working conditions; each project chooses its own context home and methods.
+
+## Choose a method source
+
+The current Notion authoring library has six cross-domain Core methods: Foundation, Brief, Council, Takeover, Full Stop and Output. It also offers the optional Software method New Feature. Read the relevant current method when the project has selected that live source, record the version used and handle changes affecting ongoing work explicitly.
+
+This repository's **0.2 portable line** deliberately retains earlier selected exports:
+
+| Portable method | Use |
+| --- | --- |
+| `agentic-entry` | Optional help understanding the framework, locating a project or checking status |
+| `agentic-foundation` | Prepare, assess or maintain the project's working ground |
+| `agentic-evaluate` | Compare alternatives when evidence can change a decision |
+| `agentic-security` | Optional method for a bounded, authorized defensive question |
+
+These exports are a separate versioned choice from the live six-method Core. Read their own version metadata and [source record](docs/system-definition.md); this documentation release does not replace them with the later authoring edition. Existing installations keep their selected versions until deliberately adopted.
+
+To stage these portable methods from a reviewed release into a new directory:
 
 ```sh
 python3 scripts/stage.py all --output /path/to/new-stage
 ```
 
-Staging copies the selected skills and their resources; it does not install them. Inspect its manifest and use Foundation's adoption guidance before changing an installation. The skills work without this checkout or live Notion access. Follow [CONTRIBUTING.md](CONTRIBUTING.md) for checks, source exports and releases.
+Staging copies the selected methods and resources. Follow Foundation's adoption guidance before changing an installation. The staged methods remain usable without this checkout or live Notion access. The optional project brief is a separate document in the repository/source archive, not a runtime dependency of a staged skill.
 
-## Agentic System Lab
+## Learn, adapt and share
 
-Lab remains one project in T3 Code on Z13. It investigates the method and concrete open questions. Product development for OSM, Bridge and OpenPaperDesign continues in its own Codex projects, outside Lab.
+A work module is the methods, checks and domain knowledge selected for the work. Use the [Reference library](https://www.notion.so/4176d2e17f568129ab71cfa0b2aecbd8) to find relevant starting points and keep project-specific choices with that project. Share a useful example or propose an improvement through this repository.
 
-T3 Code **Beta** is the desktop product label; **stable** is its selected release channel. Installation and native qualification are separate from this source revision. Read the dated [Lab qualification record](docs/qualification.md) and [current backlog](docs/backlog.md); a new method release does not clear an operational hold or enable intake.
+Agentic System Lab is one project using the framework. Its dated [qualification](docs/qualification.md) and [remaining work](docs/backlog.md) describe that installation, its results and holds. They are separate from this framework's general setup guidance. The retained [Lab 0.9 declaration](system.yaml) is a dated example, not a generic project starter or fresh installation evidence.
 
-The repository was renamed from `arcitai/factory`, then `arcitai/agentic-systems`; its identity, commits, issues and historical releases are preserved. The old names remain in dated evidence.
+The former software-stage methods and AgentOps arrangement remain in [0.1.34 history](https://github.com/arcitai/agentic-system/tree/v0.1.34). The repository's earlier names, `arcitai/factory` and `arcitai/agentic-systems`, remain in dated records and releases.
 
-MIT covers the method, code and documentation. Arc’ It AI branding has [separate terms](assets/branding/README.md). Inspired by the [Warp Factory Stack](https://www.warp.dev/blog/the-factory-stack), [harness engineering](https://openai.com/index/harness-engineering/) and the sources in the reference library; this is an independent framework, not a Warp-compatible runtime.
+MIT covers the method, code and documentation. Arc’ It AI branding has [separate terms](assets/branding/README.md). Inspired by the [Warp Factory Stack](https://www.warp.dev/blog/the-factory-stack), [harness engineering](https://openai.com/index/harness-engineering/) and the sources in the Reference library; this is an independent framework.

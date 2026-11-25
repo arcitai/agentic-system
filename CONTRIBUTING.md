@@ -1,12 +1,12 @@
 # Contributing
 
-Revision: 0.2.0 · Updated: 2026-11-13
+Revision: 0.2.3 · Updated: 2026-11-25
 
 Start with a concrete problem, the applicable project goal and observable proof.
 Use an issue or accepted brief; research may end with a decision rather than code.
 Preserve the small method-only scope in [VISION.md](VISION.md).
 
-Resolve [source ownership](docs/system-definition.md) before editing. Shared methods are authored in Notion; a reviewed distribution uses portable bundles in `foundation/`, `entry/`, `evaluation/` or `defence/`. Existing Git bundles remain authoritative for their released versions. The Notion core edition and its complete supporting resources are exported deliberately for this distribution. Do not maintain two editable originals. A release must retain the exact source/version and required resources; it must not silently export a newer source or require live Notion access to function.
+Resolve [source ownership](docs/system-definition.md) before editing. Shared methods are authored in Notion; this 0.2 portable line retains selected earlier exports in `foundation/`, `entry/` and `evaluation/`, plus the Git-owned optional `defence/` method. These bundles and their bindings are authoritative for their released versions; they do not yet export the later six-method Notion Core. A new export is deliberate and includes its complete supporting resources. Do not maintain two editable originals. A release must retain the exact source/version and required resources; it must not silently export a newer source or require live Notion access to function.
 Supporting references belong inside the skill directory so staging keeps them
 usable. The root documentation is for maintainers/operators and is not a hidden
 runtime dependency. Preserve the existing MIT attribution.
@@ -29,7 +29,7 @@ must not refresh historical observations merely by changing document headers.
 Foundation establishes this convention, the selected work module updates affected sources and review
 checks them, and the project agent resolves concrete drift within its mandate.
 
-README routes to the public architecture/context entry; setup remains the installation/maintenance path. The chosen context home owns the declared composition; our recipe uses one YAML code block in Notion. `system.yaml` is only a version-marked export and links to shared methods rather than duplicating their full policy. Edit the original, then make a deliberate reviewed export; do not maintain an agent that synchronizes two editable copies. It is not consumed by an Agentic System runtime; the working project agent interprets it. Keep
+README routes to the public guide and optional Git-owned project brief. Each project chooses its context home and an appropriate definition. `system.yaml` retains the 13 November Lab 0.9 snapshot and its canonical hash; on 25 November the public Notion definition page contains general prose, not that Lab YAML block. Preserve the frozen export and report its unavailable live block honestly until a separate source/adoption decision resolves it. This documentation update does not rebind it. A future export starts from its actual original; do not maintain an agent that synchronizes two editable copies. No Agentic System runtime consumes the declaration; the working project agent interprets it. Keep
 conditional detail inside the affected skill and keep current qualification here.
 Historical research, migration inventories and old rehearsals remain available
 in reviewed releases and PRs instead of becoming permanent onboarding steps.

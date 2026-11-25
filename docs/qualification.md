@@ -1,6 +1,6 @@
 # Qualification
 
-Revision: 0.2.2 · Updated: 2026-11-14
+Revision: 0.2.3 · Updated: 2026-11-25
 
 This record distinguishes source review, disposable exercises and observed native
 operation. A package release does not qualify another host, every future update
@@ -325,3 +325,20 @@ Open acceptance work lives in [Agentic Systems issues](https://github.com/arcita
 remaining recovery cases, end-to-end application
 adoption, and a separately authorized Defence case. These do not become complete
 because the method package passes its checks. Kastanje product work remains parked.
+
+## Documentation scope · 25 November 2026
+
+The 0.2.3 documentation candidate gives readers a human-first entry and an
+optional Git-owned project brief. Existing portable skill directories, their
+source bindings and the dated Lab 0.9 declaration remain unchanged. The live
+Notion catalog read on 25 November has six Core methods and one Software method;
+that later authoring edition is separate from these selected 0.2 exports.
+The current general definition page has no Lab YAML block, so the old export
+is not claimed live IN-SYNC.
+
+Source checks and independent review bind to the PR's actual candidate.
+Companion Notion edits follow merge after the new template URL exists; their
+actual readback belongs with delivery evidence, not a pre-merge success claim.
+This work changes no Lab installation, method selection, model, grants or
+schedules. Existing operational holds and #122's inactive live publication
+qualification remain separate. Earlier dates and observations above are retained.

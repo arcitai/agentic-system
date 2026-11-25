@@ -1,9 +1,9 @@
 # Contributor instructions
 
-Revision: 0.2.0 · Updated: 2026-11-13
+Revision: 0.2.3 · Updated: 2026-11-25
 
 Read [VISION.md](VISION.md), [README.md](README.md) and the affected skill.
-Read [system.yaml](system.yaml) and [source ownership](docs/system-definition.md) for the selected exported declaration and owning sources. The Notion YAML block owns the current authoring definition; use a release/export at its recorded revision when working from that version. Do not silently refresh it mid-task or edit a distribution as a second original. The declaration is interpreted by the working project agent; it does not apply settings, grant authority or override holds.
+Read [system.yaml](system.yaml) and [source ownership](docs/system-definition.md) for the selected exported declaration and owning sources. The YAML file retains the dated 13 November Lab 0.9 export; the current public Notion definition page explains general project setup and no longer contains that block. Keep the recorded export and bindings until a separately reviewed adoption; do not infer live IN-SYNC or silently refresh it mid-task. A project declaration is interpreted by its working agent; it does not apply settings, grant authority or override holds.
 This repository owns versioned distributions and Agentic System Lab's native project artifacts, not an adopting application's product rules. Shared methods are authored in the linked Notion home; existing bundles retain authority for their released versions until reviewed cutover.
 
 Keep one canonical source for each skill and its references. A staged bundle
