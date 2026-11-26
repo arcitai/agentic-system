@@ -382,6 +382,51 @@
       "status": "active",
       "path": "templates/project-brief.md",
       "public": true
+    },
+    {
+      "key": "code/mcp",
+      "kind": "code",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": "apps/mcp",
+      "public": true
+    },
+    {
+      "key": "code/claude-plugin",
+      "kind": "code",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": ".claude-plugin",
+      "public": true
+    },
+    {
+      "key": "code/codex-plugin",
+      "kind": "code",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": ".codex-plugin",
+      "public": true
+    },
+    {
+      "key": "code/codex-marketplace",
+      "kind": "code",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": ".agents",
+      "public": true
+    },
+    {
+      "key": "code/cursor-plugin",
+      "kind": "code",
+      "owner": "git",
+      "label": "main-working",
+      "status": "active",
+      "path": ".cursor-plugin",
+      "public": true
     }
   ]
 }

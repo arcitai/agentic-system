@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agentic-system": {
+      "command": "node",
+      "args": ["./apps/mcp/stdio.mjs"],
+      "cwd": "."
+    }
+  }
+}

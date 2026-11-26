@@ -1,0 +1,27 @@
+{
+  "name": "agentic-system",
+  "version": "0.2.3",
+  "description": "Prepare useful working ground for AI: foundation, entry, evaluation and defensive security methods.",
+  "author": {
+    "name": "Arc' It AI"
+  },
+  "interface": {
+    "displayName": "Agentic System",
+    "composerIcon": "./assets/branding/agentic-system-icon.png",
+    "logo": "./assets/branding/agentic-system-icon.png",
+    "shortDescription": "Open framework for agentic systems",
+    "longDescription": "Prepare useful working ground for AI: a clear outcome, reliable context, suitable tools and a way to judge the result. Ships the 0.2 portable methods (Foundation, Entry, Evaluate, Security), the project brief template and architecture docs via a local zero-dependency read-only MCP server.",
+    "developerName": "Arc' It AI",
+    "websiteURL": "https://github.com/arcitai/agentic-system",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Assess and prepare the Agentic System foundation for this project."
+    ]
+  },
+  "repository": "https://github.com/arcitai/agentic-system",
+  "license": "MIT",
+  "mcpServers": "./.codex-plugin/mcp.json"
+}

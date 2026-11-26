@@ -1,0 +1,11 @@
+{
+  "name": "agentic-system",
+  "version": "0.2.3",
+  "description": "Prepare useful working ground for AI: foundation, entry, evaluation and defensive security methods.",
+  "skills": [
+    "./foundation/agentic-foundation",
+    "./entry/agentic-entry",
+    "./evaluation/agentic-evaluate",
+    "./defence/agentic-security"
+  ]
+}

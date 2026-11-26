@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/configuration/",
+  "name": "agentic-systems-mcp",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "mcp-agentic-systems.arcitai.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": false
+  }
+}

@@ -2,7 +2,7 @@
 
 <img src="assets/branding/agentic-system-icon.svg" alt="Agentic System: three connected modules" width="56" height="56">
 
-Revision: 0.2.3 · Updated: 2026-11-25
+Revision: 0.2.3 · Updated: 2026-11-26
 
 Prepare useful working ground for AI: a clear outcome, reliable context, suitable tools and a way to judge the result.
 
@@ -60,6 +60,36 @@ This repository's **0.2 portable line** deliberately retains earlier selected ex
 | `agentic-security` | Optional method for a bounded, authorized defensive question |
 
 These exports are a separate versioned choice from the live six-method Core. Read their own version metadata and [source record](docs/system-definition.md); this documentation release does not replace them with the later authoring edition. Existing installations keep their selected versions until deliberately adopted.
+
+### Install or connect Agentic System
+
+Choose the distribution channel that matches your agent app. All channels serve the exact same reviewed GitHub files with zero login and zero customer data:
+
+| Option | What it provides | When to use it |
+| --- | --- | --- |
+| **Native plugin** | Local plugin install for Claude Code (canonical skill folders), Codex (local zero-dependency stdio MCP), or Cursor | Best default for Claude Code, Codex, and Cursor |
+| **Public MCP server** (`https://mcp-agentic-systems.arcitai.com/mcp`) | Read-only, login-free HTTP MCP server with every portable method, `templates/project-brief.md`, and docs (pin with `/v0.2.3/mcp`) | Best fit for OpenBot, Grok Bot, T3 Code, or any MCP client without copying files locally |
+| **Staged copy** (`scripts/stage.py`) | Flat local copy with a SHA-256 `manifest.json` | Best when a project wants a frozen, reviewed local copy inside a workspace |
+
+For **Claude Code**:
+
+```sh
+claude plugin marketplace add arcitai/agentic-system
+claude plugin install agentic-system@arcitai --scope user
+```
+
+For **Codex**:
+
+```sh
+codex plugin marketplace add arcitai/agentic-system
+codex plugin add agentic-system@arcitai
+```
+
+For **any MCP client** (OpenBot, Grok Bot, T3 Code, Codex, Claude Code, or Cursor; see [apps/mcp/README.md](apps/mcp/README.md)):
+
+- Latest release: `https://mcp-agentic-systems.arcitai.com/mcp`
+- Pinned release: `https://mcp-agentic-systems.arcitai.com/v0.2.3/mcp`
+- Health and SHA-256 verification: `https://mcp-agentic-systems.arcitai.com/health`
 
 To stage these portable methods from a reviewed release into a new directory:
 
