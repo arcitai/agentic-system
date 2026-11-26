@@ -1,0 +1,14 @@
+{
+  "name": "agentic-systems-mcp",
+  "version": "0.2.3",
+  "private": true,
+  "type": "module",
+  "description": "Public, read-only, login-free MCP server for Agentic System.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test mcp.test.mjs",
+    "start:stdio": "node stdio.mjs",
+    "start:http": "node http.mjs"
+  }
+}

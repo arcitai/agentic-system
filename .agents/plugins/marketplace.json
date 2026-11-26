@@ -1,0 +1,20 @@
+{
+  "name": "arcitai",
+  "interface": {
+    "displayName": "Arc' It AI"
+  },
+  "plugins": [
+    {
+      "name": "agentic-system",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "NONE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "name": "agentic-system",
+  "displayName": "Agentic System",
+  "version": "0.2.3",
+  "description": "Prepare useful working ground for AI: foundation, entry, evaluation and defensive security methods.",
+  "author": {
+    "name": "Arc' It AI",
+    "url": "https://github.com/arcitai"
+  },
+  "homepage": "https://github.com/arcitai/agentic-system",
+  "skills": [
+    "./foundation/agentic-foundation",
+    "./entry/agentic-entry",
+    "./evaluation/agentic-evaluate",
+    "./defence/agentic-security"
+  ],
+  "repository": "https://github.com/arcitai/agentic-system",
+  "license": "MIT",
+  "keywords": [
+    "agentic-system",
+    "ai-agents",
+    "foundation",
+    "evaluation",
+    "security",
+    "skills"
+  ],
+  "icon": "./assets/branding/agentic-system-icon.png",
+  "documentationUrl": "https://github.com/arcitai/agentic-system/blob/main/README.md",
+  "supportUrl": "https://github.com/arcitai/agentic-system/issues"
+}
