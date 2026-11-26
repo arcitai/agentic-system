@@ -34,7 +34,7 @@ A clear owner request can already admit work and delegate delivery. Native tools
 
 ## Explore
 
-The [Notion guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a) is the human entry to the current shared method. It explains setup, context, useful work and ongoing care, and links to the current Skills library.
+The human setup page is the [Agentic Systems guide](https://resources.onlinesourdough.com/collection/in-practice/agentic-systems/) on Resources. The [Notion guide](https://www.notion.so/4046d2e17f568159a603de2dd6b91c2a) keeps the method, the live library and the technical setup.
 
 | Find | Start here |
 | --- | --- |
